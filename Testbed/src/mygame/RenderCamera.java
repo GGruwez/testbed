@@ -57,6 +57,8 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class RenderCamera extends AbstractAppState implements ActionListener, SceneProcessor {
 
@@ -135,15 +137,13 @@ public class RenderCamera extends AbstractAppState implements ActionListener, Sc
     public void postFrame(FrameBuffer out) {
         if (capture){
             capture = false;
-
             Camera curCamera = rm.getCurrentCamera();
             int viewX = (int) (curCamera.getViewPortLeft() * curCamera.getWidth());
             int viewY = (int) (curCamera.getViewPortBottom() * curCamera.getHeight());
             int viewWidth = (int) ((curCamera.getViewPortRight() - curCamera.getViewPortLeft()) * curCamera.getWidth());
             int viewHeight = (int) ((curCamera.getViewPortTop() - curCamera.getViewPortBottom()) * curCamera.getHeight());
-
             renderer.setViewPort(0, 0, width, height);
-            renderer.readFrameBuffer(out, outBuf);
+            renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
 //            System.out.println(outBuf.array());
 //System.out.println(outBuf.hasArray());
 //            System.out.println(new String(outBuf.array()));
@@ -152,21 +152,44 @@ public class RenderCamera extends AbstractAppState implements ActionListener, Sc
 //            outBuf.get(arr);
 //            System.out.println(arr);
             ByteBuffer outBuf2 = outBuf.duplicate();
-            System.out.println(outBuf2.capacity());
+//            System.out.println(outBuf2.capacity());
             outBuf2.flip();
             byte[] bArray = new byte[outBuf2.capacity()];
-            System.out.println("Contents into buffer, length : " + outBuf2.capacity());
-            while (outBuf2.hasRemaining()) {
-//              System.out.print((char) outBuf2.get());
-            }
+//            System.out.println("Contents into buffer, length : " + outBuf2.capacity());
+//            while (outBuf2.hasRemaining()) {
+////              System.out.print((char) outBuf2.get());
+//            }
             outBuf2.clear();
             outBuf2.get(bArray, 0, bArray.length);
-            System.out.println("Contents into Array, length : " + bArray.length);
-            for (int i = 0; i < outBuf2.capacity(); i++) {
+ //           System.out.println("Contents into Array, length : " + bArray.length);
+//            for (int i = 0; i < outBuf2.capacity(); i+=4) {
 //              System.out.print((char) bArray[i]);
 //              System.out.print("2");
-                if(bArray[i] != 0)
-                    System.out.println(Integer.toHexString(bArray[i]) + " - " + bArray[i]);
+//                if(bArray[i] != 0)
+//                    System.out.println(Integer.toHexString(bArray[i]) + " - " + bArray[i]);
+
+//                bArray2[i*3/4]=bArray[i];
+//                bArray2[i*3/4+1]=bArray[i+1];
+//                bArray2[i*3/4+2]=bArray[i+2];
+//            }
+            
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int r = bArray[3*(y*width+x)+0]& 0xff;
+                    int g = bArray[3*(y*width+x)+1]& 0xff;
+                    int b = bArray[3*(y*width+x)+2]& 0xff;
+                    int rgb = 65536*r + 256*g + b;
+                    image.setRGB(x, height-y-1, rgb);
+                }
+            }
+
+            File outputFile = new File("output.bmp");
+            try {
+            ImageIO.write(image, "bmp", outputFile);
+            }
+            catch (IOException exc) {
             }
             
             renderer.setViewPort(viewX, viewY, viewWidth, viewHeight);

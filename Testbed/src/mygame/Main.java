@@ -6,6 +6,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
+import com.jme3.texture.Image;
 
 import mygame.RenderCamera;
 
@@ -29,7 +30,6 @@ public class Main extends SimpleApplication {
         sas.initialize(stateManager, this);
         Box b = new Box(1, 1, 1);
         Geometry box = new Geometry("Box", b);
-
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Blue);
         box.setMaterial(mat);
@@ -41,7 +41,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         //TODO: add update code
-        System.out.println(cam.getLocation());
+//        System.out.println(cam.getLocation());
         
         sas.takeScreenshot();
     }
