@@ -74,9 +74,10 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        aircraft.setLocalTranslation((float) (aircraft.getLocalTranslation().getX() + 0.01), 
-                aircraft.getLocalTranslation().getY(),
-                aircraft.getLocalTranslation().getZ());
+        rootNode.getChild("planenode").setLocalTranslation(
+                rootNode.getChild("planenode").getLocalTranslation().getX() + 0.01f, 
+                rootNode.getChild("planenode").getLocalTranslation().getY(),
+                rootNode.getChild("planenode").getLocalTranslation().getZ());
         sas.grabCamera();
     }
 
