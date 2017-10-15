@@ -23,6 +23,7 @@ import mygame.RenderCamera;
 public class Main extends SimpleApplication {
     
     private RenderCamera sas;
+    private Aircraft aircraft;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -39,11 +40,11 @@ public class Main extends SimpleApplication {
         box.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(2,1,1);
-        Geometry planeGeometry = new Geometry("Plane", plane);
+        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         planeMaterial.setColor("Color", ColorRGBA.Green);
-        planeGeometry.setMaterial(planeMaterial);
-        planeGeometry.setLocalTranslation(-4, 0, 0);
+        aircraft.setMaterial(planeMaterial);
+        aircraft.setLocalTranslation(-4, 0, 0);
         
         this.viewPort.setBackgroundColor(ColorRGBA.White);
         
@@ -58,7 +59,7 @@ public class Main extends SimpleApplication {
         CameraNode planeCamNode = new CameraNode("Camera Node", planeCam);
         planeCamNode.setControlDir(ControlDirection.SpatialToCamera);
         Node planeNode = new Node("planenode");
-        planeNode.attachChild(planeGeometry);
+        planeNode.attachChild(aircraft);
         planeNode.attachChild(planeCamNode);
         planeCamNode.setLocalTranslation(new Vector3f(-5, 3, 0));
         planeCamNode.lookAt(new Vector3f(0,0,0), Vector3f.UNIT_Y);
@@ -72,7 +73,10 @@ public class Main extends SimpleApplication {
     }
 
     @Override
-    public void simpleUpdate(float tpf) {        
+    public void simpleUpdate(float tpf) {
+        aircraft.setLocalTranslation((float) (aircraft.getLocalTranslation().getX() + 0.01), 
+                aircraft.getLocalTranslation().getY(),
+                aircraft.getLocalTranslation().getZ());
         sas.grabCamera();
     }
 
