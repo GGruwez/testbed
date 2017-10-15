@@ -1,6 +1,11 @@
 package mygame;
 import mygame.Vector;
 
+/**
+ * 
+ * @author Gilles
+ *
+ */
 public class Force {
 
 	private Aircraft plane;
@@ -11,16 +16,24 @@ public class Force {
 //	private double heading;
 //	private double pitch;
 //	private double roll;
-	private Vector attackLeftWing;
-	private Vector attackRightWing;
-	private Vector attackHorizontalStabilizer;
-	private Vector attackVerticalStabilizer;
+	private Vector leftWingAttack;
+	private Vector rightWingAttack;
+	private Vector horizontalStabilizerAttack;
+	private Vector verticalStabilizerAttack;
 	private Vector leftWingLift;
 	private Vector rightWingLift;
 	private Vector horizontalStabilizerLift;
 	private Vector verticalStabilizerLift;
+	
+	private Vector initialSpeed;
+	private Vector windSpeed;
 
-
+	private Vector rightWingAxis = new Vector(1,0,0);
+	private Vector leftWingAxis = new Vector(1,0,0);
+	private Vector verticalStabilizerAxis = new Vector(0,1,0);
+	private Vector horizontalStabilizerAxis = new Vector(1,0,0);
+	
+	
 	Force(double TailMass, double WingMass, double BodyMass, double gravityConstant,double thrust,
 			double leftWingInclination, double rightWingInclination, double horStabInclination, double verStabInclination){
 		
@@ -30,16 +43,15 @@ public class Force {
 		this.setGravityForces(TailMass, WingMass, BodyMass, gravityConstant);
 		this.setLiftForce();
 		this.setThrust(thrust);
-		
-		
+			
 	}
 	
 	
 	public void setAttackAngles(double leftWingInclination, double rightWingInclination, double horStabInclination, double verStabInclination){
-		this.attackLeftWing = new Vector(0, Math.sin(leftWingInclination), -Math.cos(leftWingInclination));
-		this.attackRightWing = new Vector(0, Math.sin(rightWingInclination), -Math.cos(rightWingInclination));
-		this.attackHorizontalStabilizer =new  Vector(0, Math.sin(horStabInclination), -Math.cos(horStabInclination));
-		this.attackVerticalStabilizer =new  Vector(-Math.sin(verStabInclination), 0, -Math.cos(verStabInclination));
+		this.leftWingAttack = new Vector(0, Math.sin(leftWingInclination), -Math.cos(leftWingInclination));
+		this.rightWingAttack = new Vector(0, Math.sin(rightWingInclination), -Math.cos(rightWingInclination));
+		this.horizontalStabilizerAttack =new  Vector(0, Math.sin(horStabInclination), -Math.cos(horStabInclination));
+		this.verticalStabilizerAttack =new  Vector(-Math.sin(verStabInclination), 0, -Math.cos(verStabInclination));
 	}
 
 	
@@ -65,6 +77,22 @@ public class Force {
 		
 	}
 	
+	
+	public Vector getLeftWingNormal(){
+		return this.leftWingAxis.crossProduct(this.leftWingAttack);
+	}
+	
+	public Vector getRightWingNormal(){
+		return this.rightWingAxis.crossProduct(this.rightWingAttack);
+	}
+	
+	public Vector getHorizontalStabilizerNormal(){
+		return this.horizontalStabilizerAxis.crossProduct(this.horizontalStabilizerAttack);
+	}
+	
+	public Vector getVerticalStabilizerNormal(){
+		return this.verticalStabilizerAxis.crossProduct(verticalStabilizerAttack);
+	}
 	
 	
 	public Vector getTotalLift(){
@@ -107,6 +135,30 @@ public class Force {
 		return this.getBodyGravityForce().add(this.getTailGravityForce().add(this.getWingGravityForce().add(this.getWingGravityForce())));
 	}
 	
+	/**
+	 * v = a*t+v0
+	 * @return
+	 */
+	public Vector getAirSpeed(){
+		Vector velocity = getTotalForce()/(getTotalGravityForce().constantProduct(1/gravityConstant)).constantProduct(timeElapsed).add(initialSpeed);
+		return Vector airSpeed = velocity.subtract(windSpeed);
+	}
+	
+	
+	
+	public Vector getProjectedAirspeed(){
+		Vector projectedAirspeed = new Vector(0,0,0);
+		return projectedAirspeed;
+		}
+	
+	public double getProjectedAirspeedSize(){
+		return getProjectedAirspeed().euclideanLength();
+	}
+	
+	public double getAngleOfAttack(){
+		return Math.atan2(getLeftWingNormal().dotProduct(getProjectedAirspeed()),
+				leftWingAttack.dotProduct(getProjectedAirspeed()));
+	}
 	
 	// in drone assenstelsel
 	public Vector getTotalForce(){

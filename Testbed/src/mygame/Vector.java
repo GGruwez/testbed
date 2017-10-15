@@ -51,6 +51,7 @@ public class Vector {
 	
 	
 	// transformatiematrixen, daar kan ik echt nie mee werken
+	// ik kijk daar wel eens naar als ik mn boek van mechanica 3 vind, staat daar allemaal in
 	public Vector transform(double heading, double pitch, double roll ){
 		
 		return new Vector(0,0,0);
@@ -75,5 +76,8 @@ public class Vector {
 				-this.x*other.z+other.x*this.z, this.x*other.y - other.x*this.y);
 	}
 	
+	public Vector constantProduct(double constant){
+		return new Vector(this.x*constant, this.y*constant, this.z*constant);
+	}
 }	
 	
