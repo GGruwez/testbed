@@ -1,5 +1,7 @@
 package mygame;
 
+import java.math.*;
+
 public class Vector {
 
 	private final double x;
@@ -34,6 +36,17 @@ public class Vector {
 	public Vector subtract(Vector other){
 		return new Vector(this.getX()- other.getX(), this.getY() - other.getY(), this.getZ() - other.getZ());
 
+	}
+	
+	public double euclideanLength(){
+		return Math.sqrt(this.dotProduct(this));
+	}
+	
+	/**
+	 * returnt de hoek tussen twee vectoren in radialen!
+	 */
+	public double angleBetween(Vector other){
+		return Math.acos(this.dotProduct(other)/(this.euclideanLength()*other.euclideanLength()));
 	}
 	
 	
