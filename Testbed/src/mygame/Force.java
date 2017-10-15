@@ -112,5 +112,7 @@ public class Force {
 	public Vector getTotalForce(){
 		return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce());
 	}
+        
+        
 	
 }
