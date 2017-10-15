@@ -26,7 +26,7 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
-        sas = new RenderCamera("", "test");
+        sas = new RenderCamera();
         sas.initialize(stateManager, this);
         Box b = new Box(1, 1, 1);
         Geometry box = new Geometry("Box", b);
