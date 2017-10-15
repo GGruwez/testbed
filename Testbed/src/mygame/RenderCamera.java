@@ -34,10 +34,6 @@ package mygame;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.post.SceneProcessor;
 import com.jme3.profile.AppProfiler;
 import com.jme3.renderer.Camera;
@@ -55,44 +51,41 @@ import java.util.List;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
-public class RenderCamera extends AbstractAppState implements ActionListener, SceneProcessor {
+public class RenderCamera extends AbstractAppState implements SceneProcessor {
 
     private boolean capture = false;
     private Renderer renderer;
-    private RenderManager rm;
     private ByteBuffer outBuf;
-    private String shotName;
     private int width, height;
+    private final Camera cameraToCapture;
+    
+    public RenderCamera(Camera cameraToCapture){
+        this.cameraToCapture = cameraToCapture;
+    }
 
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         if (!super.isInitialized()){
-            InputManager inputManager = app.getInputManager();
-            inputManager.addMapping("ScreenShot", new KeyTrigger(KeyInput.KEY_SYSRQ));
-            inputManager.addListener(this, "ScreenShot");
 
             List<ViewPort> vps = app.getRenderManager().getPostViews();
             ViewPort last = vps.get(vps.size()-1);
             last.addProcessor(this);
-
-            if (shotName == null) {
-                shotName = app.getClass().getSimpleName();
-            }
         }
 
         super.initialize(stateManager, app);
     }
 
-    public void takeScreenshot() {
+    public void grabCamera() {
         capture = true;
     }
 
     @Override
     public void initialize(RenderManager rm, ViewPort vp) {
         renderer = rm.getRenderer();
-        this.rm = rm;
-        reshape(vp, vp.getCamera().getWidth(), vp.getCamera().getHeight());
+        int width = (int) ((this.cameraToCapture.getViewPortRight() - this.cameraToCapture.getViewPortLeft()) * this.cameraToCapture.getWidth());
+        int height = (int) ((this.cameraToCapture.getViewPortTop() - this.cameraToCapture.getViewPortBottom()) * this.cameraToCapture.getHeight());
+        reshape(vp, width, height);
     }
 
     @Override
@@ -119,8 +112,13 @@ public class RenderCamera extends AbstractAppState implements ActionListener, Sc
     public void postFrame(FrameBuffer out) {
         if (capture){
             capture = false;
-            Camera curCamera = rm.getCurrentCamera();
-            renderer.setViewPort(0, 0, width, height);
+            
+            Camera curCamera = this.cameraToCapture;
+            int viewX = (int) (curCamera.getViewPortLeft() * curCamera.getWidth());
+            int viewY = (int) (curCamera.getViewPortBottom() * curCamera.getHeight());
+
+            
+            renderer.setViewPort(viewX, viewY, width, height);
             renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
             ByteBuffer outBuf2 = outBuf.duplicate();
             outBuf2.flip();
@@ -128,7 +126,7 @@ public class RenderCamera extends AbstractAppState implements ActionListener, Sc
             outBuf2.clear();
             outBuf2.get(bArray, 0, bArray.length);
             
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); 
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
@@ -146,10 +144,6 @@ public class RenderCamera extends AbstractAppState implements ActionListener, Sc
             }catch (IOException exc) {}
 
         }
-    }
-
-    @Override
-    public void onAction(String name, boolean isPressed, float tpf) {
     }
 
     @Override
