@@ -16,11 +16,11 @@ public class RGBAColor {
     private byte B;
     private byte A;
     
-    public RGBAColor(byte R, byte G, byte B){
+    public RGBAColor(byte R, byte G, byte B, byte A){
         this.R = R;
         this.G = G;
         this.B = B;
-        this.B = A;
+        this.A = A;
     }
     
     public byte getR(){

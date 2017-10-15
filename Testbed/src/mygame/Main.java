@@ -68,14 +68,17 @@ public class Main extends SimpleApplication {
         
         rootNode.attachChild(box);
         rootNode.attachChild(planeNode);
-        
-        
+       
         sas = new RenderCamera(planeCam);
         sas.initialize(stateManager, this);
     }
 
     @Override
-    public void simpleUpdate(float tpf) {        
+    public void simpleUpdate(float tpf) { 
+        rootNode.getChild("planenode").setLocalTranslation(
+                rootNode.getChild("planenode").getLocalTranslation().getX()+0.01f, 
+                rootNode.getChild("planenode").getLocalTranslation().getY(), 
+                rootNode.getChild("planenode").getLocalTranslation().getZ());
         sas.grabCamera();
     }
 

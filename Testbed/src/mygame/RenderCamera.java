@@ -116,7 +116,6 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             Camera curCamera = this.cameraToCapture;
             int viewX = (int) (curCamera.getViewPortLeft() * curCamera.getWidth());
             int viewY = (int) (curCamera.getViewPortBottom() * curCamera.getHeight());
-
             
             renderer.setViewPort(viewX, viewY, width, height);
             renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
