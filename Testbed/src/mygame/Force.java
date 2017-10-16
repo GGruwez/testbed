@@ -13,9 +13,6 @@ public class Force {
 	private Vector WingGravityForce;
 	private Vector engineGravityForce;
 	private Vector thrustForce;
-//	private double heading;
-//	private double pitch;
-//	private double roll;
 	private Vector leftWingAttack;
 	private Vector rightWingAttack;
 	private Vector horizontalStabilizerAttack;
@@ -41,7 +38,7 @@ public class Force {
 			float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination){
 		
 		this.setAttackAngles(leftWingInclination, rightWingInclination, horStabInclination, verStabInclination);
-//		this.setAngles(heading, pitch, roll);
+
 		
 		this.setGravityForces(TailMass, WingMass, engineMass, gravityConstant);
 		this.setLiftForce();
@@ -55,10 +52,10 @@ public class Force {
 	
 	
 	public void setAttackAngles(float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination){
-		this.leftWingAttack = new Vector(0, Math.sin(leftWingInclination), -Math.cos(leftWingInclination));
-		this.rightWingAttack = new Vector(0, Math.sin(rightWingInclination), -Math.cos(rightWingInclination));
-		this.horizontalStabilizerAttack =new  Vector(0, Math.sin(horStabInclination), -Math.cos(horStabInclination));
-		this.verticalStabilizerAttack =new  Vector(-Math.sin(verStabInclination), 0, -Math.cos(verStabInclination));
+		this.leftWingAttack = new Vector(0, (float)Math.sin(leftWingInclination), (float) -Math.cos(leftWingInclination));
+		this.rightWingAttack = new Vector(0, (float)Math.sin(rightWingInclination), (float) -Math.cos(rightWingInclination));
+		this.horizontalStabilizerAttack =new  Vector(0, (float)Math.sin(horStabInclination), (float) -Math.cos(horStabInclination));
+		this.verticalStabilizerAttack =new  Vector((float) -Math.sin(verStabInclination), 0, (float) -Math.cos(verStabInclination));
 	}
 
 	
@@ -216,10 +213,10 @@ public class Force {
 		this.verticalStabilizerLift = getVerticalStabilizerNormal().constantProduct(ct);
 	}
 	
+
 	public void setLiftForce(){
 		this.liftForce = this.leftWingLift.add(this.rightWingLift).add(this.horizontalStabilizerLift).add(this.verticalStabilizerLift);
 	}
-	
 	
 	public Vector getLeftWingNormal(){
 		return this.leftWingAxis.crossProduct(this.leftWingAttack);
@@ -259,10 +256,23 @@ public class Force {
 	}
 
 	
+
+	public Vector EnginePlace(){
+		return getAircraft().getTailSize().constantProduct(- getAircraft().getTailMass()/getAircraft().getEngineMass());
+	}
+	
+	// in drone assenstelsel
+
 	public Vector getTotalForce(){
 		return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce());
 	}
         
-        
+    public Vector getTotalMoment(){
+    	Vector wingR = getAircraft().getWingx().crossProduct(getWingGravityForce().add(getRightWingLift()));
+    	Vector wingL = getAircraft().getWingx().constantProduct(-1).crossProduct(getWingGravityForce().add(getRightWingLift()));
+    	Vector tail  = getAircraft().getTailSize().crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
+    	Vector engine = EnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));
+    	return wingR.add(wingL).add(tail).add(engine);
+    }
 	
 }
