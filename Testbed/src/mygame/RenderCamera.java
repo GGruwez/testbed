@@ -95,7 +95,7 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
 
     @Override
     public void reshape(ViewPort vp, int w, int h) {
-        outBuf = BufferUtils.createByteBuffer(w * h * 4);
+        outBuf = BufferUtils.createByteBuffer(1024 * 768 * 3);
         width = w;
         height = h;
     }
@@ -118,7 +118,7 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             int viewY = (int) (curCamera.getViewPortBottom() * curCamera.getHeight());
 
             
-            renderer.setViewPort(viewX, viewY, width, height);
+            renderer.setViewPort(0, 0, 1024, 768);
             renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
             ByteBuffer outBuf2 = outBuf.duplicate();
             outBuf2.flip();
@@ -127,14 +127,15 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             outBuf2.get(bArray, 0, bArray.length);
             
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int r = bArray[3*(y*width+x)+0]& 0xff;
-                    int g = bArray[3*(y*width+x)+1]& 0xff;
-                    int b = bArray[3*(y*width+x)+2]& 0xff;
+            System.out.println(bArray.length);
+            
+            for (int y = viewY; y < height+viewY; y++) {
+                for (int x = viewX; x < width+viewX; x++) {
+                    int r = bArray[3*(y*1024+x)+0]& 0xff;
+                    int g = bArray[3*(y*1024+x)+1]& 0xff;
+                    int b = bArray[3*(y*1024+x)+2]& 0xff;
                     int rgb = 65536*r + 256*g + b;
-                    image.setRGB(x, height-y-1, rgb);
+                    image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
                 }
             }
 

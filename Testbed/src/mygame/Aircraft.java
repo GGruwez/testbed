@@ -51,7 +51,7 @@ public class Aircraft extends Node {
         
         this.aircraftGeometry = new Geometry(name, mesh);
         // Plane camera
-        this.aircraftCamera = new Camera(1024,768);
+        this.aircraftCamera = new Camera(1000, 1000);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
         this.aircraftCamera.setViewPort(0.75f, 1.0f, 0.0f, 0.25f);
         this.aircraftCameraNode = new CameraNode("Camera Node", this.aircraftCamera);
@@ -162,14 +162,13 @@ public class Aircraft extends Node {
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
-    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass())));
-    
-    	
-    	setPitch(getPitch() + getAngularVelocity().getX());
-    	setRoll(getRoll() + getAngularVelocity().getZ());
-    	setHeading(getHeading() + getAngularVelocity().getY());
-    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
-    	setAngularAcceleration(getAngularAcceleration().add(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix()));
+//    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass())));
+//
+//    	setPitch(getPitch() + getAngularVelocity().getX());
+//    	setRoll(getRoll() + getAngularVelocity().getZ());
+//    	setHeading(getHeading() + getAngularVelocity().getY());
+//    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
+//    	setAngularAcceleration(getAngularAcceleration().add(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix()));
     }
 
     public void setWorld(World world) {

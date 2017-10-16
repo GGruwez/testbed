@@ -46,16 +46,8 @@ public class World {
         return this.aircraft;
     }
     
-    public AutopilotConfigReader getConfigReader() {
-        return this.configreader;
-    }
-    
     public AutopilotConfigWriter getConfigWriter() {
         return this.configwriter;
-    }
-    
-    public AutopilotInputsReader getInputReader() {
-        return this.inreader;
     }
     
     public AutopilotInputsWriter getInputWriter() {
@@ -64,10 +56,6 @@ public class World {
     
     public AutopilotOutputsReader getOutputReader() {
         return this.outreader;
-    }
-    
-    public AutopilotOutputsWriter getOutputWriter() {
-        return this.outwriter;
     }
     
     public void evolve(float dt) {
