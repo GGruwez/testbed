@@ -144,7 +144,7 @@ public class Force {
 	 * @return
 	 */
 	public Vector getAirSpeed(){
-		Vector airSpeed = getAircraft().getVelocity().substract(windSpeed);
+		Vector airSpeed = getAircraft().getVelocity().subtract(windSpeed);
 		return airSpeed;
 	}
 	
