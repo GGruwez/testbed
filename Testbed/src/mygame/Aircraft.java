@@ -116,13 +116,13 @@ public class Aircraft extends Node {
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
-    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(heading, pitch, roll).constantProduct(1/getTotalMass())));
+//    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(heading, pitch, roll).constantProduct(1/getTotalMass())));
     	
-    	setPitch();
-    	setRoll();
-    	setHeading();
-    	setAngularVelocity();
-    	setAngurlarAcceleration();
+//    	setPitch();
+//    	setRoll();
+//    	setHeading();
+//    	setAngularVelocity();
+//    	setAngurlarAcceleration();
     }
 
     public void setWorld(World world) {

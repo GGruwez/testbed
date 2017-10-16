@@ -19,12 +19,9 @@ public class World {
     private ByteArrayInputStream instream;
     private ByteArrayOutputStream outstream;
     private Aircraft aircraft;
-    private AutopilotConfigReader configreader = new AutopilotConfigReader();
     private AutopilotConfigWriter configwriter = new AutopilotConfigWriter();
-    private AutopilotInputsReader inreader = new AutopilotInputsReader();
     private AutopilotInputsWriter inwriter = new AutopilotInputsWriter();
     private AutopilotOutputsReader outreader = new AutopilotOutputsReader();
-    private AutopilotOutputsWriter outwriter = new AutopilotOutputsWriter();
     
     public World() {
         byte[] inbuf = new byte[1000];
@@ -73,7 +70,8 @@ public class World {
         return this.outwriter;
     }
     
-    public void evolve(double dt) {
+    public void evolve(float dt) {
+        this.getAircraft().updateAirplane(dt);
         
     }
     
