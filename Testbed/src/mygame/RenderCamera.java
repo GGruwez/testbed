@@ -58,11 +58,14 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
     private ByteBuffer outBuf;
     private int width, height;
     private final Camera cameraToCapture;
+    private int totalWidth;
+    private int totalHeight;
     
-    public RenderCamera(Camera cameraToCapture){
+    public RenderCamera(Camera cameraToCapture, int totalWidth, int totalHeight){
         this.cameraToCapture = cameraToCapture;
+        this.totalWidth = totalWidth;
+        this.totalHeight = totalHeight;
     }
-
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -95,7 +98,7 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
 
     @Override
     public void reshape(ViewPort vp, int w, int h) {
-        outBuf = BufferUtils.createByteBuffer(1024 * 768 * 3);
+        outBuf = BufferUtils.createByteBuffer(totalWidth * totalHeight * 3);
         width = w;
         height = h;
     }
@@ -117,8 +120,6 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             int viewX = (int) (curCamera.getViewPortLeft() * curCamera.getWidth());
             int viewY = (int) (curCamera.getViewPortBottom() * curCamera.getHeight());
 
-            
-            renderer.setViewPort(0, 0, 1024, 768);
             renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
             ByteBuffer outBuf2 = outBuf.duplicate();
             outBuf2.flip();
@@ -131,9 +132,9 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             
             for (int y = viewY; y < height+viewY; y++) {
                 for (int x = viewX; x < width+viewX; x++) {
-                    int r = bArray[3*(y*1024+x)+0]& 0xff;
-                    int g = bArray[3*(y*1024+x)+1]& 0xff;
-                    int b = bArray[3*(y*1024+x)+2]& 0xff;
+                    int r = bArray[3*(y*totalWidth+x)+0]& 0xff;
+                    int g = bArray[3*(y*totalWidth+x)+1]& 0xff;
+                    int b = bArray[3*(y*totalWidth+x)+2]& 0xff;
                     int rgb = 65536*r + 256*g + b;
                     image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
                 }
