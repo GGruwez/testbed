@@ -140,9 +140,10 @@ public class Force {
 	 * @return
 	 */
 	public Vector getAirSpeed(){
-		Vector velocity = getTotalForce()/(getTotalGravityForce().constantProduct(1/gravityConstant)).constantProduct(timeElapsed).add(initialSpeed);
-		return velocity.subtract(windSpeed);
+		Vector airSpeed = getAircraft().getVelocity().substract(windSpeed);
+		return airSpeed;
 	}
+	
 	
 	
 	
