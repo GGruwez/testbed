@@ -46,6 +46,10 @@ public class Force {
 			
 	}
 	
+	public Aircraft getAircraft(){
+		return this.plane;
+	}
+	
 	
 	public void setAttackAngles(float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination){
 		this.leftWingAttack = new Vector(0, (float)Math.sin(leftWingInclination), (float) -Math.cos(leftWingInclination));
