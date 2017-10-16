@@ -2,6 +2,7 @@ package mygame;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import p_en_o_cw_2017.AutopilotConfig;
 
 public class Aircraft extends Geometry {
     
@@ -11,6 +12,8 @@ public class Aircraft extends Geometry {
     private float xVelocity;
     private float yVelocity;
     private float zVelocity;
+    private World world;
+    private AutopilotConfig config;
     
     /**
      * 
@@ -55,6 +58,26 @@ public class Aircraft extends Geometry {
         this.yVelocity = y;
         this.zVelocity = z;
     }
-		
+    
+    public void setWorld(World world) {
+        this.world = world;
+    }
+    
+    public World getWorld() {
+        return this.world;
+    }
+    
+    public AutopilotConfig getConfig() {
+        return this.config;
+    }
+    
+    public void setConfig(AutopilotConfig config) {
+        this.config = config; 
+    }
+    
+    public void move(double dt) {
+        this.setLocalTranslation(
+                this.getLocalTranslation(), y, z);
+    }
 }
 
