@@ -15,6 +15,8 @@ public class Aircraft extends Geometry {
     private float pitch;
     private float roll;
     private float heading;
+	private Vector angularAcceleration;
+	private Vector angularVelocity;
     /**
      * 
      * @param x
@@ -70,16 +72,57 @@ public class Aircraft extends Geometry {
     	return this.enginemass+this.wingmass*2+ this.tailmass;
     }
     
-    public void updateAirplane(double time){
+    public float getPitch(){
+    	return this.pitch;
+    }
+    
+    public void setPitch(float pitch){
+    	this.pitch = pitch;
+    }
+    
+    public float getRoll(){
+    	return this.roll;
+    }
+    
+    public void setRoll(float roll){
+    	this.roll = roll;
+    }
+    
+    public float getHeading(){
+    	return this.heading;
+    }
+    
+    public void setHeading(float heading){
+    	this.heading = heading;
+    }
+    
+    public Vector getAngularVelocity(){
+    	return this.angularVelocity;
+    }
+    
+    public void setAngularVelocity(Vector aVelocity){
+    	this.angularVelocity = aVelocity;
+    }
+    
+    public Vector getAngularAcceleration(){
+    	return this.angularAcceleration;
+    }
+    
+    public void setAngularAcceleration(Vector aAcceleration){
+    	this.angularAcceleration = aAcceleration;
+    }
+    
+    
+    public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
-    	setVelocity(getVelocity().add(getAcceleration()).constantProduct(time));
-    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(heading, pitch, roll).constantProduct(1/getTotalMass())));
+    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
+    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass())));
     	
-    	setPitch();
-    	setRoll();
-    	setHeading();
-    	setAngularVelocity();
-    	setAngurlarAcceleration();
+    	setPitch(getPitch() + getAngularVelocity().getX());
+    	setRoll(getRoll() + getAngularVelocity().getZ());
+    	setHeading(getHeading() + getAngularVelocity().getY());
+    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
+    	setAngularAcceleration(getAngularAcceleration().add(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix()));
     }
 }
 
