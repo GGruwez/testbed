@@ -138,10 +138,5 @@ public class Aircraft extends Node {
     public void setConfig(AutopilotConfig config) {
         this.config = config; 
     }
-    
-    public void move(double dt) {
-        this.setLocalTranslation(
-                this.getLocalTranslation(), y, z);
-    }
 }
 
