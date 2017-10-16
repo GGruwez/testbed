@@ -5,13 +5,16 @@ import com.jme3.scene.Mesh;
 
 public class Aircraft extends Geometry {
     
-    private float x;
-    private float y;
-    private float z;
-    private float xVelocity;
-    private float yVelocity;
-    private float zVelocity;
-    
+    private Vector coordinates;
+    private Vector velocity;
+    private Vector acceleration;
+    private Force forces;
+    private float tailmass;
+    private float wingmass;
+    private float enginemass;
+    private float pitch;
+    private float roll;
+    private float heading;
     /**
      * 
      * @param x
@@ -31,30 +34,52 @@ public class Aircraft extends Geometry {
             float mass, float thrust, float leftWingInclination,float rightWingInclination,
             float horStabInclination, float verStabInclination) {
         super(name, mesh);
-        this.setLocalTranslation(x, y, z);
+    
     }
 
     public Vector getCoordinates(){
-        return new Vector(this.x, this.y, this.z);
+        return this.coordinates;
     }	
     
-    @Override
-    public void setLocalTranslation(float x, float y, float z){
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        super.setLocalTranslation(x, y, z);
+    public void setCoordinates(Vector coordinates){
+    	this.coordinates = coordinates;
     }
     
     public Vector getVelocity() {
-        return new Vector(this.xVelocity, this.yVelocity, this.zVelocity);
+        return this.velocity;
     }
     
-    public void setVelocity(float x, float y, float z) {
-        this.xVelocity = x;
-        this.yVelocity = y;
-        this.zVelocity = z;
+    public void setVelocity(Vector velocity){
+    	this.velocity = velocity;
+    	
     }
-		
+    
+    public Vector getAcceleration(){
+    	return this.acceleration;
+    }
+    
+    public void setAcceleration(Vector acceleration){
+    	this.acceleration = acceleration;
+    }
+    
+    public Force getForce(){
+    	return this.forces;
+    }
+    
+    public float getTotalMass(){
+    	return this.enginemass+this.wingmass*2+ this.tailmass;
+    }
+    
+    public void updateAirplane(double time){
+    	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
+    	setVelocity(getVelocity().add(getAcceleration()).constantProduct(time));
+    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(heading, pitch, roll).constantProduct(1/getTotalMass())));
+    	
+    	setPitch();
+    	setRoll();
+    	setHeading();
+    	setAngularVelocity();
+    	setAngurlarAcceleration();
+    }
 }
 

@@ -11,7 +11,7 @@ public class Force {
 	private Aircraft plane;
 	private Vector tailGravityForce;
 	private Vector WingGravityForce;
-	private Vector BodyGravityForce;
+	private Vector engineGravityForce;
 	private Vector thrustForce;
 //	private double heading;
 //	private double pitch;
@@ -34,13 +34,13 @@ public class Force {
 	private Vector horizontalStabilizerAxis = new Vector(1,0,0);
 	
 	
-	Force(double TailMass, double WingMass, double BodyMass, double gravityConstant,double thrust,
+	Force(double TailMass, double WingMass, double engineMass, double gravityConstant,double thrust,
 			double leftWingInclination, double rightWingInclination, double horStabInclination, double verStabInclination){
 		
 		this.setAttackAngles(leftWingInclination, rightWingInclination, horStabInclination, verStabInclination);
 //		this.setAngles(heading, pitch, roll);
 		
-		this.setGravityForces(TailMass, WingMass, BodyMass, gravityConstant);
+		this.setGravityForces(TailMass, WingMass, engineMass, gravityConstant);
 		this.setLiftForce();
 		this.setThrust(thrust);
 			
@@ -55,10 +55,10 @@ public class Force {
 	}
 
 	
-	public void setGravityForces(double TailMass, double WingMass, double BodyMass, double gravityConstant){
+	public void setGravityForces(double TailMass, double WingMass, double engineMass, double gravityConstant){
 		this.tailGravityForce = new Vector(0,-TailMass * gravityConstant, 0);
 		this.WingGravityForce = new Vector(0, -WingMass * gravityConstant, 0);
-		this.BodyGravityForce = new Vector(0,-BodyMass * gravityConstant, 0);
+		this.engineGravityForce = new Vector(0,-engineMass * gravityConstant, 0);
 		
 		}
 	
@@ -123,8 +123,8 @@ public class Force {
 		return this.WingGravityForce;
 	}
 	
-	public Vector getBodyGravityForce(){
-		return this.BodyGravityForce;
+	public Vector getEngineGravityForce(){
+		return this.engineGravityForce;
 	}
 	
 	public Vector getTailGravityForce(){
@@ -132,7 +132,7 @@ public class Force {
 	}
 	
 	public Vector getTotalGravityForce(){
-		return this.getBodyGravityForce().add(this.getTailGravityForce().add(this.getWingGravityForce().add(this.getWingGravityForce())));
+		return this.getEngineGravityForce().add(this.getTailGravityForce().add(this.getWingGravityForce().add(this.getWingGravityForce())));
 	}
 	
 	/**
@@ -141,7 +141,7 @@ public class Force {
 	 */
 	public Vector getAirSpeed(){
 		Vector velocity = getTotalForce()/(getTotalGravityForce().constantProduct(1/gravityConstant)).constantProduct(timeElapsed).add(initialSpeed);
-		return Vector airSpeed = velocity.subtract(windSpeed);
+		return velocity.subtract(windSpeed);
 	}
 	
 	
