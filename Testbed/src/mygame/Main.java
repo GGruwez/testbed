@@ -33,51 +33,42 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         Box b = new Box(1, 1, 1);
-        Geometry box = new Geometry("Box", b);
+        Geometry goalCube = new Geometry("Box", b);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        box.setMaterial(mat);
-        box.setLocalTranslation(0, 0, 0);
+        mat.setColor("Color", ColorRGBA.Red);
+        goalCube.setMaterial(mat);
+        goalCube.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(2,1,1);
         aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-        Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        planeMaterial.setColor("Color", ColorRGBA.Green);
-        aircraft.setMaterial(planeMaterial);
-        aircraft.setLocalTranslation(-4, 0, 0);
         
-        this.viewPort.setBackgroundColor(ColorRGBA.White);
-        
-        // Plane camera
-        Camera planeCam = cam.clone();
-        planeCam.setViewPort(0.75f, 1.0f, 0.0f, 0.25f);
-        ViewPort planeCamViewPort = renderManager.createMainView("planecam view", planeCam);
+        // Plane camera viewport
+        ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
         planeCamViewPort.setClearFlags(true, true, true);
         planeCamViewPort.attachScene(rootNode);
         planeCamViewPort.setBackgroundColor(ColorRGBA.Black);
         
-        CameraNode planeCamNode = new CameraNode("Camera Node", planeCam);
-        planeCamNode.setControlDir(ControlDirection.SpatialToCamera);
-        Node planeNode = new Node("planenode");
-        planeNode.attachChild(aircraft);
-        planeNode.attachChild(planeCamNode);
-        planeCamNode.setLocalTranslation(new Vector3f(-5, 3, 0));
-        planeCamNode.lookAt(new Vector3f(0,0,0), Vector3f.UNIT_Y);
+        // Aircraft material
+        Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        planeMaterial.setColor("Color", ColorRGBA.Green);
+        aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
-        rootNode.attachChild(box);
-        rootNode.attachChild(planeNode);
+        // Move aircraft to starting position
+        aircraft.setLocalTranslation(-10, 0, 0);
         
+        // Set viewport background color to white
+        this.viewPort.setBackgroundColor(ColorRGBA.White);
         
-        sas = new RenderCamera(planeCam);
+        rootNode.attachChild(goalCube);
+        rootNode.attachChild(aircraft);
+        
+        sas = new RenderCamera(aircraft.getCamera());
         sas.initialize(stateManager, this);
     }
 
     @Override
     public void simpleUpdate(float tpf) {
-        rootNode.getChild("planenode").setLocalTranslation(
-                rootNode.getChild("planenode").getLocalTranslation().getX() + 0.01f, 
-                rootNode.getChild("planenode").getLocalTranslation().getY(),
-                rootNode.getChild("planenode").getLocalTranslation().getZ());
+        aircraft.move(new Vector(0.01f, 0, 0));
         sas.grabCamera();
     }
 
