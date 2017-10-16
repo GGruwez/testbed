@@ -13,7 +13,7 @@ public class Aircraft extends Node {
     
     private Vector coordinates;
     private Vector velocity;
-    private Vector acceleration;
+    private Vector acceleration = new Vector(0, 0, 0);
     private Force forces;
     private float tailmass;
     private float wingmass;
@@ -58,6 +58,8 @@ public class Aircraft extends Node {
         this.attachChild(this.aircraftCameraNode);
         this.aircraftCameraNode.setLocalTranslation(Vector3f.ZERO);
         this.aircraftCameraNode.lookAt(new Vector3f(1,0,0), Vector3f.UNIT_Y);
+        this.setCoordinates(new Vector(x, y, z));
+        this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
     }
     
     public Geometry getAircraftGeometry(){
@@ -113,7 +115,7 @@ public class Aircraft extends Node {
     
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
-    	setVelocity(getVelocity().add(getAcceleration()).constantProduct(time));
+    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
     	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(heading, pitch, roll).constantProduct(1/getTotalMass())));
     	
     	setPitch();
@@ -139,9 +141,5 @@ public class Aircraft extends Node {
         this.config = config; 
     }
     
-    public void move(double dt) {
-        this.setLocalTranslation(
-                this.getLocalTranslation(), y, z);
-    }
 }
 

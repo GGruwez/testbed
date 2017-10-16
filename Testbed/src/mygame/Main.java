@@ -40,7 +40,7 @@ public class Main extends SimpleApplication {
         goalCube.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(2,1,1);
-        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0);
         
         // Plane camera viewport
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
@@ -68,7 +68,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleUpdate(float tpf) {
-        aircraft.move(new Vector(0.01f, 0, 0));
+        aircraft.updateAirplane(tpf);
         sas.grabCamera();
     }
 
