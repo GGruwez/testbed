@@ -55,12 +55,16 @@ public class Vector {
 	 * @param roll - roll van de aircraft tov wereld
 	 * @return
 	 */
-	public Vector transform(double heading, double pitch, double roll ){
-		return new Vector(this.x*(Math.cos(heading)*Math.cos(pitch))+this.y*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll))+this.z*(Math.cos(heading)*Math.sin(pitch)*Math.cos(roll)+Math.sin(heading)*Math.sin(roll)),
-				this.x*(Math.sin(heading)*Math.cos(pitch))+this.y*(Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)+Math.cos(heading)*Math.cos(roll))+this.z*(Math.sin(heading)*Math.sin(pitch)*Math.cos(roll)-Math.cos(heading)*Math.sin(roll)),
-				this.x*(-Math.sin(pitch))+this.y*(Math.cos(pitch)*Math.sin(roll))+this.z*(Math.cos(pitch)*Math.cos(roll)));
-				
-				
+
+	public Vector transform(float heading, float pitch, float roll ){
+			double newX = this.x*(Math.cos(heading)*Math.cos(pitch))+this.y*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll))+this.z*(Math.cos(heading)*Math.sin(pitch)*Math.cos(roll)+Math.sin(heading)*Math.sin(roll));
+			float X = (float)newX;
+			double newY = this.x*(Math.sin(heading)*Math.cos(pitch))+this.y*(Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)+Math.cos(heading)*Math.cos(roll))+this.z*(Math.sin(heading)*Math.sin(pitch)*Math.cos(roll)-Math.cos(heading)*Math.sin(roll));
+			float Y = (float)newY;
+			double newZ = this.x*(-Math.sin(pitch))+this.y*(Math.cos(pitch)*Math.sin(roll))+this.z*(Math.cos(pitch)*Math.cos(roll));
+			float Z = (float)newZ;
+			return new Vector(X,Y,Z);
+	}
 
 	
 	/**
@@ -86,9 +90,9 @@ public class Vector {
 		return new Vector(this.x*constant, this.y*constant, this.z*constant);
 	}
         
-        @Override
-        public Vector clone(){
-            return new Vector(this.getX(), this.getY(), this.getZ());
-        }
+	@Override
+    public Vector clone(){
+        return new Vector(this.getX(), this.getY(), this.getZ());
+    }  
 }	
 	

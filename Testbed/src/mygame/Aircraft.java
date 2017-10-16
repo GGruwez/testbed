@@ -64,6 +64,8 @@ public class Aircraft extends Node {
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
     }
     
+   
+    
     public Geometry getAircraftGeometry(){
         return this.aircraftGeometry;
     }
