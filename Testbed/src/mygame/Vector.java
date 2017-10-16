@@ -1,30 +1,28 @@
 package mygame;
 
-import java.math.*;
-
 public class Vector {
 
-	private final double x;
-	private final double y;
-	private final double z;
+	private final float x;
+	private final float y;
+	private final float z;
 
-	public Vector(double x, double y, double z){
+	public Vector(float x, float y, float z){
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
 	
-	public double getX(){
+	public float getX(){
 		return this.x;
 	}
 	
-	public double getY(){
+	public float getY(){
 		return this.y;
 		
 	}
 	
-	public double getZ(){
+	public float getZ(){
 		return this.z;
 	}
 
@@ -38,18 +36,19 @@ public class Vector {
 
 	}
 	
-	public double euclideanLength(){
-		return Math.sqrt(this.dotProduct(this));
+	public float euclideanLength(){
+		return (float) Math.sqrt(this.dotProduct(this));
 	}
 	
 	/**
 	 * returnt de hoek tussen twee vectoren in radialen!
 	 */
-	public double angleBetween(Vector other){
-		return Math.acos(this.dotProduct(other)/(this.euclideanLength()*other.euclideanLength()));
+	public float angleBetween(Vector other){
+		return (float) Math.acos(this.dotProduct(other)/(this.euclideanLength()*other.euclideanLength()));
 	}
 	
 	
+<<<<<<< HEAD
 	/**
 	 * 
 	 * @param heading - heading van de aircraft tov wereld
@@ -64,6 +63,11 @@ public class Vector {
 				
 				
 		
+=======
+	// transformatiematrixen, daar kan ik echt nie mee werken
+	// ik kijk daar wel eens naar als ik mn boek van mechanica 3 vind, staat daar allemaal in
+	public Vector transform(float heading, float pitch, float roll ){
+>>>>>>> 4f8e96bada2056dc69beb5f0ed4ada14fb0019c5
 		
 	}
 	
@@ -72,7 +76,7 @@ public class Vector {
 	 * @param other
 	 * @return
 	 */
-	public double dotProduct(Vector other){
+	public float dotProduct(Vector other){
 		return this.x*other.x + this.y*other.y + this.z*other.z;
 	}
 	
@@ -86,8 +90,13 @@ public class Vector {
 				-this.x*other.z+other.x*this.z, this.x*other.y - other.x*this.y);
 	}
 	
-	public Vector constantProduct(double constant){
+	public Vector constantProduct(float constant){
 		return new Vector(this.x*constant, this.y*constant, this.z*constant);
 	}
+        
+        @Override
+        public Vector clone(){
+            return new Vector(this.getX(), this.getY(), this.getZ());
+        }
 }	
 	
