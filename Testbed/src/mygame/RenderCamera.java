@@ -128,7 +128,6 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             outBuf2.get(bArray, 0, bArray.length);
             
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            System.out.println(bArray.length);
             
             for (int y = viewY; y < height+viewY; y++) {
                 for (int x = viewX; x < width+viewX; x++) {
