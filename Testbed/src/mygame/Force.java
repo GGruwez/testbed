@@ -155,7 +155,6 @@ public class Force {
 		float returnZ = this.getAircraft().getVerticalStabilizerAirspeed().getZ();
 		
 		return new Vector(returnX, returnY, returnZ);
-		
 	}
 	
 	
