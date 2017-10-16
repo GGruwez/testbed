@@ -13,9 +13,6 @@ public class Force {
 	private Vector WingGravityForce;
 	private Vector engineGravityForce;
 	private Vector thrustForce;
-//	private double heading;
-//	private double pitch;
-//	private double roll;
 	private Vector leftWingAttack;
 	private Vector rightWingAttack;
 	private Vector horizontalStabilizerAttack;
@@ -38,7 +35,7 @@ public class Force {
 			float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination){
 		
 		this.setAttackAngles(leftWingInclination, rightWingInclination, horStabInclination, verStabInclination);
-//		this.setAngles(heading, pitch, roll);
+
 		
 		this.setGravityForces(TailMass, WingMass, engineMass, gravityConstant);
 		this.setLiftForce();
@@ -144,7 +141,7 @@ public class Force {
 	 * @return
 	 */
 	public Vector getAirSpeed(){
-		Vector airSpeed = getAircraft().getVelocity().substract(windSpeed);
+		Vector airSpeed = getAircraft().getVelocity().subtract(windSpeed);
 		return airSpeed;
 	}
 	
@@ -165,11 +162,21 @@ public class Force {
 				leftWingAttack.dotProduct(getProjectedAirspeed()));
 	}
 	
+	public Vector EnginePlace(){
+		return getAircraft().getTailSize().constantProduct(- getAircraft().getTailMass()/getAircraft().getEngineMass());
+	}
+	
 	// in drone assenstelsel
 	public Vector getTotalForce(){
 		return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce());
 	}
         
-        
+    public Vector getTotalMoment(){
+    	Vector wingR = getAircraft().getWingx().crossProduct(getWingGravityForce().add(getRightWingLift()));
+    	Vector wingL = getAircraft().getWingx().constantProduct(-1).crossProduct(getWingGravityForce().add(getRightWingLift()));
+    	Vector tail  = getAircraft().getTailSize().crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
+    	Vector engine = EnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));
+    	return wingR.add(wingL).add(tail).add(engine);
+    }
 	
 }

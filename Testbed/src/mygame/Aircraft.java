@@ -21,6 +21,8 @@ public class Aircraft extends Node {
     private float pitch;
     private float roll;
     private float heading;
+    private Vector wingx;
+    private Vector tailSize;
 	private Vector angularAcceleration;
 	private Vector angularVelocity;
     private World world;
@@ -156,6 +158,22 @@ public class Aircraft extends Node {
     
     public void setAngularAcceleration(Vector aAcceleration){
     	this.angularAcceleration = aAcceleration;
+    }
+    
+    public Vector getWingx(){
+    	return this.wingx;
+    }
+    
+    public Vector getTailSize(){
+    	return this.tailSize;
+    }
+    
+    public float getTailMass(){
+    	return this.tailmass;
+    }
+    
+    public float getEngineMass(){
+    	return this.enginemass;
     }
     
     
