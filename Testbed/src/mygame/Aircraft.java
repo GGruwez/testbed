@@ -140,6 +140,6 @@ public class Aircraft extends Node {
     public void setConfig(AutopilotConfig config) {
         this.config = config; 
     }
-    
+
 }
 

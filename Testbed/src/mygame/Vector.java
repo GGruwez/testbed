@@ -48,11 +48,27 @@ public class Vector {
 	}
 	
 	
+<<<<<<< HEAD
+	/**
+	 * 
+	 * @param heading - heading van de aircraft tov wereld
+	 * @param pitch - pitch van de aircraft tov wereld
+	 * @param roll - roll van de aircraft tov wereld
+	 * @return
+	 */
+	public Vector transform(double heading, double pitch, double roll ){
+		return new Vector(this.x*(Math.cos(heading)*Math.cos(pitch))+this.y*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll))+this.z*(Math.cos(heading)*Math.sin(pitch)*Math.cos(roll)+Math.sin(heading)*Math.sin(roll)),
+				this.x*(Math.sin(heading)*Math.cos(pitch))+this.y*(Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)+Math.cos(heading)*Math.cos(roll))+this.z*(Math.sin(heading)*Math.sin(pitch)*Math.cos(roll)-Math.cos(heading)*Math.sin(roll)),
+				this.x*(-Math.sin(pitch))+this.y*(Math.cos(pitch)*Math.sin(roll))+this.z*(Math.cos(pitch)*Math.cos(roll)));
+				
+				
+		
+=======
 	// transformatiematrixen, daar kan ik echt nie mee werken
 	// ik kijk daar wel eens naar als ik mn boek van mechanica 3 vind, staat daar allemaal in
 	public Vector transform(float heading, float pitch, float roll ){
+>>>>>>> 4f8e96bada2056dc69beb5f0ed4ada14fb0019c5
 		
-		return new Vector(0,0,0);
 	}
 	
 	/**
