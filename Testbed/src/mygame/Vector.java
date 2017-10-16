@@ -25,6 +25,7 @@ public class Vector {
 	public float getZ(){
 		return this.z;
 	}
+	
 
 
 	public Vector add(Vector other){
@@ -85,6 +86,7 @@ public class Vector {
 		return new Vector(this.y*other.z - other.y*this.z,
 				-this.x*other.z+other.x*this.z, this.x*other.y - other.x*this.y);
 	}
+	
 	
 	public Vector constantProduct(float constant){
 		return new Vector(this.x*constant, this.y*constant, this.z*constant);
