@@ -146,8 +146,4 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
 
         }
     }
-
-    @Override
-    public void setProfiler(AppProfiler profiler) {
-    }
 }

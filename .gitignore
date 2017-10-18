@@ -2,3 +2,6 @@
 /Testbed/build/
 /bin/
 /Testbed/output.bmp
+Testbed/.idea
+Testbed/out
+Testbed.iml
