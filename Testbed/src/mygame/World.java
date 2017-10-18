@@ -64,7 +64,7 @@ public class World {
         AutopilotOutputs input = this.getInputReader().read(this.getInputStream());
         this.getAircraft().readAutopilotOutputs(input);
         this.getAircraft().updateAirplane(dt);
-        AutopilotInputs output = this.getAircraft().getAutopilotInputs(dt);
+        AutopilotInputs output = this.getAircraft().getAutopilotInputs();
         this.getOutputWriter().write(this.getOutputStream(), output);
     }
     
