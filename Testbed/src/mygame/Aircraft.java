@@ -217,13 +217,13 @@ public class Aircraft extends Node {
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
-//    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass())));
+//    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
 //
 //    	setPitch(getPitch() + getAngularVelocity().getX());
 //    	setRoll(getRoll() + getAngularVelocity().getZ());
 //    	setHeading(getHeading() + getAngularVelocity().getY());
 //    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
-//    	setAngularAcceleration(getAngularAcceleration().add(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix()));
+//    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix());
     }
 
     public void setWorld(World world) {
