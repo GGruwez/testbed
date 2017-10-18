@@ -103,38 +103,51 @@ public class Force {
 	///////////////////////////////////LIFT//////////////////////////////////////////
 	
 	public Vector getLeftWingAirSpeed(){
-		Vector leftWingAirSpeed = getAircraft().getLeftWingVelocity().subtract(windSpeed);
+		Vector leftWingAirSpeed = getLeftWingVelocity().subtract(windSpeed);
 		return leftWingAirSpeed;
 	}
 	
 	public Vector getRightWingAirSpeed(){
-		Vector rightWingAirSpeed = getAircraft().getRightWingVelocity().subtract(windSpeed);
+		Vector rightWingAirSpeed = getRightWingVelocity().subtract(windSpeed);
 		return rightWingAirSpeed;
 	}
 	
 	public Vector getHorizontalStabilizerAirSpeed(){
-		Vector horizontalStabilizerAirSpeed = getAircraft().getHorizontalStabilizerVelocity().subtract(windSpeed);
+		Vector horizontalStabilizerAirSpeed = getStabilizerVelocity().subtract(windSpeed);
 		return	horizontalStabilizerAirSpeed;
 	}
 	
 	public Vector getVerticalStabilizerAirSpeed(){
-		Vector verticalStabilizerAirSpeed = getAircraft().getVerticalStabilizerVelocity().subtract(windSpeed);
+		Vector verticalStabilizerAirSpeed = getStabilizerVelocity().subtract(windSpeed);
 		return verticalStabilizerAirSpeed;
+	}
+	
+	public Vector getRightWingVelocity(){
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingx().crossProduct(this.getAircraft().getAngularVelocity()));
+	}
+	
+	public Vector getLeftWingVelocity(){
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingx().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
+	}
+	
+	public Vector getStabilizerVelocity(){
+		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
+
 	}
 	
 	
 	public Vector getRightWingProjectedAirspeed(){
 		float returnX = 0;
-		float returnY = this.getAircraft().getRightWingAirSpeed().getY();
-		float returnZ = this.getAircraft().getRightWingAirSpeed().getZ();
+		float returnY = getRightWingAirSpeed().getY();
+		float returnZ = getRightWingAirSpeed().getZ();
 		
 		return new Vector(returnX, returnY, returnZ);
 		}
 	
 	public Vector getLeftWingProjectedAirspeed(){
 		float returnX = 0;
-		float returnY = this.getAircraft().getLeftWingAirSpeed().getY();
-		float returnZ = this.getAircraft().getLeftWingAirSpeed().getZ();
+		float returnY = getLeftWingAirSpeed().getY();
+		float returnZ = getLeftWingAirSpeed().getZ();
 		
 		return new Vector(returnX, returnY, returnZ);
 		}
@@ -142,17 +155,17 @@ public class Force {
 	
 	public Vector getHorizontalStabilizerProjectedAirspeed(){
 		float returnX = 0;
-		float returnY = this.getAircraft().getHorizontalStabilizerAirSpeed().getY();
-		float returnZ = this.getAircraft().getHorizontalStabilizerAirSpeed().getZ();
+		float returnY = getHorizontalStabilizerAirSpeed().getY();
+		float returnZ = getHorizontalStabilizerAirSpeed().getZ();
 		
 		return new Vector(returnX, returnY, returnZ);
 	}
 	
 	
 	public Vector getVerticalStabilizerProjectedAirspeed(){
-		float returnX = this.getAircraft().getVerticalStabilizerAirspeed().getX();
+		float returnX = getVerticalStabilizerAirSpeed().getX();
 		float returnY = 0;
-		float returnZ = this.getAircraft().getVerticalStabilizerAirspeed().getZ();
+		float returnZ = getVerticalStabilizerAirSpeed().getZ();
 		
 		return new Vector(returnX, returnY, returnZ);
 	}
