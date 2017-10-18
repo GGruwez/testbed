@@ -119,7 +119,6 @@ public class Aircraft extends Node {
     	return this.enginemass+this.wingmass*2+ this.tailmass;
     }
     
-
     public float getPitch(){
     	return this.pitch;
     }
