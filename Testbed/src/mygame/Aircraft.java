@@ -30,10 +30,10 @@ public class Aircraft extends Node {
     private World world;
     private AutopilotConfig config;
     private float leftWingInclination;
-
     private float rightWingInclination;
     private float horStabInclination;
     private float verStabInclination;
+    private float elapsedTime;
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -213,6 +213,14 @@ public class Aircraft extends Node {
     public void setVerStabInclination(float verStabInclination) {
         this.verStabInclination = verStabInclination;
     }
+
+    public float getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(float elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
     
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
@@ -224,6 +232,7 @@ public class Aircraft extends Node {
 //    	setHeading(getHeading() + getAngularVelocity().getY());
 //    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
 //    	setAngularAcceleration(getAngularAcceleration().add(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix()));
+        this.setElapsedTime(this.getElapsedTime()+time);
     }
 
     public void setWorld(World world) {
@@ -250,7 +259,7 @@ public class Aircraft extends Node {
         this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
     }
 
-    public AutopilotInputs getAutopilotInputs(final float dt){
+    public AutopilotInputs getAutopilotInputs(){
         return new AutopilotInputs() {
             @Override
             public byte[] getImage() {
@@ -289,7 +298,7 @@ public class Aircraft extends Node {
 
             @Override
             public float getElapsedTime() {
-                return dt;
+                return Aircraft.this.getElapsedTime();
             }
         };
     }
