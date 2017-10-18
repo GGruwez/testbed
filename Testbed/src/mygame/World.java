@@ -11,6 +11,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import p_en_o_cw_2017.AutopilotConfigWriter;
+import p_en_o_cw_2017.AutopilotInputs;
 import p_en_o_cw_2017.AutopilotInputsWriter;
 import p_en_o_cw_2017.AutopilotOutputs;
 import p_en_o_cw_2017.AutopilotOutputsReader;
@@ -63,6 +64,8 @@ public class World {
         AutopilotOutputs input = this.getInputReader().read(this.getInputStream());
         this.getAircraft().readAutopilotOutputs(input);
         this.getAircraft().updateAirplane(dt);
+        AutopilotInputs output = this.getAircraft().getAutopilotInputs(dt);
+        this.getOutputWriter().write(this.getOutputStream(), output);
     }
     
 }
