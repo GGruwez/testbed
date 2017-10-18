@@ -76,9 +76,6 @@ public class Force {
 //		this.roll = roll;
 //	}
 	
-	
-	
-	
 	public Vector getThrustForce(){
 		return this.thrustForce;
 	}

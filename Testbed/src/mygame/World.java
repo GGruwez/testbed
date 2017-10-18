@@ -7,17 +7,18 @@ package mygame;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import p_en_o_cw_2017.AutopilotConfigReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import p_en_o_cw_2017.AutopilotConfigWriter;
-import p_en_o_cw_2017.AutopilotInputsReader;
 import p_en_o_cw_2017.AutopilotInputsWriter;
+import p_en_o_cw_2017.AutopilotOutputs;
 import p_en_o_cw_2017.AutopilotOutputsReader;
-import p_en_o_cw_2017.AutopilotOutputsWriter;
 
 public class World {
     
-    private ByteArrayInputStream instream;
-    private ByteArrayOutputStream outstream;
+    private DataOutputStream outstream;
+    private DataInputStream instream;
     private Aircraft aircraft;
     private AutopilotConfigWriter configwriter = new AutopilotConfigWriter();
     private AutopilotInputsWriter inwriter = new AutopilotInputsWriter();
@@ -25,15 +26,15 @@ public class World {
     
     public World() {
         byte[] inbuf = new byte[1000];
-        this.instream = new ByteArrayInputStream(inbuf);
-        this.outstream = new ByteArrayOutputStream();
+        this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
+        this.outstream = new DataOutputStream(new ByteArrayOutputStream());
     }
     
-    public ByteArrayInputStream getInputStream() {
+    public DataInputStream getInputStream() {
         return this.instream;
     }
     
-    public ByteArrayOutputStream getOutputStream() {
+    public DataOutputStream getOutputStream() {
         return this.outstream;
     }
     
@@ -50,17 +51,18 @@ public class World {
         return this.configwriter;
     }
     
-    public AutopilotInputsWriter getInputWriter() {
+    public AutopilotInputsWriter getOutputWriter() {
         return this.inwriter;
     }
     
-    public AutopilotOutputsReader getOutputReader() {
+    public AutopilotOutputsReader getInputReader() {
         return this.outreader;
     }
     
-    public void evolve(float dt) {
+    public void evolve(float dt) throws IOException {
+        AutopilotOutputs input = this.getInputReader().read(this.getInputStream());
+        this.getAircraft().readAutopilotOutputs(input);
         this.getAircraft().updateAirplane(dt);
-        
     }
     
 }

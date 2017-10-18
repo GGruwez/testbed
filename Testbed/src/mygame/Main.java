@@ -39,8 +39,8 @@ public class Main extends SimpleApplication {
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
         
-        Box plane = new Box(2,1,1);
-        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+        Box plane = new Box(1,1,2);
+        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0);
         
         // Plane camera viewport
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
@@ -54,7 +54,7 @@ public class Main extends SimpleApplication {
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
         // Move aircraft to starting position
-        aircraft.setLocalTranslation(-10, 0, 0);
+        aircraft.setLocalTranslation(0, 0, 50);
         
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.White);

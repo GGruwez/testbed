@@ -8,6 +8,8 @@ import com.jme3.scene.Mesh;
 import p_en_o_cw_2017.AutopilotConfig;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
+import p_en_o_cw_2017.AutopilotInputs;
+import p_en_o_cw_2017.AutopilotOutputs;
 
 public class Aircraft extends Node {
     
@@ -27,6 +29,11 @@ public class Aircraft extends Node {
 	private Vector angularVelocity;
     private World world;
     private AutopilotConfig config;
+    private float leftWingInclination;
+
+    private float rightWingInclination;
+    private float horStabInclination;
+    private float verStabInclination;
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -61,7 +68,7 @@ public class Aircraft extends Node {
         this.attachChild(this.aircraftGeometry);
         this.attachChild(this.aircraftCameraNode);
         this.aircraftCameraNode.setLocalTranslation(Vector3f.ZERO);
-        this.aircraftCameraNode.lookAt(new Vector3f(1,0,0), Vector3f.UNIT_Y);
+        this.aircraftCameraNode.lookAt(new Vector3f(0,0,-1), Vector3f.UNIT_Y); // Front of the plane is in -z direction
         this.setCoordinates(new Vector(x, y, z));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
     }
@@ -119,7 +126,6 @@ public class Aircraft extends Node {
     	return this.enginemass+this.wingmass*2+ this.tailmass;
     }
     
-
     public float getPitch(){
     	return this.pitch;
     }
@@ -175,7 +181,38 @@ public class Aircraft extends Node {
     public float getEngineMass(){
     	return this.enginemass;
     }
-    
+
+    public float getLeftWingInclination() {
+        return leftWingInclination;
+    }
+
+    public void setLeftWingInclination(float leftWingInclination) {
+        this.leftWingInclination = leftWingInclination;
+    }
+
+    public float getRightWingInclination() {
+        return rightWingInclination;
+    }
+
+    public void setRightWingInclination(float rightWingInclination) {
+        this.rightWingInclination = rightWingInclination;
+    }
+
+    public float getHorStabInclination() {
+        return horStabInclination;
+    }
+
+    public void setHorStabInclination(float horStabInclination) {
+        this.horStabInclination = horStabInclination;
+    }
+
+    public float getVerStabInclination() {
+        return verStabInclination;
+    }
+
+    public void setVerStabInclination(float verStabInclination) {
+        this.verStabInclination = verStabInclination;
+    }
     
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
@@ -203,6 +240,58 @@ public class Aircraft extends Node {
     
     public void setConfig(AutopilotConfig config) {
         this.config = config; 
+    }
+
+    public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
+        this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
+        this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
+        this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
+        this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
+    }
+
+    public AutopilotInputs getAutopilotInputs(float dt){
+        return new AutopilotInputs() {
+            @Override
+            public byte[] getImage() {
+                return new byte[0]; // TODO: get image
+            }
+
+            @Override
+            public float getX() {
+                return Aircraft.this.getCoordinates().getX();
+            }
+
+            @Override
+            public float getY() {
+                return Aircraft.this.getCoordinates().getY();
+            }
+
+            @Override
+            public float getZ() {
+                return Aircraft.this.getCoordinates().getZ();
+            }
+
+            @Override
+            public float getHeading() {
+                return Aircraft.this.getHeading();
+            }
+
+            @Override
+            public float getPitch() {
+                return Aircraft.this.getPitch();
+            }
+
+            @Override
+            public float getRoll() {
+                return Aircraft.this.getRoll();
+            }
+
+            @Override
+            public float getElapsedTime() {
+                return dt;
+            }
+        };
     }
 
 }
