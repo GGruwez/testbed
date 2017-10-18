@@ -250,7 +250,7 @@ public class Aircraft extends Node {
         this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
     }
 
-    public AutopilotInputs getAutopilotInputs(float dt){
+    public AutopilotInputs getAutopilotInputs(final float dt){
         return new AutopilotInputs() {
             @Override
             public byte[] getImage() {
