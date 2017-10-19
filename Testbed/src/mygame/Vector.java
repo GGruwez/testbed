@@ -67,7 +67,9 @@ public class Vector {
 			return new Vector(X,Y,Z);
 	}
 
-	
+	public Vector inverseTransform(float heading, float pitch, float roll){
+		return
+	}
 	/**
 	 * A.B
 	 * @param other

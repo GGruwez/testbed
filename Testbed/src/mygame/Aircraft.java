@@ -122,6 +122,9 @@ public class Aircraft extends Node {
     	return this.forces;
     }
     
+    public float getWingMass(){
+    return this.wingmass;
+    }
     public float getTotalMass(){
     	return this.enginemass+this.wingmass*2+ this.tailmass;
     }
@@ -166,7 +169,7 @@ public class Aircraft extends Node {
     	this.angularAcceleration = aAcceleration;
     }
     
-    public Vector getWingx(){
+    public Vector getWingX(){
     	return this.wingx;
     }
     
@@ -181,6 +184,10 @@ public class Aircraft extends Node {
     public float getEngineMass(){
     	return this.enginemass;
     }
+    
+    public Vector getEnginePlace(){
+		return this.tailSize.constantProduct(-this.tailmass/this.enginemass);
+	}
 
     public float getLeftWingInclination() {
         return leftWingInclination;
@@ -225,14 +232,17 @@ public class Aircraft extends Node {
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
-//    	setAcceleration(getAcceleration().add(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass())));
+//    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
 //
 //    	setPitch(getPitch() + getAngularVelocity().getX());
 //    	setRoll(getRoll() + getAngularVelocity().getZ());
 //    	setHeading(getHeading() + getAngularVelocity().getY());
 //    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
-//    	setAngularAcceleration(getAngularAcceleration().add(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix()));
+
+//    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix());
+
         this.setElapsedTime(this.getElapsedTime()+time);
+>>>>>>> 32f32c4a2915b05dcded3567275de2ea9ae7f506
     }
 
     public void setWorld(World world) {
