@@ -25,8 +25,8 @@ public class Aircraft extends Node {
     private float heading;
     private Vector wingx;
     private Vector tailSize;
-	private Vector angularAcceleration;
-	private Vector angularVelocity;
+    private Vector angularAcceleration;
+    private Vector angularVelocity;
     private World world;
     private AutopilotConfig config;
     private float leftWingInclination;
@@ -122,6 +122,9 @@ public class Aircraft extends Node {
     	return this.forces;
     }
     
+    public float getWingMass(){
+    return this.wingmass;
+    }
     public float getTotalMass(){
     	return this.enginemass+this.wingmass*2+ this.tailmass;
     }
@@ -166,7 +169,7 @@ public class Aircraft extends Node {
     	this.angularAcceleration = aAcceleration;
     }
     
-    public Vector getWingx(){
+    public Vector getWingX(){
     	return this.wingx;
     }
     
@@ -181,6 +184,10 @@ public class Aircraft extends Node {
     public float getEngineMass(){
     	return this.enginemass;
     }
+    
+    public Vector getEnginePlace(){
+		return this.tailSize.constantProduct(-this.tailmass/this.enginemass);
+	}
 
     public float getLeftWingInclination() {
         return leftWingInclination;

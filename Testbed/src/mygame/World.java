@@ -10,12 +10,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import p_en_o_cw_2017.AutopilotConfigWriter;
-import p_en_o_cw_2017.AutopilotInputs;
-import p_en_o_cw_2017.AutopilotInputsWriter;
-import p_en_o_cw_2017.AutopilotOutputs;
-import p_en_o_cw_2017.AutopilotOutputsReader;
+
+import p_en_o_cw_2017.*;
 import autopilot.Autopilot;
+import p_en_o_cw_2017.AutopilotOutputs;
 
 public class World {
     
@@ -51,23 +49,11 @@ public class World {
         return this.aircraft;
     }
     
-    public AutopilotConfigWriter getConfigWriter() {
-        return this.configwriter;
-    }
-    
-    public AutopilotInputsWriter getOutputWriter() {
-        return this.inwriter;
-    }
-    
-    public AutopilotOutputsReader getInputReader() {
-        return this.outreader;
-    }
-    
     public void evolve(float dt) throws IOException {
         AutopilotInputs output = this.getAircraft().getAutopilotInputs();
-        this.getOutputWriter().write(this.getOutputStream(), output);
+        AutopilotInputsWriter.write(this.getOutputStream(), output);
         autopilot.fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
-        AutopilotOutputs input = this.getInputReader().read(this.getInputStream());
+        AutopilotOutputs input = AutopilotOutputsReader.read(this.getInputStream());
         this.getAircraft().readAutopilotOutputs(input);
         this.getAircraft().updateAirplane(dt);
     }
