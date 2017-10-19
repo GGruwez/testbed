@@ -120,11 +120,11 @@ public class Force {
 	}
 	
 	public Vector getRightWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingx().crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getLeftWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingx().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getStabilizerVelocity(){
@@ -291,7 +291,6 @@ public class Force {
 	
 	
 	// in drone assenstelsel
-
 	public Vector getTotalForce(){
 		return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce());
 	}
