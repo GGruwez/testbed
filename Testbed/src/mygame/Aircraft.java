@@ -25,8 +25,8 @@ public class Aircraft extends Node {
     private float heading;
     private Vector wingx;
     private Vector tailSize;
-	private Vector angularAcceleration;
-	private Vector angularVelocity;
+    private Vector angularAcceleration;
+    private Vector angularVelocity;
     private World world;
     private AutopilotConfig config;
     private float leftWingInclination;
