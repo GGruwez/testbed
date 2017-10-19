@@ -68,7 +68,7 @@ public class Vector {
 	}
 
 	public Vector inverseTransform(float heading, float pitch, float roll){
-		return
+		return null;
 	}
 	/**
 	 * A.B

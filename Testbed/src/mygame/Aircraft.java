@@ -60,7 +60,7 @@ public class Aircraft extends Node {
         
         this.aircraftGeometry = new Geometry(name, mesh);
         // Plane camera
-        this.aircraftCamera = new Camera(1000, 1000);
+        this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
         this.aircraftCamera.setViewPort(0.75f, 1.0f, 0.0f, 0.25f);
         this.aircraftCameraNode = new CameraNode("Camera Node", this.aircraftCamera);
@@ -235,7 +235,6 @@ public class Aircraft extends Node {
 //    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix());
 
         this.setElapsedTime(this.getElapsedTime()+time);
->>>>>>> 32f32c4a2915b05dcded3567275de2ea9ae7f506
     }
 
     public void setWorld(World world) {
