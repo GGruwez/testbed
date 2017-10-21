@@ -20,7 +20,7 @@ public class Aircraft extends Node {
     private float pitch;
     private float roll;
     private float heading;
-    private Vector wingx;
+    private Vector wingX;
     private Vector tailSize;
     private Vector angularAcceleration;
     private Vector angularVelocity;
@@ -56,6 +56,7 @@ public class Aircraft extends Node {
             float horStabInclination, float verStabInclination) {   
         
         this.aircraftGeometry = new Geometry(name, mesh);
+        
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
@@ -167,7 +168,7 @@ public class Aircraft extends Node {
     }
     
     public Vector getWingX(){
-    	return this.wingx;
+    	return this.wingX;
     }
     
     public Vector getTailSize(){
@@ -229,6 +230,7 @@ public class Aircraft extends Node {
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
+        
 //    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
 //
 //    	setPitch(getPitch() + getAngularVelocity().getX());
