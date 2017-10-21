@@ -20,16 +20,13 @@ public class World {
     private DataOutputStream outstream;
     private DataInputStream instream;
     private Aircraft aircraft;
-    private AutopilotConfigWriter configwriter = new AutopilotConfigWriter();
-    private AutopilotInputsWriter inwriter = new AutopilotInputsWriter();
-    private AutopilotOutputsReader outreader = new AutopilotOutputsReader();
     private Autopilot autopilot;
 
     public World() {
         byte[] inbuf = new byte[1000];
         this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
         this.outstream = new DataOutputStream(new ByteArrayOutputStream());
-        this.autopilot = new Autopilot(null); // TODO: set config
+        this.autopilot = new Autopilot();
     }
     
     public DataInputStream getInputStream() {
@@ -42,17 +39,22 @@ public class World {
     
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
-        aircraft.setWorld(this);
+        getAircraft().setWorld(this);
+        getAutopilot().setConfig(this.getAircraft().getConfig());
     }
     
     public Aircraft getAircraft() {
         return this.aircraft;
     }
     
+    public Autopilot getAutopilot() {
+        return this.autopilot;
+    }
+    
     public void evolve(float dt) throws IOException {
         AutopilotInputs output = this.getAircraft().getAutopilotInputs();
         AutopilotInputsWriter.write(this.getOutputStream(), output);
-        autopilot.fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
+        getAutopilot().fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
         AutopilotOutputs input = AutopilotOutputsReader.read(this.getInputStream());
         this.getAircraft().readAutopilotOutputs(input);
         this.getAircraft().updateAirplane(dt);

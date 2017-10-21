@@ -17,9 +17,6 @@ public class Aircraft extends Node {
     private Vector velocity;
     private Vector acceleration = new Vector(0, 0, 0);
     private Force forces;
-    private float tailmass;
-    private float wingmass;
-    private float enginemass;
     private float pitch;
     private float roll;
     private float heading;
@@ -123,10 +120,10 @@ public class Aircraft extends Node {
     }
     
     public float getWingMass(){
-    return this.wingmass;
+    return this.getConfig().getWingMass();
     }
     public float getTotalMass(){
-    	return this.enginemass+this.wingmass*2+ this.tailmass;
+    	return this.getEngineMass()+this.getWingMass()*2+ this.getTailMass();
     }
     
     public float getPitch(){
@@ -178,15 +175,15 @@ public class Aircraft extends Node {
     }
     
     public float getTailMass(){
-    	return this.tailmass;
+    	return this.getConfig().getTailMass();
     }
     
     public float getEngineMass(){
-    	return this.enginemass;
+    	return this.getConfig().getEngineMass();
     }
     
     public Vector getEnginePlace(){
-		return this.tailSize.constantProduct(-this.tailmass/this.enginemass);
+		return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
 	}
 
     public float getLeftWingInclination() {
