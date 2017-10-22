@@ -21,6 +21,8 @@ public class World {
     private DataInputStream instream;
     private Aircraft aircraft;
     private Autopilot autopilot;
+    private boolean simulation;
+    private Vector goal;
 
     public World() {
         byte[] inbuf = new byte[1000];
@@ -52,12 +54,41 @@ public class World {
     }
     
     public void evolve(float dt) throws IOException {
-        AutopilotInputs output = this.getAircraft().getAutopilotInputs();
-        AutopilotInputsWriter.write(this.getOutputStream(), output);
-        getAutopilot().fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
-        AutopilotOutputs input = AutopilotOutputsReader.read(this.getInputStream());
-        this.getAircraft().readAutopilotOutputs(input);
-        this.getAircraft().updateAirplane(dt);
+        if (this.isSimulating()) {
+            AutopilotInputs output = this.getAircraft().getAutopilotInputs();
+            AutopilotInputsWriter.write(this.getOutputStream(), output);
+            getAutopilot().fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
+            AutopilotOutputs input = AutopilotOutputsReader.read(this.getInputStream());
+            this.getAircraft().readAutopilotOutputs(input);
+            this.getAircraft().updateAirplane(dt);
+        }
+        double distanceToGoal = Math.sqrt(
+            Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
+            Math.pow(getAircraft().getCoordinates().getY()-getGoal().getY(), 2) +
+            Math.pow(getAircraft().getCoordinates().getZ()-getGoal().getZ(), 2) );
+        if (distanceToGoal<=4) {
+            endSimulation();
+        }
+    }
+    
+    public void startSimulation() {
+        this.simulation = true;
+    }
+    
+    public void endSimulation() {
+        this.simulation = false;
+    }
+    
+    public boolean isSimulating() {
+        return this.simulation;
+    }
+    
+    public Vector getGoal() {
+        return this.goal;
+    }
+    
+    public void setGoal(float x, float y, float z) {
+        this.goal = new Vector(x, y, z);
     }
     
 }
