@@ -1,6 +1,12 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.input.CameraInput;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
@@ -68,8 +74,17 @@ public class Main extends SimpleApplication {
         world.startSimulation();
     }
 
+    private boolean initialFrame = true;
     @Override
     public void simpleUpdate(float tpf) {
+        if (initialFrame) {
+            inputManager.deleteMapping(CameraInput.FLYCAM_STRAFELEFT);
+            inputManager.deleteMapping(CameraInput.FLYCAM_STRAFERIGHT);
+            inputManager.deleteMapping(CameraInput.FLYCAM_FORWARD);
+            inputManager.deleteMapping(CameraInput.FLYCAM_BACKWARD);
+            initKeys();
+            initialFrame = false;
+        }
         try {
             world.evolve(tpf);
         } catch (IOException ex) {
@@ -85,4 +100,30 @@ public class Main extends SimpleApplication {
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
     }
+    
+    /** Custom Keybinding: Map named actions to inputs. */
+    private void initKeys() {
+      // You can map one or several inputs to one named action
+      inputManager.addMapping("Right",  new KeyTrigger(KeyInput.KEY_D));
+      // Add the names to the action listener.
+      inputManager.addListener(actionListener,"Pause");
+      inputManager.addListener(analogListener,"Left", "Right", "Rotate");
+
+    }
+
+    private ActionListener actionListener = new ActionListener() {
+      public void onAction(String name, boolean keyPressed, float tpf) {
+//        if (name.equals("Pause") && !keyPressed) {
+//          isRunning = !isRunning;
+//        }
+      }
+    };
+
+    private AnalogListener analogListener = new AnalogListener() {
+      public void onAnalog(String name, float value, float tpf) {
+          if(name == "Right"){
+              System.out.println("Right");
+          }
+      }
+    };
 }
