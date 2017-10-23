@@ -299,6 +299,12 @@ public class Force {
 		
 		return new Vector(Ixx,Iyy,Izz);
 	}
+        
+        public Vector getInverseInertia(){
+            Vector InertiaTensor = this.getInertiaTensor();
+            System.out.println(1/InertiaTensor.getX() + " " + 1/InertiaTensor.getY() + " " + 1/InertiaTensor.getZ());
+            return new Vector(1/InertiaTensor.getX(),1/InertiaTensor.getY(),1/InertiaTensor.getZ());
+        }
 	
 	
 	// in drone assenstelsel

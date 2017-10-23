@@ -20,7 +20,7 @@ public class Aircraft extends Node {
     private float roll;
     private float heading;
     private Vector wingX = new Vector(1, 0, 0);
-    private Vector tailSize = new Vector(0, 0, 0);
+    private Vector tailSize = new Vector(0, 0, 1);
     private Vector angularAcceleration = Vector.NULL;
     private Vector angularVelocity = Vector.NULL;
     private World world;
@@ -237,17 +237,18 @@ public class Aircraft extends Node {
         
     	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
 
-    	setPitch(getPitch() + getAngularVelocity().getX());
-    	setRoll(getRoll() + getAngularVelocity().getZ());
-    	setHeading(getHeading() + getAngularVelocity().getY());
+    	setPitch(getPitch() + getAngularVelocity().getX()*time);
+    	setRoll(getRoll() + getAngularVelocity().getZ()*time);
+    	setHeading(getHeading() + getAngularVelocity().getY()*time);
     	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
 
-    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInertiaTensor()));
+    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()));
 
         this.setElapsedTime(this.getElapsedTime()+time);
         
-//        System.out.println(getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
-//        System.out.println(getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
 //        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
 //        System.out.println("Right wing lift: " + getForce().getRightWingLift().getX() + " " + getForce().getRightWingLift().getY() + " " + getForce().getRightWingLift().getZ());
 //        System.out.println("Left wing lift: " + getForce().getLeftWingLift().getX() + " " + getForce().getLeftWingLift().getY() + " " + getForce().getLeftWingLift().getZ());
