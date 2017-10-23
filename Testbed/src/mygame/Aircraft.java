@@ -56,7 +56,8 @@ public class Aircraft extends Node {
             float mass, float thrust, float leftWingInclination,float rightWingInclination,
             float horStabInclination, float verStabInclination) {   
         
-        this.aircraftGeometry = (Spatial) model.getChild(0);;
+        model.getChild(0).scale(0.05f, 0.05f, 0.05f);
+        this.aircraftGeometry = (Spatial) model.getChild(0);
         
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
