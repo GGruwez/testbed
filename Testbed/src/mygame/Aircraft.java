@@ -235,7 +235,6 @@ public class Aircraft extends Node {
 //    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyTraagheidsmatrix());
 
         this.setElapsedTime(this.getElapsedTime()+time);
->>>>>>> 32f32c4a2915b05dcded3567275de2ea9ae7f506
     }
 
     public void setWorld(World world) {

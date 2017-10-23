@@ -60,9 +60,9 @@ public class Force {
 
 	
 	public void setGravityForces(float TailMass, float WingMass, float engineMass, float gravityConstant){
-		this.tailGravityForce = new Vector(0,-TailMass * gravityConstant, 0);
-		this.WingGravityForce = new Vector(0, -WingMass * gravityConstant, 0);
-		this.engineGravityForce = new Vector(0,-engineMass * gravityConstant, 0);
+		this.tailGravityForce = new Vector(0,-TailMass * gravityConstant, 0).inverseTransform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
+		this.WingGravityForce = new Vector(0, -WingMass * gravityConstant, 0).inverseTransform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
+		this.engineGravityForce = new Vector(0,-engineMass * gravityConstant, 0).inverseTransform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
 		
 		}
 	
