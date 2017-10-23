@@ -9,21 +9,21 @@ import mygame.Vector;
 public class Force {
 
 	private Aircraft plane;
-	private Vector tailGravityForce;
-	private Vector WingGravityForce;
-	private Vector engineGravityForce;
-	private Vector thrustForce;
-	private Vector leftWingAttack;
-	private Vector rightWingAttack;
-	private Vector horizontalStabilizerAttack;
-	private Vector verticalStabilizerAttack;
-	private Vector leftWingLift;
-	private Vector rightWingLift;
-	private Vector horizontalStabilizerLift;
-	private Vector verticalStabilizerLift;
-	private Vector liftForce;
+	private Vector tailGravityForce = Vector.NULL;
+	private Vector WingGravityForce = Vector.NULL;
+	private Vector engineGravityForce = Vector.NULL;
+	private Vector thrustForce = Vector.NULL;
+	private Vector leftWingAttack = Vector.NULL;
+	private Vector rightWingAttack = Vector.NULL;
+	private Vector horizontalStabilizerAttack = Vector.NULL;
+	private Vector verticalStabilizerAttack = Vector.NULL;
+	private Vector leftWingLift = Vector.NULL;
+	private Vector rightWingLift = Vector.NULL;
+	private Vector horizontalStabilizerLift = Vector.NULL;
+	private Vector verticalStabilizerLift = Vector.NULL;
+	private Vector liftForce = Vector.NULL;
 	
-	private Vector windSpeed;
+	private Vector windSpeed = Vector.NULL;
 
 	private Vector rightWingAxis = new Vector(1,0,0);
 	private Vector leftWingAxis = new Vector(1,0,0);
@@ -34,15 +34,13 @@ public class Force {
 	
 	
 	Force(float TailMass, float WingMass, float engineMass, float gravityConstant,float thrust,
-			float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination){
+			float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination, Aircraft plane){
 		
 		this.setAttackAngles(leftWingInclination, rightWingInclination, horStabInclination, verStabInclination);
-
-		
+		this.plane = plane;
 		this.setGravityForces(TailMass, WingMass, engineMass, gravityConstant);
 		this.setLiftForce();
-		this.setThrust(thrust);
-			
+		this.setThrust(thrust);			
 	}
 	
 	public Aircraft getAircraft(){
