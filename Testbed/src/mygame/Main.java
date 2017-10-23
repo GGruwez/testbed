@@ -3,26 +3,15 @@ package mygame;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import mygame.RenderCamera;
 
-/**
- * This is the Main Class of your Game. You should only do initialization here.
- * Move your Logic into AppStates or Controls
- * @author normenhansen
- */
 public class Main extends SimpleApplication {
     
     private RenderCamera sas;
@@ -72,6 +61,11 @@ public class Main extends SimpleApplication {
         
         sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight());
         sas.initialize(stateManager, this);
+        
+        world.setGoal(goalCube.getLocalTranslation().getX(),
+                goalCube.getLocalTranslation().getY(),
+                goalCube.getLocalTranslation().getZ());
+        world.startSimulation();
     }
 
     @Override
@@ -82,6 +76,9 @@ public class Main extends SimpleApplication {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         sas.grabCamera();
+        if (! world.isSimulating()) {
+            stop();
+        }
     }
 
     @Override

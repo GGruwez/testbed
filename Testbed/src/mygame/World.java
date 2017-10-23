@@ -20,16 +20,15 @@ public class World {
     private DataOutputStream outstream;
     private DataInputStream instream;
     private Aircraft aircraft;
-    private AutopilotConfigWriter configwriter = new AutopilotConfigWriter();
-    private AutopilotInputsWriter inwriter = new AutopilotInputsWriter();
-    private AutopilotOutputsReader outreader = new AutopilotOutputsReader();
     private Autopilot autopilot;
+    private boolean simulation;
+    private Vector goal;
 
     public World() {
         byte[] inbuf = new byte[1000];
         this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
         this.outstream = new DataOutputStream(new ByteArrayOutputStream());
-        this.autopilot = new Autopilot(null); // TODO: set config
+        this.autopilot = new Autopilot();
     }
     
     public DataInputStream getInputStream() {
@@ -42,20 +41,54 @@ public class World {
     
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
-        aircraft.setWorld(this);
+        getAircraft().setWorld(this);
+        getAutopilot().setConfig(this.getAircraft().getConfig());
     }
     
     public Aircraft getAircraft() {
         return this.aircraft;
     }
     
+    public Autopilot getAutopilot() {
+        return this.autopilot;
+    }
+    
     public void evolve(float dt) throws IOException {
-        AutopilotInputs output = this.getAircraft().getAutopilotInputs();
-        AutopilotInputsWriter.write(this.getOutputStream(), output);
-        autopilot.fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
-        AutopilotOutputs input = AutopilotOutputsReader.read(this.getInputStream());
-        this.getAircraft().readAutopilotOutputs(input);
-        this.getAircraft().updateAirplane(dt);
+        if (this.isSimulating()) {
+            AutopilotInputs output = this.getAircraft().getAutopilotInputs();
+            AutopilotInputsWriter.write(this.getOutputStream(), output);
+            getAutopilot().fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
+            AutopilotOutputs input = AutopilotOutputsReader.read(this.getInputStream());
+            this.getAircraft().readAutopilotOutputs(input);
+            this.getAircraft().updateAirplane(dt);
+        }
+        double distanceToGoal = Math.sqrt(
+            Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
+            Math.pow(getAircraft().getCoordinates().getY()-getGoal().getY(), 2) +
+            Math.pow(getAircraft().getCoordinates().getZ()-getGoal().getZ(), 2) );
+        if (distanceToGoal<=4) {
+            endSimulation();
+        }
+    }
+    
+    public void startSimulation() {
+        this.simulation = true;
+    }
+    
+    public void endSimulation() {
+        this.simulation = false;
+    }
+    
+    public boolean isSimulating() {
+        return this.simulation;
+    }
+    
+    public Vector getGoal() {
+        return this.goal;
+    }
+    
+    public void setGoal(float x, float y, float z) {
+        this.goal = new Vector(x, y, z);
     }
     
 }

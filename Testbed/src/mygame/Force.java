@@ -23,7 +23,6 @@ public class Force {
 	private Vector verticalStabilizerLift;
 	private Vector liftForce;
 	
-	private Vector initialSpeed;
 	private Vector windSpeed;
 
 	private Vector rightWingAxis = new Vector(1,0,0);
