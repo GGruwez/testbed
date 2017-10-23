@@ -7,6 +7,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import p_en_o_cw_2017.AutopilotConfig;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
 import p_en_o_cw_2017.AutopilotInputs;
 import p_en_o_cw_2017.AutopilotOutputs;
@@ -32,7 +33,7 @@ public class Aircraft extends Node {
     private float verStabInclination;
     private float elapsedTime;
     
-    private Geometry aircraftGeometry;
+    private Spatial aircraftGeometry;
     private Camera aircraftCamera;
     private CameraNode aircraftCameraNode;
 
@@ -51,11 +52,11 @@ public class Aircraft extends Node {
      * @param horStabInclination
      * @param verStabInclination
      */	
-    public Aircraft(String name, Mesh mesh, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity,
+    public Aircraft(String name, Node model, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity,
             float mass, float thrust, float leftWingInclination,float rightWingInclination,
             float horStabInclination, float verStabInclination) {   
         
-        this.aircraftGeometry = new Geometry(name, mesh);
+        this.aircraftGeometry = (Spatial) model.getChild(0);;
         
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
@@ -73,7 +74,7 @@ public class Aircraft extends Node {
     
    
     
-    public Geometry getAircraftGeometry(){
+    public Spatial getAircraftGeometry(){
         return this.aircraftGeometry;
     }
     

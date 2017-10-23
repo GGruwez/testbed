@@ -6,6 +6,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -36,7 +37,8 @@ public class Main extends SimpleApplication {
         goalCube.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(1,1,2);
-        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0);
+        Node planemodel = (Node) assetManager.loadModel("Models/Air_Balloon.j3o");
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
         // Plane camera viewport
