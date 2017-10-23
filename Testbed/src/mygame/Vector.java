@@ -109,6 +109,10 @@ public class Vector {
 		return new Vector(this.x*constant, this.y*constant, this.z*constant);
 	}
         
+	public Vector applyInertiaTensor(Vector InertiaTensor){
+		return new Vector(this.getX()*InertiaTensor.getX(), this.getY()*InertiaTensor.getY(), this.getZ()*InertiaTensor.getZ());
+	}
+	
 	@Override
     public Vector clone(){
         return new Vector(this.getX(), this.getY(), this.getZ());
