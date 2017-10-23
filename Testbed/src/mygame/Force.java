@@ -308,9 +308,11 @@ public class Force {
         
     public Vector getTotalMoment(){
     	Vector wingR = getAircraft().getWingX().crossProduct(getWingGravityForce().add(getRightWingLift()));
-    	Vector wingL = getAircraft().getWingX().constantProduct(-1).crossProduct(getWingGravityForce().add(getRightWingLift()));
-    	Vector tail  = getAircraft().getTailSize().crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
-    	Vector engine = getEnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));
+        System.out.println(wingR.getX() + " " + wingR.getY() + " " + wingR.getZ());
+    	Vector wingL = getAircraft().getWingX().constantProduct(-1).crossProduct(getWingGravityForce().add(getLeftWingLift()));
+    	System.out.println(wingL.getX() + " " + wingL.getY() + " " + wingL.getZ());
+        Vector tail  = getAircraft().getTailSize().crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
+        Vector engine = getEnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));
     	return wingR.add(wingL).add(tail).add(engine);
     }
 	

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class Main extends SimpleApplication {
     
     private RenderCamera sas;
@@ -36,7 +35,7 @@ public class Main extends SimpleApplication {
         goalCube.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(1,1,2);
-        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -5, 0, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
         // Plane camera viewport
@@ -51,7 +50,7 @@ public class Main extends SimpleApplication {
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
         // Move aircraft to starting position
-        aircraft.setLocalTranslation(0, 0, 30);
+        aircraft.setLocalTranslation(0, 0, 60);
         
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.White);

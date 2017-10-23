@@ -246,11 +246,12 @@ public class Aircraft extends Node {
 
         this.setElapsedTime(this.getElapsedTime()+time);
         
-        System.out.println(getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
-        System.out.println(getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
-        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
-        System.out.println("Thrust: " + this.getForce().getThrustForce().getZ());
-        System.out.println("Left wing: " + this.getLeftWingInclination());
+//        System.out.println(getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+//        System.out.println(getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+//        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
+//        System.out.println("Right wing lift: " + getForce().getRightWingLift().getX() + " " + getForce().getRightWingLift().getY() + " " + getForce().getRightWingLift().getZ());
+//        System.out.println("Left wing lift: " + getForce().getLeftWingLift().getX() + " " + getForce().getLeftWingLift().getY() + " " + getForce().getLeftWingLift().getZ());
+//        System.out.println("Left wing: " + this.getLeftWingInclination());
     }
 
     public float getGravityConstant(){
@@ -276,7 +277,7 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(70);
+        this.getForce().setThrust(0);
         this.setLeftWingInclination(0.2f);
         this.setRightWingInclination(-0.2f);
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
