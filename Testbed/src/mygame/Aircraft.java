@@ -28,9 +28,10 @@ public class Aircraft extends Node {
     private AutopilotConfig config = new AutopilotConfig();
     private float leftWingInclination;
     private float rightWingInclination;
-    private float horStabInclination = 1f;
+    private float horStabInclination;
     private float verStabInclination;
     private float elapsedTime;
+    private float gravityConstant;
     
     private Spatial aircraftGeometry;
     private Camera aircraftCamera;
@@ -69,7 +70,7 @@ public class Aircraft extends Node {
         this.aircraftCameraNode.lookAt(new Vector3f(0,0,-1), Vector3f.UNIT_Y); // Front of the plane is in -z direction
         this.setCoordinates(new Vector(x, y, z));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
-        this.forces = new Force(0, 0, 0, 0, 0, 0, 0, 0, 0, this);
+        this.forces = new Force(0,this);
     }
     
    
@@ -184,6 +185,7 @@ public class Aircraft extends Node {
     	return this.getConfig().getEngineMass();
     }
     
+
     public Vector getEnginePlace(){
 		return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
 	}
@@ -229,6 +231,8 @@ public class Aircraft extends Node {
     }
     
     public void updateAirplane(float time){
+        this.getForce().UpdateForce();
+        
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
         
@@ -243,9 +247,17 @@ public class Aircraft extends Node {
 
         this.setElapsedTime(this.getElapsedTime()+time);
         
-        System.out.println(getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+        System.out.println(getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
+        System.out.println("Thrust: " + this.getForce().getThrustForce().getZ());
+        System.out.println("Left wing: " + this.getLeftWingInclination());
     }
 
+    public float getGravityConstant(){
+        return this.gravityConstant;
+    }
+    
+    
+    
     public void setWorld(World world) {
         this.world = world;
     }
@@ -263,9 +275,9 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(autopilotOutputs.getThrust());
-        this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
-        this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
+        this.getForce().setThrust(1);
+        this.setLeftWingInclination(0.5f);
+        this.setRightWingInclination(-0.5f);
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
         this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
     }

@@ -33,16 +33,26 @@ public class Force {
 	private float liftSlope = 1;
 	
 	
-	Force(float TailMass, float WingMass, float engineMass, float gravityConstant,float thrust,
-			float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination, Aircraft plane){
+	Force(float thrust,Aircraft plane){
 		
-		this.setAttackAngles(leftWingInclination, rightWingInclination, horStabInclination, verStabInclination);
-		this.plane = plane;
-		this.setGravityForces(TailMass, WingMass, engineMass, gravityConstant);
+                this.plane = plane;
+		this.setAttackAngles(this.getAircraft().getLeftWingInclination(), this.getAircraft().getRightWingInclination(), this.getAircraft().getHorStabInclination(), this.getAircraft().getVerStabInclination());
+		
+		this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), this.getAircraft().getEngineMass(), this.getAircraft().getGravityConstant());
 		this.setLiftForce();
 		this.setThrust(thrust);			
 	}
 	
+        public void UpdateForce(){
+
+		this.setAttackAngles(this.getAircraft().getLeftWingInclination(), this.getAircraft().getRightWingInclination(), this.getAircraft().getHorStabInclination(), this.getAircraft().getVerStabInclination());
+		
+		this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), this.getAircraft().getEngineMass(), this.getAircraft().getGravityConstant());
+		this.setLiftForce();
+				
+	
+        }
+        
 	public Aircraft getAircraft(){
 		return this.plane;
 	}
