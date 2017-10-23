@@ -237,9 +237,9 @@ public class Aircraft extends Node {
         
     	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
 
-    	setPitch(getPitch() + getAngularVelocity().getX());
-    	setRoll(getRoll() + getAngularVelocity().getZ());
-    	setHeading(getHeading() + getAngularVelocity().getY());
+    	setPitch(getPitch() + getAngularVelocity().getX()*time);
+    	setRoll(getRoll() + getAngularVelocity().getZ()*time);
+    	setHeading(getHeading() + getAngularVelocity().getY()*time);
     	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
 
     	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInertiaTensor()));

@@ -135,7 +135,7 @@ public class Force {
 	}
 	
 	public Vector getStabilizerVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()));
 
 	}
 	
@@ -256,6 +256,7 @@ public class Force {
 	
 	
 	public Vector getTotalLift(){
+		
 		return this.liftForce;
 	}
 	
