@@ -270,7 +270,7 @@ public class Force {
 	}
 	
 	/**
-	 * Returnt een vector!
+	 * Returnt een vector! Maar is eigenlijk een diagonaalmatrix
 	 * 
 	 */
 	public Vector getInertiaTensor(){
