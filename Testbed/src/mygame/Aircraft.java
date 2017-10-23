@@ -17,16 +17,13 @@ public class Aircraft extends Node {
     private Vector velocity;
     private Vector acceleration = new Vector(0, 0, 0);
     private Force forces;
-    private float tailmass;
-    private float wingmass;
-    private float enginemass;
     private float pitch;
     private float roll;
     private float heading;
-    private Vector wingx;
+    private Vector wingX;
     private Vector tailSize;
-	private Vector angularAcceleration;
-	private Vector angularVelocity;
+    private Vector angularAcceleration;
+    private Vector angularVelocity;
     private World world;
     private AutopilotConfig config;
     private float leftWingInclination;
@@ -59,10 +56,11 @@ public class Aircraft extends Node {
             float horStabInclination, float verStabInclination) {   
         
         this.aircraftGeometry = new Geometry(name, mesh);
+        
         // Plane camera
-        this.aircraftCamera = new Camera(1000, 1000);
+        this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
-        this.aircraftCamera.setViewPort(0.75f, 1.0f, 0.0f, 0.25f);
+        this.aircraftCamera.setViewPort(4f, 5f, 0f, 1f);
         this.aircraftCameraNode = new CameraNode("Camera Node", this.aircraftCamera);
         this.aircraftCameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
         this.attachChild(this.aircraftGeometry);
@@ -122,8 +120,11 @@ public class Aircraft extends Node {
     	return this.forces;
     }
     
+    public float getWingMass(){
+    return this.getConfig().getWingMass();
+    }
     public float getTotalMass(){
-    	return this.enginemass+this.wingmass*2+ this.tailmass;
+    	return this.getEngineMass()+this.getWingMass()*2+ this.getTailMass();
     }
     
     public float getPitch(){
@@ -166,8 +167,8 @@ public class Aircraft extends Node {
     	this.angularAcceleration = aAcceleration;
     }
     
-    public Vector getWingx(){
-    	return this.wingx;
+    public Vector getWingX(){
+    	return this.wingX;
     }
     
     public Vector getTailSize(){
@@ -175,12 +176,16 @@ public class Aircraft extends Node {
     }
     
     public float getTailMass(){
-    	return this.tailmass;
+    	return this.getConfig().getTailMass();
     }
     
     public float getEngineMass(){
-    	return this.enginemass;
+    	return this.getConfig().getEngineMass();
     }
+    
+    public Vector getEnginePlace(){
+		return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
+	}
 
     public float getLeftWingInclination() {
         return leftWingInclination;
@@ -225,6 +230,7 @@ public class Aircraft extends Node {
     public void updateAirplane(float time){
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
+        
 //    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
 //
 //    	setPitch(getPitch() + getAngularVelocity().getX());

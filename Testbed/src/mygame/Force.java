@@ -23,7 +23,6 @@ public class Force {
 	private Vector verticalStabilizerLift;
 	private Vector liftForce;
 	
-	private Vector initialSpeed;
 	private Vector windSpeed;
 
 	private Vector rightWingAxis = new Vector(1,0,0);
@@ -120,11 +119,11 @@ public class Force {
 	}
 	
 	public Vector getRightWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingx().crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getLeftWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingx().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getStabilizerVelocity(){
@@ -266,22 +265,44 @@ public class Force {
 
 	
 
-	public Vector EnginePlace(){
+	public Vector getEnginePlace(){
 		return getAircraft().getTailSize().constantProduct(- getAircraft().getTailMass()/getAircraft().getEngineMass());
 	}
 	
+	/**
+	 * Returnt een vector! Maar is eigenlijk een diagonaalmatrix
+	 * 
+	 */
+	public Vector getInertiaTensor(){
+		//elementen vd matrix berekenen - alles behalve elementen op de diagonaal zijn 0
+		
+		double Ixx1 = Math.pow(getAircraft().getTailSize().getZ(),2)*getAircraft().getTailMass() + Math.pow(getAircraft().getEnginePlace().getZ(),2)*getAircraft().getEngineMass();
+		float Ixx = (float)Ixx1;
+		
+		double Iyy1 = 2*Math.pow(getAircraft().getWingX().getX(), 2)*getAircraft().getWingMass() + Math.pow(getAircraft().getTailSize().getZ(),2)*getAircraft().getTailMass() + Math.pow(getAircraft().getEnginePlace().getZ(),2)*getAircraft().getEngineMass();
+		float Iyy = (float)Iyy1;
+		
+		double Izz1 = 2*Math.pow(getAircraft().getWingX().getX(), 2)*getAircraft().getWingMass();
+		float Izz = (float)Izz1;
+		
+		return new Vector(Ixx,Iyy,Izz);
+	}
+	
+	
 	// in drone assenstelsel
-
 	public Vector getTotalForce(){
 		return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce());
 	}
         
     public Vector getTotalMoment(){
-    	Vector wingR = getAircraft().getWingx().crossProduct(getWingGravityForce().add(getRightWingLift()));
-    	Vector wingL = getAircraft().getWingx().constantProduct(-1).crossProduct(getWingGravityForce().add(getRightWingLift()));
+    	Vector wingR = getAircraft().getWingX().crossProduct(getWingGravityForce().add(getRightWingLift()));
+    	Vector wingL = getAircraft().getWingX().constantProduct(-1).crossProduct(getWingGravityForce().add(getRightWingLift()));
     	Vector tail  = getAircraft().getTailSize().crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
-    	Vector engine = EnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));
+    	Vector engine = getEnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));
     	return wingR.add(wingL).add(tail).add(engine);
     }
 	
+    
+    
+    
 }
