@@ -1,5 +1,7 @@
 package mygame;
 
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
@@ -56,7 +58,8 @@ public class Aircraft extends Node {
             float mass, float thrust, float leftWingInclination,float rightWingInclination,
             float horStabInclination, float verStabInclination) {   
         
-        model.getChild(0).scale(0.05f, 0.05f, 0.05f);
+        model.getChild(0).scale(0.5f, 0.5f, 0.5f);
+        model.getChild(0).rotate(FastMath.PI, 0, FastMath.PI);
         this.aircraftGeometry = (Spatial) model.getChild(0);
         
         // Plane camera

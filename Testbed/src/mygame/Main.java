@@ -37,7 +37,7 @@ public class Main extends SimpleApplication {
         goalCube.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(1,1,2);
-        Node planemodel = (Node) assetManager.loadModel("Models/Air_Balloon.j3o");
+        Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
         aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
