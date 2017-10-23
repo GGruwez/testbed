@@ -19,8 +19,8 @@ public class Aircraft extends Node {
     private float pitch;
     private float roll;
     private float heading;
-    private Vector wingX = Vector.NULL;
-    private Vector tailSize = Vector.NULL;
+    private Vector wingX = new Vector(1, 0, 0);
+    private Vector tailSize = new Vector(0, 0, 0);
     private Vector angularAcceleration = Vector.NULL;
     private Vector angularVelocity = Vector.NULL;
     private World world;
@@ -30,7 +30,7 @@ public class Aircraft extends Node {
     private float horStabInclination;
     private float verStabInclination;
     private float elapsedTime;
-    private float gravityConstant;
+    private float gravityConstant = 9.81f;
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -246,7 +246,9 @@ public class Aircraft extends Node {
 
         this.setElapsedTime(this.getElapsedTime()+time);
         
-        System.out.println(getForce().getTotalLift().getX() + " " + getForce().getTotalLift().getY() + " " + getForce().getTotalLift().getZ());
+        System.out.println(getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+        System.out.println(getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
         System.out.println("Thrust: " + this.getForce().getThrustForce().getZ());
         System.out.println("Left wing: " + this.getLeftWingInclination());
     }
@@ -274,11 +276,11 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(1);
-        this.setLeftWingInclination(0.5f);
-        this.setRightWingInclination(-0.5f);
+        this.getForce().setThrust(70);
+        this.setLeftWingInclination(0.2f);
+        this.setRightWingInclination(-0.2f);
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
-        this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
+        this.setVerStabInclination(0);
     }
 
     public AutopilotInputs getAutopilotInputs(){
