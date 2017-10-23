@@ -231,6 +231,10 @@ public class Force {
 	
 
 	public void setLiftForce(){
+		this.setLeftWingLift();
+		this.setRightWingLift();
+		this.setHorizontalStabilizerLift();
+		this.setVerticalStabilizerLift();
 		this.liftForce = this.leftWingLift.add(this.rightWingLift).add(this.horizontalStabilizerLift).add(this.verticalStabilizerLift);
 	}
 	
