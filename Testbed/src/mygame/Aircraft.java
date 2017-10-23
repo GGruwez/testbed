@@ -246,7 +246,7 @@ public class Aircraft extends Node {
 
         this.setElapsedTime(this.getElapsedTime()+time);
         
-        System.out.println(getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
+        System.out.println(getForce().getTotalLift().getX() + " " + getForce().getTotalLift().getY() + " " + getForce().getTotalLift().getZ());
         System.out.println("Thrust: " + this.getForce().getThrustForce().getZ());
         System.out.println("Left wing: " + this.getLeftWingInclination());
     }
