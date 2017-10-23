@@ -25,7 +25,7 @@ public class World {
     private Vector goal;
 
     public World() {
-        byte[] inbuf = new byte[1000];
+        byte[] inbuf = new byte[1000000];
         this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
         this.outstream = new DataOutputStream(new ByteArrayOutputStream());
         this.autopilot = new Autopilot();

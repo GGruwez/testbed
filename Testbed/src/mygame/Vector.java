@@ -1,6 +1,8 @@
 package mygame;
 
 public class Vector {
+    
+        public final static Vector NULL = new Vector(0, 0, 0);
 
 	private final float x;
 	private final float y;
