@@ -1,6 +1,8 @@
 package mygame;
 
 public class Vector {
+    
+        public final static Vector NULL = new Vector(0, 0, 0);
 
 	private final float x;
 	private final float y;
@@ -109,6 +111,10 @@ public class Vector {
 		return new Vector(this.x*constant, this.y*constant, this.z*constant);
 	}
         
+	public Vector applyInertiaTensor(Vector InertiaTensor){
+		return new Vector(this.getX()*InertiaTensor.getX(), this.getY()*InertiaTensor.getY(), this.getZ()*InertiaTensor.getZ());
+	}
+	
 	@Override
     public Vector clone(){
         return new Vector(this.getX(), this.getY(), this.getZ());

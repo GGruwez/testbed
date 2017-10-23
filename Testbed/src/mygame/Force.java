@@ -9,21 +9,21 @@ import mygame.Vector;
 public class Force {
 
 	private Aircraft plane;
-	private Vector tailGravityForce;
-	private Vector WingGravityForce;
-	private Vector engineGravityForce;
-	private Vector thrustForce;
-	private Vector leftWingAttack;
-	private Vector rightWingAttack;
-	private Vector horizontalStabilizerAttack;
-	private Vector verticalStabilizerAttack;
-	private Vector leftWingLift;
-	private Vector rightWingLift;
-	private Vector horizontalStabilizerLift;
-	private Vector verticalStabilizerLift;
-	private Vector liftForce;
+	private Vector tailGravityForce = Vector.NULL;
+	private Vector WingGravityForce = Vector.NULL;
+	private Vector engineGravityForce = Vector.NULL;
+	private Vector thrustForce = Vector.NULL;
+	private Vector leftWingAttack = Vector.NULL;
+	private Vector rightWingAttack = Vector.NULL;
+	private Vector horizontalStabilizerAttack = Vector.NULL;
+	private Vector verticalStabilizerAttack = Vector.NULL;
+	private Vector leftWingLift = Vector.NULL;
+	private Vector rightWingLift = Vector.NULL;
+	private Vector horizontalStabilizerLift = Vector.NULL;
+	private Vector verticalStabilizerLift = Vector.NULL;
+	private Vector liftForce = Vector.NULL;
 	
-	private Vector windSpeed;
+	private Vector windSpeed = Vector.NULL;
 
 	private Vector rightWingAxis = new Vector(1,0,0);
 	private Vector leftWingAxis = new Vector(1,0,0);
@@ -33,18 +33,26 @@ public class Force {
 	private float liftSlope = 1;
 	
 	
-	Force(float TailMass, float WingMass, float engineMass, float gravityConstant,float thrust,
-			float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination){
+	Force(float thrust,Aircraft plane){
 		
-		this.setAttackAngles(leftWingInclination, rightWingInclination, horStabInclination, verStabInclination);
-
+                this.plane = plane;
+		this.setAttackAngles(this.getAircraft().getLeftWingInclination(), this.getAircraft().getRightWingInclination(), this.getAircraft().getHorStabInclination(), this.getAircraft().getVerStabInclination());
 		
-		this.setGravityForces(TailMass, WingMass, engineMass, gravityConstant);
+		this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), this.getAircraft().getEngineMass(), this.getAircraft().getGravityConstant());
 		this.setLiftForce();
-		this.setThrust(thrust);
-			
+		this.setThrust(thrust);			
 	}
 	
+        public void UpdateForce(){
+
+		this.setAttackAngles(this.getAircraft().getLeftWingInclination(), this.getAircraft().getRightWingInclination(), this.getAircraft().getHorStabInclination(), this.getAircraft().getVerStabInclination());
+		
+		this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), this.getAircraft().getEngineMass(), this.getAircraft().getGravityConstant());
+		this.setLiftForce();
+				
+	
+        }
+        
 	public Aircraft getAircraft(){
 		return this.plane;
 	}
@@ -291,6 +299,8 @@ public class Force {
 		
 		return new Vector(Ixx,Iyy,Izz);
 	}
+	
+	
 	
 	
 	// in drone assenstelsel
