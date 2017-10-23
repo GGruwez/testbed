@@ -27,7 +27,7 @@ public class Aircraft extends Node {
     private AutopilotConfig config = new AutopilotConfig();
     private float leftWingInclination;
     private float rightWingInclination;
-    private float horStabInclination;
+    private float horStabInclination = 1f;
     private float verStabInclination;
     private float elapsedTime;
     
@@ -241,6 +241,8 @@ public class Aircraft extends Node {
     	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInertiaTensor()));
 
         this.setElapsedTime(this.getElapsedTime()+time);
+        
+        System.out.println(getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
     }
 
     public void setWorld(World world) {
