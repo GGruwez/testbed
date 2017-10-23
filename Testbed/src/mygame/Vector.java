@@ -75,7 +75,7 @@ public class Vector {
 		double newX = this.x*(Math.cos(heading)*Math.cos(pitch)) + this.y*(Math.sin(heading)*Math.cos(pitch) + this.z*(-Math.sin(pitch)));
 		float X = (float)newX;
 		
-		double newY = this.x*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll)) + this.y*(Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)+Math.cos(heading)*Math.cos(roll)) + this.z*(Math.cos(pitch)*Math.cos(roll));
+		double newY = this.x*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll)) + this.y*(Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)+Math.cos(heading)*Math.cos(roll)) + this.z*(Math.cos(pitch)*Math.sin(roll));
 		float Y = (float)newY;
 		
 		double newZ = this.x*(Math.cos(heading)*Math.sin(pitch)*Math.cos(roll)+Math.sin(heading)*Math.sin(roll)) + this.y*(Math.sin(heading)*Math.sin(pitch)*Math.cos(roll)-Math.cos(heading)*Math.sin(roll)) + this.z*(Math.cos(pitch)*Math.cos(roll));
