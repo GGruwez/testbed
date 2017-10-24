@@ -129,22 +129,22 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             
-            for (int y = viewY; y < height+viewY; y++) {
-                for (int x = viewX; x < width+viewX; x++) {
-                    int r = bArray[3*(y*totalWidth+x)+0]& 0xff;
-                    int g = bArray[3*(y*totalWidth+x)+1]& 0xff;
-                    int b = bArray[3*(y*totalWidth+x)+2]& 0xff;
-                    int rgb = 65536*r + 256*g + b;
-                    image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
-                }
-            }
+//            for (int y = viewY; y < height+viewY; y++) {
+//                for (int x = viewX; x < width+viewX; x++) {
+//                    int r = bArray[3*(y*totalWidth+x)+0]& 0xff;
+//                    int g = bArray[3*(y*totalWidth+x)+1]& 0xff;
+//                    int b = bArray[3*(y*totalWidth+x)+2]& 0xff;
+//                    int rgb = 65536*r + 256*g + b;
+//                    image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
+//                }
+//            }
+//
+//            File outputFile = new File("output.jpeg");
+//            try {
+//                ImageIO.write(image, "jpeg", outputFile);
+//            }catch (IOException exc) {}
 
-            File outputFile = new File("output.bmp");
-            try {
-                ImageIO.write(image, "bmp", outputFile);
-            }catch (IOException exc) {}
-
-        }
+       }
     }
 
     @Override

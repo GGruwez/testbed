@@ -245,12 +245,16 @@ public class Aircraft extends Node {
     	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()));
 
         this.setElapsedTime(this.getElapsedTime()+time);
-        
-        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
-        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+//        System.out.println("time" + time);
+//        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+//        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
         System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
-//        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
-//        System.out.println("Right wing lift: " + getForce().getRightWingLift().getX() + " " + getForce().getRightWingLift().getY() + " " + getForce().getRightWingLift().getZ());
+        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
+        System.out.println("force " + getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
+        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
+        System.out.println("");
+
+//      System.out.println("Right wing lift: " + getForce().getRightWingLift().getX() + " " + getForce().getRightWingLift().getY() + " " + getForce().getRightWingLift().getZ());
 //        System.out.println("Left wing lift: " + getForce().getLeftWingLift().getX() + " " + getForce().getLeftWingLift().getY() + " " + getForce().getLeftWingLift().getZ());
 //        System.out.println("Left wing: " + this.getLeftWingInclination());
     }
@@ -278,10 +282,10 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(0);
-        this.setLeftWingInclination(0.2f);
-        this.setRightWingInclination(-0.2f);
-        this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
+        this.getForce().setThrust(0.00f);
+        this.setLeftWingInclination(0.00f);
+        this.setRightWingInclination(-0.00f);
+        this.setHorStabInclination(-0.03f);
         this.setVerStabInclination(0);
     }
 

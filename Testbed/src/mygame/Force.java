@@ -30,7 +30,9 @@ public class Force {
 	private Vector verticalStabilizerAxis = new Vector(0,1,0);
 	private Vector horizontalStabilizerAxis = new Vector(1,0,0);
 	
-	private float liftSlope = 1;
+	private float wingLiftSlope = 1f;
+        private float horStabLiftSlope = 0.1f;
+        private float verStabLiftSlope = 0.1f;
 	
 	
 	Force(float thrust,Aircraft plane){
@@ -127,52 +129,49 @@ public class Force {
 	}
 	
 	public Vector getRightWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()).inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()));
 	}
 	
 	public Vector getLeftWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()).inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()));
 	}
 	
 	public Vector getStabilizerVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()).inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()));
 
 	}
 	
 	
 	public Vector getRightWingProjectedAirspeed(){
-		float returnX = 0;
-		float returnY = getRightWingAirSpeed().getY();
-		float returnZ = getRightWingAirSpeed().getZ();
+                Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
+		Vector projairspeed = new Vector(0,airspeed.getY(),airspeed.getZ());
+
 		
-		return new Vector(returnX, returnY, returnZ);
+		return projairspeed.transform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll());
 		}
 	
 	public Vector getLeftWingProjectedAirspeed(){
-		float returnX = 0;
-		float returnY = getLeftWingAirSpeed().getY();
-		float returnZ = getLeftWingAirSpeed().getZ();
-		
-		return new Vector(returnX, returnY, returnZ);
+		Vector airspeed = this.getLeftWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
+		Vector projairspeed = new Vector(0,airspeed.getY(),airspeed.getZ());
+		return projairspeed.transform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll());
 		}
 	
 	
 	public Vector getHorizontalStabilizerProjectedAirspeed(){
-		float returnX = 0;
-		float returnY = getHorizontalStabilizerAirSpeed().getY();
-		float returnZ = getHorizontalStabilizerAirSpeed().getZ();
+                Vector airspeed = this.getHorizontalStabilizerAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
+		Vector projairspeed = new Vector(0,airspeed.getY(),airspeed.getZ());
+
 		
-		return new Vector(returnX, returnY, returnZ);
-	}
-	
+		return projairspeed.transform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll());
+		}
 	
 	public Vector getVerticalStabilizerProjectedAirspeed(){
-		float returnX = getVerticalStabilizerAirSpeed().getX();
-		float returnY = 0;
-		float returnZ = getVerticalStabilizerAirSpeed().getZ();
+		Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
+		Vector projairspeed = new Vector(airspeed.getX(),0,airspeed.getZ());
+
 		
-		return new Vector(returnX, returnY, returnZ);
-	}
+		return projairspeed.transform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll());
+		}
 	
 	
 	public float getRightWingAngleOfAttack(){
@@ -206,26 +205,26 @@ public class Force {
 	
 	public void setLeftWingLift(){
 		float s2 = getLeftWingProjectedAirspeed().dotProduct(getLeftWingProjectedAirspeed());
-		float ct = s2*liftSlope*getLeftWingAngleOfAttack();
+		float ct = s2*wingLiftSlope*getLeftWingAngleOfAttack();
 		this.leftWingLift = getLeftWingNormal().constantProduct(ct);
 	}
 	
 	public void setRightWingLift(){
 		float s2 = getRightWingProjectedAirspeed().dotProduct(getRightWingProjectedAirspeed());
-		float ct = s2*liftSlope*getRightWingAngleOfAttack();
+		float ct = s2*wingLiftSlope*getRightWingAngleOfAttack();
 		this.rightWingLift = getRightWingNormal().constantProduct(ct);
 	}
 	
 	
 	public void setHorizontalStabilizerLift(){
 		float s2 = getHorizontalStabilizerProjectedAirspeed().dotProduct(getHorizontalStabilizerProjectedAirspeed());
-		float ct = s2*liftSlope*getHorizontalStabilizerAngleOfAttack();
+		float ct = s2*horStabLiftSlope*getHorizontalStabilizerAngleOfAttack();
 		this.horizontalStabilizerLift = getHorizontalStabilizerNormal().constantProduct(ct);
 	}
 	
 	public void setVerticalStabilizerLift(){
 		float s2 = getVerticalStabilizerProjectedAirspeed().dotProduct(getVerticalStabilizerProjectedAirspeed());
-		float ct = s2*liftSlope*getVerticalStabilizerAngleOfAttack();
+		float ct = s2*verStabLiftSlope*getVerticalStabilizerAngleOfAttack();
 		this.verticalStabilizerLift = getVerticalStabilizerNormal().constantProduct(ct);
 	}
 	
@@ -235,6 +234,10 @@ public class Force {
 		this.setRightWingLift();
 		this.setHorizontalStabilizerLift();
 		this.setVerticalStabilizerLift();
+                this.leftWingLift.printVector("Llift");
+                this.rightWingLift.printVector("Rlift");
+                this.horizontalStabilizerLift.printVector("horLift");
+                this.verticalStabilizerLift.printVector("verLift");
 		this.liftForce = this.leftWingLift.add(this.rightWingLift).add(this.horizontalStabilizerLift).add(this.verticalStabilizerLift);
 	}
 	
@@ -303,7 +306,7 @@ public class Force {
         
         public Vector getInverseInertia(){
             Vector InertiaTensor = this.getInertiaTensor();
-            System.out.println(1/InertiaTensor.getX() + " " + 1/InertiaTensor.getY() + " " + 1/InertiaTensor.getZ());
+            //System.out.println(1/InertiaTensor.getX() + " " + 1/InertiaTensor.getY() + " " + 1/InertiaTensor.getZ());
             return new Vector(1/InertiaTensor.getX(),1/InertiaTensor.getY(),1/InertiaTensor.getZ());
         }
 	
@@ -315,11 +318,11 @@ public class Force {
         
     public Vector getTotalMoment(){
     	Vector wingR = getAircraft().getWingX().crossProduct(getWingGravityForce().add(getRightWingLift()));
-        System.out.println(wingR.getX() + " " + wingR.getY() + " " + wingR.getZ());
+        //System.out.println(wingR.getX() + " " + wingR.getY() + " " + wingR.getZ());
     	Vector wingL = getAircraft().getWingX().constantProduct(-1).crossProduct(getWingGravityForce().add(getLeftWingLift()));
-    	System.out.println(wingL.getX() + " " + wingL.getY() + " " + wingL.getZ());
+    	//System.out.println(wingL.getX() + " " + wingL.getY() + " " + wingL.getZ());
         Vector tail  = getAircraft().getTailSize().crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
-        Vector engine = getEnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));
+        Vector engine = getEnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));   
     	return wingR.add(wingL).add(tail).add(engine);
     }
 	
