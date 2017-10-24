@@ -27,6 +27,11 @@ public class Vector {
 	public float getZ(){
 		return this.z;
 	}
+        
+        @Override
+        public String toString(){
+            return String.format("Position: (%.2f, %.2f, %.2f)", this.getX(), this.getY(), this.getZ());
+        }
 	
 
 
