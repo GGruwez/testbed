@@ -127,15 +127,15 @@ public class Force {
 	}
 	
 	public Vector getRightWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity();//.add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getLeftWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity();//.add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getStabilizerVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()));
+		return this.getAircraft().getVelocity();//.add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()));
 
 	}
 	

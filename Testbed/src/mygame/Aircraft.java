@@ -279,8 +279,8 @@ public class Aircraft extends Node {
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
         this.getForce().setThrust(0);
-        this.setLeftWingInclination(0.2f);
-        this.setRightWingInclination(-0.2f);
+        this.setLeftWingInclination(0f);
+        this.setRightWingInclination(-0f);
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
         this.setVerStabInclination(0);
     }
