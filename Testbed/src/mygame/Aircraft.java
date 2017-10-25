@@ -246,7 +246,7 @@ public class Aircraft extends Node {
 
         this.setElapsedTime(this.getElapsedTime()+time);
 //        System.out.println("time" + time);
-//        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
         System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
         System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
@@ -285,7 +285,7 @@ public class Aircraft extends Node {
         this.getForce().setThrust(0.00f);
         this.setLeftWingInclination(0.00f);
         this.setRightWingInclination(-0.00f);
-        this.setHorStabInclination(-0.03f);
+        this.setHorStabInclination(0.03f);
         this.setVerStabInclination(0);
     }
 

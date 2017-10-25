@@ -35,7 +35,7 @@ public class Main extends SimpleApplication {
         goalCube.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(1,1,2);
-        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -50, 0, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -20, 0, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
         // Plane camera viewport
