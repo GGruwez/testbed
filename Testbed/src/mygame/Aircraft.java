@@ -31,6 +31,7 @@ public class Aircraft extends Node {
     private float verStabInclination;
     private float elapsedTime;
     private float gravityConstant = 9.81f;
+    private boolean manualControl = false;
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -273,6 +274,18 @@ public class Aircraft extends Node {
         return this.world;
     }
     
+    public boolean isManualControlEnabled(){
+        return this.manualControl;
+    }
+    
+    public void setManualControl(boolean control){
+        this.manualControl = control;
+    }
+    
+    public void toggleManualControl(){
+        this.manualControl = !this.manualControl;
+    }
+    
     public AutopilotConfig getConfig() {
         return this.config;
     }
@@ -282,10 +295,10 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(30.00f);
+        this.getForce().setThrust(0.00f);
         this.setLeftWingInclination(0.00f);
-        this.setRightWingInclination(-0.00f);
-        this.setHorStabInclination(0.01f);
+        this.setRightWingInclination(0.00f);
+        this.setHorStabInclination(-0.045f);
         this.setVerStabInclination(0);
     }
 

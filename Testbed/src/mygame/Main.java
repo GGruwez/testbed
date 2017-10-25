@@ -77,8 +77,8 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(aircraftInfo);
         
         // Change camera view to show both cube and aircraft in one shot
-        cam.setLocation(new Vector3f(-80, 0, 0));
-        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
+//        cam.setLocation(new Vector3f(-80, 0, 0));
+//        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
     }
 
     @Override
