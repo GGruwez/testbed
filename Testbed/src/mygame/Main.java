@@ -1,6 +1,8 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.renderer.RenderManager;
@@ -16,6 +18,7 @@ public class Main extends SimpleApplication {
     private RenderCamera sas;
     private Aircraft aircraft;
     private World world;
+    private BitmapText aircraftInfo;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -65,6 +68,12 @@ public class Main extends SimpleApplication {
                 goalCube.getLocalTranslation().getY(),
                 goalCube.getLocalTranslation().getZ());
         world.startSimulation();
+        
+        aircraftInfo = new BitmapText(guiFont, false);
+        aircraftInfo.setSize(guiFont.getCharSet().getRenderedSize()*3/4);
+        aircraftInfo.setColor(ColorRGBA.Blue);
+        aircraftInfo.setLocalTranslation(0, settings.getHeight(), 0);
+        guiNode.attachChild(aircraftInfo);
     }
 
     @Override
@@ -78,6 +87,35 @@ public class Main extends SimpleApplication {
         if (! world.isSimulating()) {
             stop();
         }
+        
+        this.refreshAircraftInfo();
+    }
+    
+    public void refreshAircraftInfo(){
+        String aircraftInfoText = "Aircraft Info:\r\n";
+        aircraftInfoText += "Position: " + this.aircraft.getCoordinates().toString();
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += "Velocity: " + this.aircraft.getVelocity().toString();
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += "Acceleration: " + this.aircraft.getAcceleration().toString();
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Pitch: %.2f", this.aircraft.getPitch());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Roll: %.2f", this.aircraft.getRoll());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Heading: %.2f", this.aircraft.getHeading());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("leftWingInclination: %.2f", this.aircraft.getLeftWingInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("rightWingInclination: %.2f", this.aircraft.getRightWingInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("horStabInclination: %.2f", this.aircraft.getHorStabInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("verStabInclination: %.2f", this.aircraft.getVerStabInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Elapsed time: %.2f", this.aircraft.getElapsedTime());
+        aircraftInfoText += "\r\n";
+        aircraftInfo.setText(aircraftInfoText);
     }
 
     @Override
