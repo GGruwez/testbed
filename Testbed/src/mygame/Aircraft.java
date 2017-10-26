@@ -135,7 +135,7 @@ public class Aircraft extends Node {
     }
     
     public void setPitch(float pitch){
-    	this.pitch = pitch;
+    	this.pitch = (float)(pitch  % (2 * Math.PI));
     }
     
     public float getRoll(){
@@ -143,7 +143,7 @@ public class Aircraft extends Node {
     }
     
     public void setRoll(float roll){
-    	this.roll = roll;
+    	this.roll = (float)(roll % (2 * Math.PI));
     }
     
     public float getHeading(){
@@ -151,7 +151,7 @@ public class Aircraft extends Node {
     }
     
     public void setHeading(float heading){
-    	this.heading = heading;
+    	this.heading = (float)(heading % (2 * Math.PI));
     }
     
     public Vector getAngularVelocity(){
@@ -242,7 +242,7 @@ public class Aircraft extends Node {
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
     	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
-    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
+    	setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
 
         this.setElapsedTime(this.getElapsedTime()+time);
         

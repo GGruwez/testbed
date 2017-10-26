@@ -124,15 +124,15 @@ public class Force {
 	}
 	
 	public Vector getRightWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()).inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getLeftWingVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()).inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	public Vector getStabilizerVelocity(){
-		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()).inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()));
+		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
 	
@@ -163,7 +163,6 @@ public class Force {
 		Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
 		Vector projairspeed = new Vector(airspeed.getX(),0,airspeed.getZ());
 
-		
 		return projairspeed.transform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll());
 		}
 	
@@ -171,28 +170,32 @@ public class Force {
 	public float getRightWingAngleOfAttack(){
 		double angle = -Math.atan2(getRightWingNormal().dotProduct(getRightWingProjectedAirspeed()),
 				rightWingAttack.dotProduct(getRightWingProjectedAirspeed()));
-		float AOA = (float)angle;
+		float AOA = (float)(angle > Math.PI/9 ? Math.PI/9 : angle);
+		AOA = AOA < 0 ? 0 : AOA;
 		return AOA;
 	}
 	
 	public float getLeftWingAngleOfAttack(){
 		double angle = -Math.atan2(getLeftWingNormal().dotProduct(getLeftWingProjectedAirspeed()),
 				leftWingAttack.dotProduct(getLeftWingProjectedAirspeed()));
-		float AOA = (float)angle;
+		float AOA = (float)(angle > Math.PI/9 ? Math.PI/9 : angle);
+		AOA = AOA < 0 ? 0 : AOA;
 		return AOA;
 	}
 	
 	public float getHorizontalStabilizerAngleOfAttack(){
 		double angle = -Math.atan2(getHorizontalStabilizerNormal().dotProduct(getHorizontalStabilizerProjectedAirspeed()),
 				horizontalStabilizerAttack.dotProduct(getHorizontalStabilizerProjectedAirspeed()));
-		float AOA = (float)angle;
+		float AOA = (float)(angle > Math.PI/9 ? Math.PI/9 : angle);
+		AOA = AOA < 0 ? 0 : AOA;
 		return AOA;
 	}
 	
 	public float getVerticalStabilizerAngleOfAttack(){
 		double angle = -Math.atan2(getVerticalStabilizerNormal().dotProduct(getVerticalStabilizerProjectedAirspeed()),
 				verticalStabilizerAttack.dotProduct(getVerticalStabilizerProjectedAirspeed()));
-		float AOA = (float)angle;
+		float AOA = (float)(angle > Math.PI/9 ? Math.PI/9 : angle);
+		AOA = AOA < 0 ? 0 : AOA;
 		return AOA;
 	}
 	
