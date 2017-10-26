@@ -1,7 +1,11 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.font.BitmapFont;
+import com.jme3.input.CameraInput;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -81,8 +85,19 @@ public class Main extends SimpleApplication {
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
     }
 
+    private boolean initialFrame = true;
     @Override
     public void simpleUpdate(float tpf) {
+        if (initialFrame) {
+            inputManager.deleteMapping(CameraInput.FLYCAM_STRAFELEFT);
+            inputManager.deleteMapping(CameraInput.FLYCAM_STRAFERIGHT);
+            inputManager.deleteMapping(CameraInput.FLYCAM_FORWARD);
+            inputManager.deleteMapping(CameraInput.FLYCAM_BACKWARD);
+            inputManager.deleteMapping(CameraInput.FLYCAM_RISE);
+            inputManager.deleteMapping(CameraInput.FLYCAM_LOWER);
+            initKeys();
+            initialFrame = false;
+        }
         try {
             world.evolve(tpf);
         } catch (IOException ex) {
@@ -120,11 +135,56 @@ public class Main extends SimpleApplication {
         aircraftInfoText += "\r\n";
         aircraftInfoText += String.format("Elapsed time: %.2f", this.aircraft.getElapsedTime());
         aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Manual control: %b", this.aircraft.isManualControlEnabled());
+        aircraftInfoText += "\r\n";
         aircraftInfo.setText(aircraftInfoText);
+    }
+    
+    public Aircraft getAircraft(){
+        return this.aircraft;
     }
 
     @Override
     public void simpleRender(RenderManager rm) {
         //TODO: add render code
     }
+    
+    /** Custom Keybinding: Map named actions to inputs. */
+    private void initKeys() {
+      // You can map one or several inputs to one named action
+      inputManager.addMapping("SwitchControl",  new KeyTrigger(KeyInput.KEY_Q));
+      inputManager.addMapping("PlaneLeft",  new KeyTrigger(KeyInput.KEY_A));
+      inputManager.addMapping("PlaneRight",  new KeyTrigger(KeyInput.KEY_D));
+      inputManager.addMapping("PlanePosStab",  new KeyTrigger(KeyInput.KEY_W));
+      inputManager.addMapping("PlaneNegStab",  new KeyTrigger(KeyInput.KEY_S));
+      // Add the names to the action listener.
+      inputManager.addListener(actionListener,"SwitchControl");
+      inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab");
+
+    }
+
+    private ActionListener actionListener = new ActionListener() {
+        public void onAction(String name, boolean keyPressed, float tpf) {
+          if (name.equals("SwitchControl") && !keyPressed) {
+              Main.this.getAircraft().toggleManualControl();
+          }
+        }
+    };
+
+    private AnalogListener analogListener = new AnalogListener() {
+      public void onAnalog(String name, float value, float tpf) {
+          Aircraft ac = Main.this.getAircraft();
+          if(name == "PlaneLeft"){
+              ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
+              ac.setRightWingInclination(ac.getRightWingInclination() + 0.01f);
+          }else if(name == "PlaneRight"){
+              ac.setLeftWingInclination(ac.getLeftWingInclination() + 0.01f);
+              ac.setRightWingInclination(ac.getRightWingInclination() - 0.01f);    
+          }else if(name == "PlanePosStab"){
+              ac.setHorStabInclination(ac.getHorStabInclination() + 0.001f);              
+          }else if(name == "PlaneNegStab"){
+              ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);              
+          }
+      }
+    };
 }
