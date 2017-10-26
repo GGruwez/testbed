@@ -57,13 +57,12 @@ public class Vector {
 	
 
 	/**
-	 * 
+	 * AIRCRAFT --> WERELD 
 	 * @param heading - heading van de aircraft tov wereld
 	 * @param pitch - pitch van de aircraft tov wereld
 	 * @param roll - roll van de aircraft tov wereld
 	 * @return
 	 */
-
 	public Vector transform(float heading, float pitch, float roll ){
 		double newX = this.x*(Math.cos(heading)*Math.cos(pitch))+this.y*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll))+this.z*(Math.cos(heading)*Math.sin(pitch)*Math.cos(roll)+Math.sin(heading)*Math.sin(roll));
 		float X = (float)newX;
@@ -77,6 +76,9 @@ public class Vector {
 		return new Vector(X,Y,Z);
 	}
 	
+	/**
+	 * WERELD --> AIRCRAFT
+	 */
 	//inverse matrix gewoon getransponeerde van normale matrix
 	public Vector inverseTransform(float heading, float pitch, float roll){
 		double newX = this.x*(Math.cos(heading)*Math.cos(pitch)) + this.y*(Math.sin(heading)*Math.cos(pitch) + this.z*(-Math.sin(pitch)));

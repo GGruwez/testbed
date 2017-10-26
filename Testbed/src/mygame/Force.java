@@ -142,7 +142,7 @@ public class Force {
 	
 	
 	public Vector getRightWingProjectedAirspeed(){
-                Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
+        Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
 		Vector projairspeed = new Vector(0,airspeed.getY(),airspeed.getZ());
 
 		
