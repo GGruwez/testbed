@@ -33,6 +33,7 @@ public class Aircraft extends Node {
     private float elapsedTime;
     private float gravityConstant = 9.81f;
     private boolean manualControl = false;
+    private float NeglectValue  = 0.00001f;
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -235,17 +236,17 @@ public class Aircraft extends Node {
         this.getForce().UpdateForce();
         
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
-        
-    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
-        
-    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
+
+    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
+
+    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
 
     	setPitch(getPitch() + getAngularVelocity().getX()*time);
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
-    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
+    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
 
-    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()));
+    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
 
         this.setElapsedTime(this.getElapsedTime()+time);
         
@@ -308,7 +309,7 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(0.00f);
+        this.getForce().setThrust(5.00f);
         this.setLeftWingInclination(0.00f);
         this.setRightWingInclination(0.00f);
         this.setHorStabInclination(-0.045f);
