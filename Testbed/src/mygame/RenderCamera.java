@@ -123,26 +123,33 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
             ByteBuffer outBuf2 = outBuf.duplicate();
             outBuf2.flip();
-            byte[] bArray = new byte[outBuf2.capacity()];
+            byte[] bArray = new byte[outBuf2.capacity()+10000];
             outBuf2.clear();
-            outBuf2.get(bArray, 0, bArray.length);
+            outBuf2.get(bArray, 0, bArray.length-10000);
             
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             
-//            for (int y = viewY; y < height+viewY; y++) {
-//                for (int x = viewX; x < width+viewX; x++) {
-//                    int r = bArray[3*(y*totalWidth+x)+0]& 0xff;
-//                    int g = bArray[3*(y*totalWidth+x)+1]& 0xff;
-//                    int b = bArray[3*(y*totalWidth+x)+2]& 0xff;
-//                    int rgb = 65536*r + 256*g + b;
-//                    image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
-//                }
-//            }
-//
-//            File outputFile = new File("output.jpeg");
-//            try {
-//                ImageIO.write(image, "jpeg", outputFile);
-//            }catch (IOException exc) {}
+            for (int y = viewY; y < height+viewY; y++) {
+                for (int x = viewX; x < width+viewX; x++) {
+ //                  try {
+                       int r = bArray[3*(y*totalWidth+x)+0]& 0xff;
+                       int g = bArray[3*(y*totalWidth+x)+1]& 0xff;
+                       int b = bArray[3*(y*totalWidth+x)+2]& 0xff;
+                       int rgb = 65536*r + 256*g + b;
+                       image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
+//                   }
+  //                 catch (ArrayIndexOutOfBoundsException e) {
+    //                   System.out.println(3*(y*totalWidth+x)+0);
+      //                 System.out.println(bArray.length);
+        //           }
+                    
+                }
+            }
+
+            File outputFile = new File("output.jpeg");
+            try {
+                ImageIO.write(image, "jpeg", outputFile);
+            }catch (IOException exc) {}
 
        }
     }

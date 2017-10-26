@@ -1,4 +1,5 @@
 package mygame;
+
 import mygame.Vector;
 
 /**
@@ -28,19 +29,12 @@ public class Force {
 	private Vector rightWingAxis = new Vector(1,0,0);
 	private Vector leftWingAxis = new Vector(1,0,0);
 	private Vector verticalStabilizerAxis = new Vector(0,1,0);
-	private Vector horizontalStabilizerAxis = new Vector(1,0,0);
-	
-	private float wingLiftSlope = 1f;
-        private float horStabLiftSlope = 0.1f;
-        private float verStabLiftSlope = 0.1f;
-        private float ForceNeglect = 0.0001f;
-	
+	private final Vector horizontalStabilizerAxis = new Vector(1,0,0);
+        private final float FORCE_NEGLECT  = 0.00001f;
 	
 	Force(float thrust,Aircraft plane){
-		
                 this.plane = plane;
 		this.setAttackAngles(this.getAircraft().getLeftWingInclination(), this.getAircraft().getRightWingInclination(), this.getAircraft().getHorStabInclination(), this.getAircraft().getVerStabInclination());
-		
 		this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), this.getAircraft().getEngineMass(), this.getAircraft().getGravityConstant());
 		this.setLiftForce();
 		this.setThrust(thrust);			
@@ -143,7 +137,7 @@ public class Force {
 	
 	
 	public Vector getRightWingProjectedAirspeed(){
-                Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
+        Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
 		Vector projairspeed = new Vector(0,airspeed.getY(),airspeed.getZ());
 
 		
@@ -205,27 +199,27 @@ public class Force {
 	
 	public void setLeftWingLift(){
 		float s2 = getLeftWingProjectedAirspeed().dotProduct(getLeftWingProjectedAirspeed());
-		float ct = s2*wingLiftSlope*getLeftWingAngleOfAttack();
-		this.leftWingLift = getLeftWingNormal().constantProduct(ct).checkAndNeglect(ForceNeglect);
+		float ct = s2*getAircraft().getConfig().getWingLiftSlope()*getLeftWingAngleOfAttack();
+		this.leftWingLift = getLeftWingNormal().constantProduct(ct).checkAndNeglect(FORCE_NEGLECT);
 	}
 	
 	public void setRightWingLift(){
 		float s2 = getRightWingProjectedAirspeed().dotProduct(getRightWingProjectedAirspeed());
-		float ct = s2*wingLiftSlope*getRightWingAngleOfAttack();
-		this.rightWingLift = getRightWingNormal().constantProduct(ct).checkAndNeglect(ForceNeglect);
+		float ct = s2*getAircraft().getConfig().getWingLiftSlope()*getRightWingAngleOfAttack();
+		this.rightWingLift = getRightWingNormal().constantProduct(ct).checkAndNeglect(FORCE_NEGLECT);
 	}
 	
 	
 	public void setHorizontalStabilizerLift(){
 		float s2 = getHorizontalStabilizerProjectedAirspeed().dotProduct(getHorizontalStabilizerProjectedAirspeed());
-		float ct = s2*horStabLiftSlope*getHorizontalStabilizerAngleOfAttack();
-		this.horizontalStabilizerLift = getHorizontalStabilizerNormal().constantProduct(ct).checkAndNeglect(ForceNeglect);
+		float ct = s2*getAircraft().getConfig().getHorStabLiftSlope()*getHorizontalStabilizerAngleOfAttack();
+		this.horizontalStabilizerLift = getHorizontalStabilizerNormal().constantProduct(ct).checkAndNeglect(FORCE_NEGLECT);
 	}
 	
 	public void setVerticalStabilizerLift(){
 		float s2 = getVerticalStabilizerProjectedAirspeed().dotProduct(getVerticalStabilizerProjectedAirspeed());
-		float ct = s2*verStabLiftSlope*getVerticalStabilizerAngleOfAttack();
-		this.verticalStabilizerLift = getVerticalStabilizerNormal().constantProduct(ct).checkAndNeglect(ForceNeglect);
+		float ct = s2*getAircraft().getConfig().getVerStabLiftSlope()*getVerticalStabilizerAngleOfAttack();
+		this.verticalStabilizerLift = getVerticalStabilizerNormal().constantProduct(ct).checkAndNeglect(FORCE_NEGLECT);
 	}
 	
 
