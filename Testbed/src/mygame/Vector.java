@@ -30,7 +30,7 @@ public class Vector {
         
         @Override
         public String toString(){
-            return String.format("Position: (%.2f, %.2f, %.2f)", this.getX(), this.getY(), this.getZ());
+            return String.format("(%.2f, %.2f, %.2f)", this.getX(), this.getY(), this.getZ());
         }
 	
 

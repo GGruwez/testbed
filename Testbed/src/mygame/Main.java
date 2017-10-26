@@ -5,6 +5,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
@@ -74,6 +75,10 @@ public class Main extends SimpleApplication {
         aircraftInfo.setColor(ColorRGBA.Blue);
         aircraftInfo.setLocalTranslation(0, settings.getHeight(), 0);
         guiNode.attachChild(aircraftInfo);
+        
+        // Change camera view to show both cube and aircraft in one shot
+//        cam.setLocation(new Vector3f(-80, 0, 0));
+//        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
     }
 
     @Override
