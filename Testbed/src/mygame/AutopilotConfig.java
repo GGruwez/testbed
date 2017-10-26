@@ -13,15 +13,15 @@ public class AutopilotConfig implements p_en_o_cw_2017.AutopilotConfig {
     
     private float gravity = 9.81f;
     private float wingX = 1;
-    private float tailSize;
-    private float engineMass = 1;
-    private float wingMass = 1;
-    private float tailMass = 1;
+    private float tailSize = 1;
+    private float engineMass = 2;
+    private float wingMass = 4;
+    private float tailMass = 4;
     private float maxThrust;
     private float maxAOA;
-    private float wingLiftSlope = 1;
-    private float horStabLiftSlope = 1;
-    private float verStabLiftSlope = 1;
+    private float wingLiftSlope = 1f;
+    private float horStabLiftSlope = 0.1f;
+    private float verStabLiftSlope = 0.1f;
     private float horAngleOfView;
     private float verAngleOfView;
     private int nbColums;

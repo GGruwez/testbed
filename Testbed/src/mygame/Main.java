@@ -6,9 +6,10 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
@@ -17,12 +18,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class Main extends SimpleApplication {
     
     private RenderCamera sas;
     private Aircraft aircraft;
     private World world;
+    private BitmapText aircraftInfo;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -42,7 +43,7 @@ public class Main extends SimpleApplication {
         goalCube.setLocalTranslation(0, 0, 0);
         
         Box plane = new Box(1,1,2);
-        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -5, 0, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", plane, 0, 0, 0, 0, 0, -20, 0, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
         // Plane camera viewport
@@ -57,10 +58,10 @@ public class Main extends SimpleApplication {
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
         // Move aircraft to starting position
-        aircraft.setLocalTranslation(0, 0, 30);
+        aircraft.setLocalTranslation(0, 0, 60);
         
         // Set viewport background color to white
-        this.viewPort.setBackgroundColor(ColorRGBA.White);
+        this.viewPort.setBackgroundColor(ColorRGBA.LightGray);
         
         rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
@@ -72,6 +73,16 @@ public class Main extends SimpleApplication {
                 goalCube.getLocalTranslation().getY(),
                 goalCube.getLocalTranslation().getZ());
         world.startSimulation();
+        
+        aircraftInfo = new BitmapText(guiFont, false);
+        aircraftInfo.setSize(guiFont.getCharSet().getRenderedSize()*3/4);
+        aircraftInfo.setColor(ColorRGBA.Blue);
+        aircraftInfo.setLocalTranslation(0, settings.getHeight(), 0);
+        guiNode.attachChild(aircraftInfo);
+        
+        // Change camera view to show both cube and aircraft in one shot
+//        cam.setLocation(new Vector3f(-80, 0, 0));
+//        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
     }
 
     private boolean initialFrame = true;
@@ -94,6 +105,35 @@ public class Main extends SimpleApplication {
         if (! world.isSimulating()) {
             stop();
         }
+        
+        this.refreshAircraftInfo();
+    }
+    
+    public void refreshAircraftInfo(){
+        String aircraftInfoText = "Aircraft Info:\r\n";
+        aircraftInfoText += "Position: " + this.aircraft.getCoordinates().toString();
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += "Velocity: " + this.aircraft.getVelocity().toString();
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += "Acceleration: " + this.aircraft.getAcceleration().toString();
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Pitch: %.2f", this.aircraft.getPitch());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Roll: %.2f", this.aircraft.getRoll());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Heading: %.2f", this.aircraft.getHeading());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("leftWingInclination: %.2f", this.aircraft.getLeftWingInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("rightWingInclination: %.2f", this.aircraft.getRightWingInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("horStabInclination: %.2f", this.aircraft.getHorStabInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("verStabInclination: %.2f", this.aircraft.getVerStabInclination());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Elapsed time: %.2f", this.aircraft.getElapsedTime());
+        aircraftInfoText += "\r\n";
+        aircraftInfo.setText(aircraftInfoText);
     }
 
     @Override

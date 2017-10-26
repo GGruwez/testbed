@@ -27,6 +27,28 @@ public class Vector {
 	public float getZ(){
 		return this.z;
 	}
+        
+        public Vector checkAndNeglect(float rejectValue){
+            float newX = this.getX();
+            float newY = this.getY();
+            float newZ = this.getZ();
+            if (Math.abs(newX)< rejectValue){
+                newX = 0;
+            }
+            if (Math.abs(newY) < rejectValue){
+                newY = 0;
+            }
+            if (Math.abs(newZ) < rejectValue){
+                newZ = 0;
+            }
+            return new Vector(newX,newY,newZ);
+            
+        }
+        
+        @Override
+        public String toString(){
+            return String.format("(%.2f, %.2f, %.2f)", this.getX(), this.getY(), this.getZ());
+        }
 	
 
 
@@ -87,6 +109,10 @@ public class Vector {
 				
 	}
 	
+        public void printVector(String name){
+        System.out.println(name + this.getX() + " " + this.getY() + " " + this.getZ());
+        }
+        
 	/**
 	 * A.B
 	 * @param other
