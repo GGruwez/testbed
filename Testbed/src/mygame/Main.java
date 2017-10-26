@@ -81,8 +81,8 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(aircraftInfo);
         
         // Change camera view to show both cube and aircraft in one shot
-//        cam.setLocation(new Vector3f(-80, 0, 0));
-//        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
+        cam.setLocation(new Vector3f(-80, 0, 0));
+        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
     }
 
     private boolean initialFrame = true;
@@ -93,6 +93,8 @@ public class Main extends SimpleApplication {
             inputManager.deleteMapping(CameraInput.FLYCAM_STRAFERIGHT);
             inputManager.deleteMapping(CameraInput.FLYCAM_FORWARD);
             inputManager.deleteMapping(CameraInput.FLYCAM_BACKWARD);
+            inputManager.deleteMapping(CameraInput.FLYCAM_RISE);
+            inputManager.deleteMapping(CameraInput.FLYCAM_LOWER);
             initKeys();
             initialFrame = false;
         }
@@ -133,7 +135,13 @@ public class Main extends SimpleApplication {
         aircraftInfoText += "\r\n";
         aircraftInfoText += String.format("Elapsed time: %.2f", this.aircraft.getElapsedTime());
         aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Manual control: %b", this.aircraft.isManualControlEnabled());
+        aircraftInfoText += "\r\n";
         aircraftInfo.setText(aircraftInfoText);
+    }
+    
+    public Aircraft getAircraft(){
+        return this.aircraft;
     }
 
     @Override
@@ -144,25 +152,35 @@ public class Main extends SimpleApplication {
     /** Custom Keybinding: Map named actions to inputs. */
     private void initKeys() {
       // You can map one or several inputs to one named action
-      inputManager.addMapping("Right",  new KeyTrigger(KeyInput.KEY_D));
+      inputManager.addMapping("SwitchControl",  new KeyTrigger(KeyInput.KEY_Q));
+      inputManager.addMapping("PlaneLeft",  new KeyTrigger(KeyInput.KEY_A));
+      inputManager.addMapping("PlaneRight",  new KeyTrigger(KeyInput.KEY_D));
+      inputManager.addMapping("PlanePosStab",  new KeyTrigger(KeyInput.KEY_W));
+      inputManager.addMapping("PlaneNegStab",  new KeyTrigger(KeyInput.KEY_S));
       // Add the names to the action listener.
-      inputManager.addListener(actionListener,"Pause");
-      inputManager.addListener(analogListener,"Left", "Right", "Rotate");
+      inputManager.addListener(actionListener,"SwitchControl");
+      inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab");
 
     }
 
     private ActionListener actionListener = new ActionListener() {
-      public void onAction(String name, boolean keyPressed, float tpf) {
-//        if (name.equals("Pause") && !keyPressed) {
-//          isRunning = !isRunning;
-//        }
-      }
+        public void onAction(String name, boolean keyPressed, float tpf) {
+          if (name.equals("SwitchControl") && !keyPressed) {
+              Main.this.getAircraft().toggleManualControl();
+          }
+        }
     };
 
     private AnalogListener analogListener = new AnalogListener() {
       public void onAnalog(String name, float value, float tpf) {
-          if(name == "Right"){
-              System.out.println("Right");
+          if(name == "PlaneLeft"){
+              Main.this.getAircraft().move(new Vector(-0.01f, 0 ,0));
+          }else if(name == "PlaneRight"){
+              Main.this.getAircraft().move(new Vector(0.01f, 0 ,0));              
+          }else if(name == "PlanePosStab"){
+              Main.this.getAircraft().setHorStabInclination(0.05f);              
+          }else if(name == "PlaneNegStab"){
+              Main.this.getAircraft().setHorStabInclination(-0.05f);              
           }
       }
     };
