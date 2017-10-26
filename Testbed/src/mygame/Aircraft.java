@@ -1,5 +1,6 @@
 package mygame;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
@@ -234,6 +235,7 @@ public class Aircraft extends Node {
         this.getForce().UpdateForce();
         
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
+        
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
         
     	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
@@ -246,6 +248,17 @@ public class Aircraft extends Node {
     	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()));
 
         this.setElapsedTime(this.getElapsedTime()+time);
+        
+        // Rotatie tonen 
+        Quaternion pitchQuat = new Quaternion();
+        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+        Quaternion rollQuat = new Quaternion();
+        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+        Quaternion yawQuat = new Quaternion();
+        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
+        this.setLocalRotation(totalQuat);
+        
 //        System.out.println("time" + time);
         System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
