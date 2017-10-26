@@ -57,7 +57,7 @@ public class Main extends SimpleApplication {
         aircraft.setLocalTranslation(0, 0, 60);
         
         // Set viewport background color to white
-        this.viewPort.setBackgroundColor(ColorRGBA.White);
+        this.viewPort.setBackgroundColor(ColorRGBA.LightGray);
         
         rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
