@@ -173,14 +173,17 @@ public class Main extends SimpleApplication {
 
     private AnalogListener analogListener = new AnalogListener() {
       public void onAnalog(String name, float value, float tpf) {
+          Aircraft ac = Main.this.getAircraft();
           if(name == "PlaneLeft"){
-              Main.this.getAircraft().move(new Vector(-0.01f, 0 ,0));
+              ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
+              ac.setRightWingInclination(ac.getRightWingInclination() + 0.01f);
           }else if(name == "PlaneRight"){
-              Main.this.getAircraft().move(new Vector(0.01f, 0 ,0));              
+              ac.setLeftWingInclination(ac.getLeftWingInclination() + 0.01f);
+              ac.setRightWingInclination(ac.getRightWingInclination() - 0.01f);    
           }else if(name == "PlanePosStab"){
-              Main.this.getAircraft().setHorStabInclination(0.05f);              
+              ac.setHorStabInclination(ac.getHorStabInclination() + 0.001f);              
           }else if(name == "PlaneNegStab"){
-              Main.this.getAircraft().setHorStabInclination(-0.05f);              
+              ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);              
           }
       }
     };

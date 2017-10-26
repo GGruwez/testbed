@@ -31,8 +31,7 @@ public class Aircraft extends Node {
     private float horStabInclination;
     private float verStabInclination;
     private float elapsedTime;
-    private float gravityConstant = 9.81f;
-    private boolean manualControl = true;
+    private boolean manualControl = false;
     private float NeglectValue  = 0.00001f;
     
     private Geometry aircraftGeometry;
