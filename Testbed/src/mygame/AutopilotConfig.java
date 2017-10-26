@@ -15,8 +15,8 @@ public class AutopilotConfig implements p_en_o_cw_2017.AutopilotConfig {
     private float wingX = 1;
     private float tailSize = 1;
     private float engineMass = 2;
-    private float wingMass = 4;
-    private float tailMass = 4;
+    private float wingMass = 2;
+    private float tailMass = 2;
     private float maxThrust;
     private float maxAOA;
     private float wingLiftSlope = 1f;

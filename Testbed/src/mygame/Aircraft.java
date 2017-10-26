@@ -288,10 +288,17 @@ public class Aircraft extends Node {
     
     public void setManualControl(boolean control){
         this.manualControl = control;
+        if(control == true){
+            this.getForce().setThrust(0);
+            this.setLeftWingInclination(0);
+            this.setRightWingInclination(0);
+            this.setHorStabInclination(0);
+            this.setVerStabInclination(0);
+        }
     }
     
     public void toggleManualControl(){
-        this.manualControl = !this.manualControl;
+        this.setManualControl(!this.manualControl);
     }
     
     public AutopilotConfig getConfig() {
@@ -303,6 +310,9 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
+        if(this.isManualControlEnabled()){
+            return;
+        }
         this.getForce().setThrust(5.00f);
         this.setLeftWingInclination(0.00f);
         this.setRightWingInclination(0.00f);
