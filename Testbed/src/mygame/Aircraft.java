@@ -1,5 +1,6 @@
 package mygame;
 
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
@@ -14,7 +15,7 @@ public class Aircraft extends Node {
     
     private Vector coordinates = Vector.NULL;
     private Vector velocity = Vector.NULL;
-    private Vector acceleration = new Vector(0, 0, 0);
+    private Vector acceleration = Vector.NULL;
     private Force forces;
     private float pitch;
     private float roll;
@@ -30,8 +31,8 @@ public class Aircraft extends Node {
     private float horStabInclination;
     private float verStabInclination;
     private float elapsedTime;
-    private float gravityConstant = 9.81f;
     private boolean manualControl = false;
+    private float NeglectValue  = 0.00001f;
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -68,12 +69,12 @@ public class Aircraft extends Node {
         this.attachChild(this.aircraftCameraNode);
         this.aircraftCameraNode.setLocalTranslation(Vector3f.ZERO);
         this.aircraftCameraNode.lookAt(new Vector3f(0,0,-1), Vector3f.UNIT_Y); // Front of the plane is in -z direction
+        
+        // Fysica
         this.setCoordinates(new Vector(x, y, z));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
         this.forces = new Force(0,this);
     }
-    
-   
     
     public Geometry getAircraftGeometry(){
         return this.aircraftGeometry;
@@ -187,7 +188,7 @@ public class Aircraft extends Node {
     
 
     public Vector getEnginePlace(){
-		return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
+	return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
 	}
 
     public float getLeftWingInclination() {
@@ -234,18 +235,27 @@ public class Aircraft extends Node {
         this.getForce().UpdateForce();
         
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
-    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
-        
-    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
+    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
+    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
 
     	setPitch(getPitch() + getAngularVelocity().getX()*time);
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
-    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
-
-    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()));
+    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
+    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
 
         this.setElapsedTime(this.getElapsedTime()+time);
+        
+        // Rotatie tonen 
+        Quaternion pitchQuat = new Quaternion();
+        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+        Quaternion rollQuat = new Quaternion();
+        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+        Quaternion yawQuat = new Quaternion();
+        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
+        this.setLocalRotation(totalQuat);
+        
 //        System.out.println("time" + time);
         System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
@@ -261,10 +271,8 @@ public class Aircraft extends Node {
     }
 
     public float getGravityConstant(){
-        return this.gravityConstant;
+        return this.getConfig().getGravity();
     }
-    
-    
     
     public void setWorld(World world) {
         this.world = world;
@@ -295,7 +303,7 @@ public class Aircraft extends Node {
     }
 
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(0.00f);
+        this.getForce().setThrust(5.00f);
         this.setLeftWingInclination(0.00f);
         this.setRightWingInclination(0.00f);
         this.setHorStabInclination(-0.045f);
