@@ -33,6 +33,7 @@ public class Aircraft extends Node {
     private float elapsedTime;
     private boolean manualControl = false;
     private float NeglectValue  = 0.00001f;
+    private byte[] image = new byte[0];
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -320,11 +321,19 @@ public class Aircraft extends Node {
         this.setVerStabInclination(0);
     }
 
+    void setImage(byte[] imageArray){
+        this.image = imageArray;
+    }
+
+    byte[] getImage(){
+        return this.image;
+    }
+
     public AutopilotInputs getAutopilotInputs(){
         return new AutopilotInputs() {
             @Override
             public byte[] getImage() {
-                return new byte[0]; // TODO: get image
+                return Aircraft.this.getImage();
             }
 
             @Override

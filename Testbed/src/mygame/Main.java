@@ -67,7 +67,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
         
-        sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight());
+        sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight(), aircraft);
         sas.initialize(stateManager, this);
         
         world.setGoal(goalCube.getLocalTranslation().getX(),
