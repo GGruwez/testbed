@@ -6,4 +6,5 @@ Testbed/.idea
 Testbed/out
 Testbed.iml
 /Testbed/dist/
+/testbed/nbproject/private/
 output.jpeg
