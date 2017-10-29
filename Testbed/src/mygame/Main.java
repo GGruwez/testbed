@@ -24,6 +24,7 @@ public class Main extends SimpleApplication {
     private Aircraft aircraft;
     private World world;
     private BitmapText aircraftInfo;
+    private Log log = new Log();
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -66,7 +67,7 @@ public class Main extends SimpleApplication {
         rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
         
-        sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight());
+        sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight(), aircraft);
         sas.initialize(stateManager, this);
         
         world.setGoal(goalCube.getLocalTranslation().getX(),
@@ -81,7 +82,7 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(aircraftInfo);
         
         // Change camera view to show both cube and aircraft in one shot
-        cam.setLocation(new Vector3f(-80, 0, 0));
+        cam.setLocation(new Vector3f(-180, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
     }
 
@@ -109,6 +110,8 @@ public class Main extends SimpleApplication {
         }
         
         this.refreshAircraftInfo();
+        log.addLine(this.getAircraft());
+        log.save();
     }
     
     public void refreshAircraftInfo(){

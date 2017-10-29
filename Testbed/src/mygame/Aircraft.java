@@ -33,6 +33,7 @@ public class Aircraft extends Node {
     private float elapsedTime;
     private boolean manualControl = false;
     private float NeglectValue  = 0.00001f;
+    private byte[] image = new byte[0];
     
     private Geometry aircraftGeometry;
     private Camera aircraftCamera;
@@ -135,7 +136,7 @@ public class Aircraft extends Node {
     }
     
     public void setPitch(float pitch){
-    	this.pitch = pitch;
+    	this.pitch = (float)(pitch  % (2 * Math.PI));
     }
     
     public float getRoll(){
@@ -143,7 +144,7 @@ public class Aircraft extends Node {
     }
     
     public void setRoll(float roll){
-    	this.roll = roll;
+    	this.roll = (float)(roll % (2 * Math.PI));
     }
     
     public float getHeading(){
@@ -151,7 +152,7 @@ public class Aircraft extends Node {
     }
     
     public void setHeading(float heading){
-    	this.heading = heading;
+    	this.heading = (float)(heading % (2 * Math.PI));
     }
     
     public Vector getAngularVelocity(){
@@ -242,7 +243,7 @@ public class Aircraft extends Node {
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
     	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
-    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
+    	setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
 
         this.setElapsedTime(this.getElapsedTime()+time);
         
@@ -320,11 +321,19 @@ public class Aircraft extends Node {
         this.setVerStabInclination(0);
     }
 
+    void setImage(byte[] imageArray){
+        this.image = imageArray;
+    }
+
+    byte[] getImage(){
+        return this.image;
+    }
+
     public AutopilotInputs getAutopilotInputs(){
         return new AutopilotInputs() {
             @Override
             public byte[] getImage() {
-                return new byte[0]; // TODO: get image
+                return Aircraft.this.getImage();
             }
 
             @Override
