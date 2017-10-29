@@ -314,11 +314,11 @@ public class Aircraft extends Node {
         if(this.isManualControlEnabled()){
             return;
         }
-        this.getForce().setThrust(5.00f);
-        this.setLeftWingInclination(0.00f);
-        this.setRightWingInclination(0.00f);
+        this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
+        this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(-0.045f);
-        this.setVerStabInclination(0);
+        this.setVerStabInclination(0f);
     }
 
     void setImage(byte[] imageArray){
