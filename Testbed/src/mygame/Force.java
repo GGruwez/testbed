@@ -231,10 +231,10 @@ public class Force {
 		this.setRightWingLift();
 		this.setHorizontalStabilizerLift();
 		this.setVerticalStabilizerLift();
-                this.leftWingLift.printVector("Llift");
-                this.rightWingLift.printVector("Rlift");
-                this.horizontalStabilizerLift.printVector("horLift");
-                this.verticalStabilizerLift.printVector("verLift");
+//		this.leftWingLift.printVector("Llift");
+//		this.rightWingLift.printVector("Rlift");
+//		this.horizontalStabilizerLift.printVector("horLift");
+//		this.verticalStabilizerLift.printVector("verLift");
 		this.liftForce = this.leftWingLift.add(this.rightWingLift).add(this.horizontalStabilizerLift).add(this.verticalStabilizerLift);
 	}
 	

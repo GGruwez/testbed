@@ -258,13 +258,13 @@ public class Aircraft extends Node {
         this.setLocalRotation(totalQuat);
         
 //        System.out.println("time" + time);
-        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+//        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
-        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
-        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
-        System.out.println("force " + getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
-        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
-        System.out.println("");
+//        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
+//        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
+//        System.out.println("force " + getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
+//        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
+//        System.out.println("");
 
 //      System.out.println("Right wing lift: " + getForce().getRightWingLift().getX() + " " + getForce().getRightWingLift().getY() + " " + getForce().getRightWingLift().getZ());
 //        System.out.println("Left wing lift: " + getForce().getLeftWingLift().getX() + " " + getForce().getLeftWingLift().getY() + " " + getForce().getLeftWingLift().getZ());
