@@ -239,12 +239,19 @@ public class Aircraft extends Node {
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
     	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
 
+        getForce().getTotalForce().printVector("voor transform ");
+        Vector totalF = getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll());
+        totalF.printVector("na transform");
+
     	setPitch(getPitch() + getAngularVelocity().getX()*time);
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
     	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
     	setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
 
+        Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
+        totalM.printVector("totalm ");
+        getAngularVelocity().printVector("angleacc");
         this.setElapsedTime(this.getElapsedTime()+time);
         
         // Rotatie tonen 
@@ -314,10 +321,10 @@ public class Aircraft extends Node {
         if(this.isManualControlEnabled()){
             return;
         }
-        this.getForce().setThrust(config.getMaxThrust());
+        this.getForce().setThrust(autopilotOutputs.getThrust());
         this.setLeftWingInclination(0f);
         this.setRightWingInclination(0f);
-        this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
+        this.setHorStabInclination(-autopilotOutputs.getHorStabInclination());
         this.setVerStabInclination(0f);
     }
 

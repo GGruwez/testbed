@@ -186,9 +186,7 @@ public class Force {
 	public float getHorizontalStabilizerAngleOfAttack(){
 		double angle = -Math.atan2(getHorizontalStabilizerNormal().dotProduct(getHorizontalStabilizerProjectedAirspeed()),
 				horizontalStabilizerAttack.dotProduct(getHorizontalStabilizerProjectedAirspeed()));
-		float AOA = (float)(angle > Math.PI/9 ? Math.PI/9 : angle);
-		AOA = AOA < 0 ? 0 : AOA;
-		return AOA;
+		return (float) angle;
 	}
 	
 	public float getVerticalStabilizerAngleOfAttack(){
