@@ -5,3 +5,12 @@
 Testbed/.idea
 Testbed/out
 Testbed.iml
+/Testbed/dist/
+/testbed/nbproject/private/
+output.jpeg
+.DS_Store
+/Testbed/*.dll
+/Testbed/*.dylib
+master-application.jnlp
+log.xlsx
+log.csv

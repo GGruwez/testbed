@@ -42,7 +42,6 @@ public class World {
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
         getAircraft().setWorld(this);
-        getAutopilot().setConfig(this.getAircraft().getConfig());
     }
     
     public Aircraft getAircraft() {
@@ -55,11 +54,9 @@ public class World {
     
     public void evolve(float dt) throws IOException {
         if (this.isSimulating()) {
-            AutopilotInputs output = this.getAircraft().getAutopilotInputs();
-            AutopilotInputsWriter.write(this.getOutputStream(), output);
-            getAutopilot().fillStreamWithOutput(this.getInputStream(), this.getOutputStream());
-            AutopilotOutputs input = AutopilotOutputsReader.read(this.getInputStream());
-            this.getAircraft().readAutopilotOutputs(input);
+            AutopilotInputs autopilotInputs = this.getAircraft().getAutopilotInputs();
+            AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
+            this.getAircraft().readAutopilotOutputs(autopilotOutputs);
             this.getAircraft().updateAirplane(dt);
         }
         double distanceToGoal = Math.sqrt(
@@ -73,10 +70,12 @@ public class World {
     
     public void startSimulation() {
         this.simulation = true;
+        this.getAutopilot().simulationStarted(this.getAircraft().getConfig(), this.getAircraft().getAutopilotInputs());
     }
     
     public void endSimulation() {
         this.simulation = false;
+        this.getAutopilot().simulationEnded();
     }
     
     public boolean isSimulating() {

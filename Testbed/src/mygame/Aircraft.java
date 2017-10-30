@@ -17,13 +17,13 @@ public class Aircraft extends Node {
     
     private Vector coordinates = Vector.NULL;
     private Vector velocity = Vector.NULL;
-    private Vector acceleration = new Vector(0, 0, 0);
+    private Vector acceleration = Vector.NULL;
     private Force forces;
     private float pitch;
     private float roll;
     private float heading;
-    private Vector wingX = Vector.NULL;
-    private Vector tailSize = Vector.NULL;
+    private Vector wingX = new Vector(1, 0, 0);
+    private Vector tailSize = new Vector(0, 0, 1);
     private Vector angularAcceleration = Vector.NULL;
     private Vector angularVelocity = Vector.NULL;
     private World world;
@@ -33,7 +33,9 @@ public class Aircraft extends Node {
     private float horStabInclination;
     private float verStabInclination;
     private float elapsedTime;
-    private float gravityConstant;
+    private boolean manualControl = false;
+    private float NeglectValue  = 0.00001f;
+    private byte[] image = new byte[0];
     
     private Spatial aircraftGeometry;
     private Camera aircraftCamera;
@@ -59,6 +61,7 @@ public class Aircraft extends Node {
             float horStabInclination, float verStabInclination) {   
         
         model.getChild(0).scale(0.5f, 0.5f, 0.5f);
+        model.getChild(0).move(0, 0, 1.2f);
         model.getChild(0).rotate(FastMath.PI, 0, FastMath.PI);
         this.aircraftGeometry = (Spatial) model.getChild(0);
         
@@ -72,13 +75,13 @@ public class Aircraft extends Node {
         this.attachChild(this.aircraftCameraNode);
         this.aircraftCameraNode.setLocalTranslation(Vector3f.ZERO);
         this.aircraftCameraNode.lookAt(new Vector3f(0,0,-1), Vector3f.UNIT_Y); // Front of the plane is in -z direction
+        
+        // Fysica
         this.setCoordinates(new Vector(x, y, z));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
         this.forces = new Force(0,this);
     }
-    
-   
-    
+
     public Spatial getAircraftGeometry(){
         return this.aircraftGeometry;
     }
@@ -138,7 +141,7 @@ public class Aircraft extends Node {
     }
     
     public void setPitch(float pitch){
-    	this.pitch = pitch;
+    	this.pitch = (float)(pitch  % (2 * Math.PI));
     }
     
     public float getRoll(){
@@ -146,7 +149,7 @@ public class Aircraft extends Node {
     }
     
     public void setRoll(float roll){
-    	this.roll = roll;
+    	this.roll = (float)(roll % (2 * Math.PI));
     }
     
     public float getHeading(){
@@ -154,7 +157,7 @@ public class Aircraft extends Node {
     }
     
     public void setHeading(float heading){
-    	this.heading = heading;
+    	this.heading = (float)(heading % (2 * Math.PI));
     }
     
     public Vector getAngularVelocity(){
@@ -191,7 +194,7 @@ public class Aircraft extends Node {
     
 
     public Vector getEnginePlace(){
-		return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
+	return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
 	}
 
     public float getLeftWingInclination() {
@@ -238,29 +241,51 @@ public class Aircraft extends Node {
         this.getForce().UpdateForce();
         
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
-    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time)));
-        
-    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()));
+    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
+    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
 
-    	setPitch(getPitch() + getAngularVelocity().getX());
-    	setRoll(getRoll() + getAngularVelocity().getZ());
-    	setHeading(getHeading() + getAngularVelocity().getY());
-    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)));
+        getForce().getTotalForce().printVector("voor transform ");
+        Vector totalF = getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll());
+        totalF.printVector("na transform");
 
-    	setAngularAcceleration(getForce().getTotalMoment().transform(heading,pitch,roll).applyInertiaTensor(this.getForce().getInertiaTensor()));
+    	setPitch(getPitch() + getAngularVelocity().getX()*time);
+    	setRoll(getRoll() + getAngularVelocity().getZ()*time);
+    	setHeading(getHeading() + getAngularVelocity().getY()*time);
+    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
+    	setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
 
+        Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
+        totalM.printVector("totalm ");
+        getAngularVelocity().printVector("angleacc");
         this.setElapsedTime(this.getElapsedTime()+time);
         
-        System.out.println(getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
-        System.out.println("Thrust: " + this.getForce().getThrustForce().getZ());
-        System.out.println("Left wing: " + this.getLeftWingInclination());
+        // Rotatie tonen 
+        Quaternion pitchQuat = new Quaternion();
+        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+        Quaternion rollQuat = new Quaternion();
+        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+        Quaternion yawQuat = new Quaternion();
+        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
+        this.setLocalRotation(totalQuat);
+        
+//        System.out.println("time" + time);
+//        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+//        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
+//        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
+//        System.out.println("force " + getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
+//        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
+//        System.out.println("");
+
+//      System.out.println("Right wing lift: " + getForce().getRightWingLift().getX() + " " + getForce().getRightWingLift().getY() + " " + getForce().getRightWingLift().getZ());
+//        System.out.println("Left wing lift: " + getForce().getLeftWingLift().getX() + " " + getForce().getLeftWingLift().getY() + " " + getForce().getLeftWingLift().getZ());
+//        System.out.println("Left wing: " + this.getLeftWingInclination());
     }
 
     public float getGravityConstant(){
-        return this.gravityConstant;
+        return this.getConfig().getGravity();
     }
-    
-    
     
     public void setWorld(World world) {
         this.world = world;
@@ -270,6 +295,25 @@ public class Aircraft extends Node {
         return this.world;
     }
     
+    public boolean isManualControlEnabled(){
+        return this.manualControl;
+    }
+    
+    public void setManualControl(boolean control){
+        this.manualControl = control;
+        if(control == true){
+            this.getForce().setThrust(0);
+            this.setLeftWingInclination(0);
+            this.setRightWingInclination(0);
+            this.setHorStabInclination(0);
+            this.setVerStabInclination(0);
+        }
+    }
+    
+    public void toggleManualControl(){
+        this.setManualControl(!this.manualControl);
+    }
+    
     public AutopilotConfig getConfig() {
         return this.config;
     }
@@ -277,20 +321,32 @@ public class Aircraft extends Node {
     public void setConfig(AutopilotConfig config) {
         this.config = config; 
     }
-
+    
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
-        this.getForce().setThrust(1);
-        this.setLeftWingInclination(0.5f);
-        this.setRightWingInclination(-0.5f);
-        this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
-        this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
+        if(this.isManualControlEnabled()){
+            return;
+        }
+        this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
+        this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
+        this.setHorStabInclination(-autopilotOutputs.getHorStabInclination());
+        this.setVerStabInclination(0f);
+    }
+    
+    void setImage(byte[] imageArray){
+        this.image = imageArray;
+    }
+
+    byte[] getImage(){
+        return this.image;
     }
 
     public AutopilotInputs getAutopilotInputs(){
         return new AutopilotInputs() {
             @Override
+
             public byte[] getImage() {
-                return new byte[0]; // TODO: get image
+                return Aircraft.this.getImage();
             }
 
             @Override
