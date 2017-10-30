@@ -309,7 +309,7 @@ public class Aircraft extends Node {
     public void setConfig(AutopilotConfig config) {
         this.config = config; 
     }
-
+    
     public void readAutopilotOutputs(AutopilotOutputs autopilotOutputs){
         if(this.isManualControlEnabled()){
             return;
@@ -320,7 +320,7 @@ public class Aircraft extends Node {
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination()*2);
         this.setVerStabInclination(0f);
     }
-
+    
     void setImage(byte[] imageArray){
         this.image = imageArray;
     }
