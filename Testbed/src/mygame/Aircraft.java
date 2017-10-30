@@ -322,8 +322,8 @@ public class Aircraft extends Node {
             return;
         }
         this.getForce().setThrust(autopilotOutputs.getThrust());
-        this.setLeftWingInclination(0f);
-        this.setRightWingInclination(0f);
+        this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
+        this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(-autopilotOutputs.getHorStabInclination());
         this.setVerStabInclination(0f);
     }
@@ -339,6 +339,7 @@ public class Aircraft extends Node {
     public AutopilotInputs getAutopilotInputs(){
         return new AutopilotInputs() {
             @Override
+
             public byte[] getImage() {
                 return Aircraft.this.getImage();
             }
