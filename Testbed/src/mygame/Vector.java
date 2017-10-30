@@ -75,19 +75,19 @@ public class Vector {
 
 	/**
 	 * AIRCRAFT --> WERELD 
-	 * @param heading - heading van de aircraft tov wereld
-	 * @param pitch - pitch van de aircraft tov wereld
-	 * @param roll - roll van de aircraft tov wereld
+	 * @param heading - heading van de aircraft tov wereld rond y-as
+	 * @param pitch - pitch van de aircraft tov wereld rond x-as
+	 * @param roll - roll van de aircraft tov wereld rond z-as
 	 * @return
 	 */
 	public Vector transform(float heading, float pitch, float roll ){
-		double newX = this.x*(Math.cos(heading)*Math.cos(pitch))+this.y*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll))+this.z*(Math.cos(heading)*Math.sin(pitch)*Math.cos(roll)+Math.sin(heading)*Math.sin(roll));
+		double newX = this.x*(Math.cos(heading)*Math.cos(roll)-Math.sin(heading)*Math.sin(pitch)*Math.sin(roll))+this.y*(Math.cos(heading)*Math.sin(roll)+Math.cos(roll)*Math.sin(heading)*Math.sin(pitch))+this.z*(-Math.cos(pitch)*Math.sin(heading));
 		float X = (float)newX;
 		
-		double newY = this.x*(Math.sin(heading)*Math.cos(pitch))+this.y*(Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)+Math.cos(heading)*Math.cos(roll))+this.z*(Math.sin(heading)*Math.sin(pitch)*Math.cos(roll)-Math.cos(heading)*Math.sin(roll));
+		double newY = this.x*(-Math.cos(pitch)*Math.sin(roll))+this.y*(Math.cos(pitch)*Math.cos(roll))+this.z*(Math.sin(pitch));
 		float Y = (float)newY;
 		
-		double newZ = this.x*(-Math.sin(pitch))+this.y*(Math.cos(pitch)*Math.sin(roll))+this.z*(Math.cos(pitch)*Math.cos(roll));
+		double newZ = this.x*(Math.cos(roll)*Math.sin(heading)+Math.cos(heading)*Math.sin(pitch)*Math.sin(roll))+this.y*(Math.sin(heading)*Math.sin(roll)-Math.cos(heading)*Math.cos(roll)*Math.sin(pitch))+this.z*(Math.cos(heading)*Math.cos(pitch));
 		float Z = (float)newZ;
 		
 		return new Vector(X,Y,Z);
@@ -98,13 +98,13 @@ public class Vector {
 	 */
 	//inverse matrix gewoon getransponeerde van normale matrix
 	public Vector inverseTransform(float heading, float pitch, float roll){
-		double newX = this.x*(Math.cos(heading)*Math.cos(pitch)) + this.y*(Math.sin(heading)*Math.cos(pitch) + this.z*(-Math.sin(pitch)));
+		double newX = this.x*(Math.cos(heading)*Math.cos(roll)-Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)) + this.y*(-Math.cos(pitch)*Math.sin(roll)) + this.z*(Math.cos(roll)*Math.sin(heading)+Math.cos(heading)*Math.sin(pitch)*Math.sin(roll));
 		float X = (float)newX;
 		
-		double newY = this.x*(Math.cos(heading)*Math.sin(pitch)*Math.sin(roll)-Math.sin(heading)*Math.cos(roll)) + this.y*(Math.sin(heading)*Math.sin(pitch)*Math.sin(roll)+Math.cos(heading)*Math.cos(roll)) + this.z*(Math.cos(pitch)*Math.sin(roll));
+		double newY = this.x*(Math.cos(heading)*Math.sin(roll)+Math.cos(roll)*Math.sin(heading)*Math.sin(pitch)) + this.y*(Math.cos(pitch)*Math.cos(roll)) + this.z*(Math.sin(heading)*Math.sin(roll)-Math.cos(heading)*Math.cos(roll)*Math.sin(pitch));
 		float Y = (float)newY;
 		
-		double newZ = this.x*(Math.cos(heading)*Math.sin(pitch)*Math.cos(roll)+Math.sin(heading)*Math.sin(roll)) + this.y*(Math.sin(heading)*Math.sin(pitch)*Math.cos(roll)-Math.cos(heading)*Math.sin(roll)) + this.z*(Math.cos(pitch)*Math.cos(roll));
+		double newZ = this.x*(-Math.cos(pitch)*Math.sin(heading)) + this.y*(Math.sin(pitch)) + this.z*(Math.cos(heading)*Math.cos(pitch));
 		float Z = (float)newZ;
 		
 		return new Vector(X,Y,Z);
