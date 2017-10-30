@@ -259,7 +259,7 @@ public class Aircraft extends Node {
         
 //        System.out.println("time" + time);
 //        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
-//        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
 //        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
 //        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
 //        System.out.println("force " + getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
@@ -317,7 +317,7 @@ public class Aircraft extends Node {
         this.getForce().setThrust(config.getMaxThrust());
         this.setLeftWingInclination(0f);
         this.setRightWingInclination(0f);
-        this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
+        this.setHorStabInclination(autopilotOutputs.getHorStabInclination()*2);
         this.setVerStabInclination(0f);
     }
 
