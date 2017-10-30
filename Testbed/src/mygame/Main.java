@@ -59,7 +59,7 @@ public class Main extends SimpleApplication {
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
         // Move aircraft to starting position
-        aircraft.setLocalTranslation(0, 0, 60);
+        aircraft.setLocalTranslation(0, 0, 80);
         
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.LightGray);
@@ -82,7 +82,7 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(aircraftInfo);
         
         // Change camera view to show both cube and aircraft in one shot
-        cam.setLocation(new Vector3f(-180, 0, 0));
+        cam.setLocation(new Vector3f(-200, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
     }
 
