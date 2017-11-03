@@ -21,7 +21,7 @@ public class AutopilotConfig implements p_en_o_cw_2017.AutopilotConfig {
     private float maxAOA = 40;
     private float wingLiftSlope = 1.1f;
     private float horStabLiftSlope = 0.1f;
-    private float verStabLiftSlope = 0f;
+    private float verStabLiftSlope = 0.1f;
     private float horAngleOfView = 120;
     private float verAngleOfView = 120;
     private int nbColums = 200;

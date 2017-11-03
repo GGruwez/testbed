@@ -244,9 +244,9 @@ public class Aircraft extends Node {
     	setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
     	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
 
-        getForce().getTotalForce().printVector("voor transform ");
-        Vector totalF = getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll());
-        totalF.printVector("na transform");
+        //getForce().getTotalForce().printVector("voor transform ");
+        //Vector totalF = getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll());
+        //totalF.printVector("na transform");
 
     	setPitch(getPitch() + getAngularVelocity().getX()*time);
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
@@ -254,9 +254,9 @@ public class Aircraft extends Node {
     	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
     	setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
 
-        Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
-        totalM.printVector("totalm ");
-        getAngularVelocity().printVector("angleacc");
+        //Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
+        //totalM.printVector("totalm ");
+        //getAngularVelocity().printVector("angleacc");
         this.setElapsedTime(this.getElapsedTime()+time);
         
         // Rotatie tonen 
@@ -271,7 +271,7 @@ public class Aircraft extends Node {
         
 //        System.out.println("time" + time);
 //        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
-        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+//        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
 //        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
 //        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
 //        System.out.println("force " + getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());

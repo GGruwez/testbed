@@ -61,7 +61,7 @@ public class Main extends SimpleApplication {
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
         // Move aircraft to starting position
-        aircraft.setLocalTranslation(0, 10, 60);
+        aircraft.setLocalTranslation(0, 10, 80);
         
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.LightGray);
