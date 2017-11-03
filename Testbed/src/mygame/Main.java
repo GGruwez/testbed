@@ -34,7 +34,7 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
-        
+        this.setPauseOnLostFocus(false);
         world = new World();
         
         Box b = new Box(1, 1, 1);
