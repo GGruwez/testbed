@@ -1,7 +1,5 @@
 package mygame;
 
-import mygame.Vector;
-
 /**
  * 
  * @author Gilles
@@ -41,19 +39,18 @@ public class Force {
 	}
 	
         public void UpdateForce(){
-
-		this.setAttackAngles(this.getAircraft().getLeftWingInclination(), this.getAircraft().getRightWingInclination(), this.getAircraft().getHorStabInclination(), this.getAircraft().getVerStabInclination());
-		
-		this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), this.getAircraft().getEngineMass(), this.getAircraft().getGravityConstant());
+		this.setAttackAngles(this.getAircraft().getLeftWingInclination(), 
+                        this.getAircraft().getRightWingInclination(), 
+                        this.getAircraft().getHorStabInclination(), 
+                        this.getAircraft().getVerStabInclination());
+		this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), 
+                        this.getAircraft().getEngineMass(), this.getAircraft().getGravityConstant());
 		this.setLiftForce();
-				
-	
         }
         
 	public Aircraft getAircraft(){
 		return this.plane;
 	}
-	
 	
 	public void setAttackAngles(float leftWingInclination, float rightWingInclination, float horStabInclination, float verStabInclination){
 		this.leftWingAttack = new Vector(0, (float)Math.sin(leftWingInclination), (float) -Math.cos(leftWingInclination));
@@ -61,14 +58,12 @@ public class Force {
 		this.horizontalStabilizerAttack =new  Vector(0, (float)Math.sin(horStabInclination), (float) -Math.cos(horStabInclination));
 		this.verticalStabilizerAttack =new  Vector((float) -Math.sin(verStabInclination), 0, (float) -Math.cos(verStabInclination));
 	}
-
 	
 	public void setGravityForces(float TailMass, float WingMass, float engineMass, float gravityConstant){
 		this.tailGravityForce = new Vector(0,-TailMass * gravityConstant, 0).inverseTransform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
 		this.WingGravityForce = new Vector(0, -WingMass * gravityConstant, 0).inverseTransform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
 		this.engineGravityForce = new Vector(0,-engineMass * gravityConstant, 0).inverseTransform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
-		
-		}
+        }
 	
 	public void setThrust(float thrust){
 		this.thrustForce = new Vector(0,0,-thrust);
@@ -103,6 +98,7 @@ public class Force {
 	
 	///////////////////////////////////LIFT//////////////////////////////////////////
 	
+        // Moet de windspeed in deze functies nog getransformeerd worden?
 	public Vector getLeftWingAirSpeed(){
 		Vector leftWingAirSpeed = getLeftWingVelocity().subtract(windSpeed);
 		return leftWingAirSpeed;
@@ -135,12 +131,10 @@ public class Force {
 		return this.getAircraft().getVelocity().add(this.getAircraft().getTailSize().crossProduct(this.getAircraft().getAngularVelocity()));
 	}
 	
-	
+	// Moet dit (en volgende returns) wel getransformeerd worden?
 	public Vector getRightWingProjectedAirspeed(){
         Vector airspeed = this.getRightWingAirSpeed().inverseTransform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll()); 
 		Vector projairspeed = new Vector(0,airspeed.getY(),airspeed.getZ());
-
-		
 		return projairspeed.transform(this.getAircraft().getHeading(),this.getAircraft().getPitch(),this.getAircraft().getRoll());
 		}
 	
@@ -320,8 +314,5 @@ public class Force {
         Vector engine = getEnginePlace().crossProduct(getEngineGravityForce().add(getThrustForce()));   
     	return wingR.add(wingL).add(tail).add(engine);
     }
-	
-    
-    
     
 }
