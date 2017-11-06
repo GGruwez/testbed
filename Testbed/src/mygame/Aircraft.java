@@ -1,5 +1,7 @@
 package mygame;
 
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -10,6 +12,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.scene.shape.Box;
 import p_en_o_cw_2017.AutopilotInputs;
 import p_en_o_cw_2017.AutopilotOutputs;
 
@@ -68,7 +71,6 @@ public class Aircraft extends Node {
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
-        
         this.aircraftCamera.setViewPort(4f, 5f, 0f, 1f);
         this.aircraftCameraNode = new CameraNode("Camera Node", this.aircraftCamera);
         this.aircraftCameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
