@@ -67,6 +67,12 @@ public class Main extends SimpleApplication {
         topDownCamViewPort.attachScene(rootNode);
         topDownCamViewPort.setBackgroundColor(ColorRGBA.Black);
         rootNode.attachChild(world.getTopDownCamNode());
+        // Side camera viewport
+        ViewPort sideCamViewPort = renderManager.createMainView("top down cam view", world.getSideCam());
+        sideCamViewPort.setClearFlags(true, true, true);
+        sideCamViewPort.attachScene(rootNode);
+        sideCamViewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        rootNode.attachChild(world.getSideCamNode());
 
         // Aircraft material
         Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");

@@ -32,6 +32,8 @@ public class World {
     private CameraNode chaseCamNode;
     private Camera topDownCam;
     private CameraNode topDownCamNode;
+    private Camera sideCam;
+    private CameraNode sideCamNode;
 
     public World() {
         byte[] inbuf = new byte[1000000];
@@ -53,6 +55,14 @@ public class World {
         this.topDownCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
         this.topDownCamNode.setLocalTranslation(0, 30, 0);
         this.topDownCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_X);
+        // Side camera
+        this.sideCam = new Camera(200, 200);
+        this.sideCam.setFrustumPerspective(120, 1, 1, 1000);
+        this.sideCam.setViewPort(3f, 4f, 0f, 1f);
+        this.sideCamNode = new CameraNode("Side cam node", this.sideCam);
+        this.sideCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
+        this.sideCamNode.setLocalTranslation(-50, 0, 0);
+        this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
     }
     
     public DataInputStream getInputStream() {
@@ -82,10 +92,11 @@ public class World {
             AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
             this.getAircraft().readAutopilotOutputs(autopilotOutputs);
             this.getAircraft().updateAirplane(dt);
-            
+
+            // Camera's
             this.chaseCam.resize(200, 200, false);
             this.topDownCam.resize(200, 200, false);
-            
+            this.sideCam.resize(200, 200, false);
             Vector newChaseCamPosition = this.getAircraft().getCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getAircraft().getCoordinates();
@@ -137,6 +148,14 @@ public class World {
 
     public CameraNode getTopDownCamNode(){
         return this.topDownCamNode;
+    }
+
+    public Camera getSideCam(){
+        return this.sideCam;
+    }
+
+    public CameraNode getSideCamNode(){
+        return this.sideCamNode;
     }
 
 }
