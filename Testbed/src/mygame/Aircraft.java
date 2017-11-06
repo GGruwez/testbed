@@ -68,6 +68,7 @@ public class Aircraft extends Node {
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
+        
         this.aircraftCamera.setViewPort(4f, 5f, 0f, 1f);
         this.aircraftCameraNode = new CameraNode("Camera Node", this.aircraftCamera);
         this.aircraftCameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);

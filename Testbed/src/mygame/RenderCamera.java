@@ -88,8 +88,10 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
     @Override
     public void initialize(RenderManager rm, ViewPort vp) {
         renderer = rm.getRenderer();
+        this.cameraToCapture.resize(200,200,false);
         int width = (int) ((this.cameraToCapture.getViewPortRight() - this.cameraToCapture.getViewPortLeft()) * this.cameraToCapture.getWidth());
         int height = (int) ((this.cameraToCapture.getViewPortTop() - this.cameraToCapture.getViewPortBottom()) * this.cameraToCapture.getHeight());
+        
         reshape(vp, width, height);
     }
 
@@ -125,9 +127,10 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
             ByteBuffer outBuf2 = outBuf.duplicate();
             outBuf2.flip();
-            byte[] bArray = new byte[outBuf2.capacity()+10000];
+            System.out.println(outBuf2.capacity());
+            byte[] bArray = new byte[outBuf2.capacity()];
             outBuf2.clear();
-            outBuf2.get(bArray, 0, bArray.length-10000);
+            outBuf2.get(bArray, 0, bArray.length);
             
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
