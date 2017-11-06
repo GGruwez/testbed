@@ -57,7 +57,7 @@ public class Aircraft extends Node {
      * @param verStabInclination
      */	
     public Aircraft(String name, Node model, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity,
-            float mass, float thrust, float leftWingInclination,float rightWingInclination,
+            float thrust, float leftWingInclination,float rightWingInclination,
             float horStabInclination, float verStabInclination) {   
         
         model.getChild(0).scale(0.5f, 0.5f, 0.5f);
@@ -114,7 +114,6 @@ public class Aircraft extends Node {
     
     public void setVelocity(Vector velocity){
     	this.velocity = velocity;
-    	
     }
     
     public Vector getAcceleration(){
@@ -192,10 +191,9 @@ public class Aircraft extends Node {
     	return this.getConfig().getEngineMass();
     }
     
-
     public Vector getEnginePlace(){
 	return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
-	}
+    }
 
     public float getLeftWingInclination() {
         return leftWingInclination;
