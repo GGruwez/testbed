@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.Object;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
@@ -176,6 +177,15 @@ public class World {
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
         app.getRootNode().attachChild(cube);
+    }
+    
+    public void generateNCubes(int N) {
+        for (int i=1; i<=N; i++) {
+            float x = (float) Math.random()*20-10;
+            float y = (float) Math.random()*10;
+            float z = -90*i/N -10;
+            this.generateCube(x, y, z);
+        }
     }
 
 }
