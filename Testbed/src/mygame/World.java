@@ -30,6 +30,8 @@ public class World {
 
     private Camera chaseCam;
     private CameraNode chaseCamNode;
+    private Camera topDownCam;
+    private CameraNode topDownCamNode;
 
     public World() {
         byte[] inbuf = new byte[1000000];
@@ -43,6 +45,14 @@ public class World {
         this.chaseCam.setViewPort(4f, 5f, 1f, 2f);
         this.chaseCamNode = new CameraNode("Chase cam Node", this.chaseCam);
         this.chaseCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
+        // Top down camera
+        this.topDownCam = new Camera(200, 200);
+        this.topDownCam.setFrustumPerspective(120, 1, 1, 1000);
+        this.topDownCam.setViewPort(3f, 4f, 1f, 2f);
+        this.topDownCamNode = new CameraNode("Top down cam node", this.topDownCam);
+        this.topDownCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
+        this.topDownCamNode.setLocalTranslation(0, 30, 0);
+        this.topDownCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_X);
     }
     
     public DataInputStream getInputStream() {
@@ -117,5 +127,13 @@ public class World {
     public CameraNode getChaseCamNode(){
         return this.chaseCamNode;
     }
-    
+
+    public Camera getTopDownCam(){
+        return this.topDownCam;
+    }
+
+    public CameraNode getTopDownCamNode(){
+        return this.topDownCamNode;
+    }
+
 }

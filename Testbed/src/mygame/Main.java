@@ -60,9 +60,14 @@ public class Main extends SimpleApplication {
         chaseCamViewPort.setClearFlags(true, true, true);
         chaseCamViewPort.attachScene(rootNode);
         chaseCamViewPort.setBackgroundColor(ColorRGBA.DarkGray);
-        Box b2 = new Box(1, 1, 1);
         rootNode.attachChild(world.getChaseCamNode());
-        
+        // Top down camera viewport
+        ViewPort topDownCamViewPort = renderManager.createMainView("top down cam view", world.getTopDownCam());
+        topDownCamViewPort.setClearFlags(true, true, true);
+        topDownCamViewPort.attachScene(rootNode);
+        topDownCamViewPort.setBackgroundColor(ColorRGBA.Black);
+        rootNode.attachChild(world.getTopDownCamNode());
+
         // Aircraft material
         Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         planeMaterial.setColor("Color", ColorRGBA.Gray);
