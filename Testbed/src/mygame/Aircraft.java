@@ -325,7 +325,7 @@ public class Aircraft extends Node {
         if(this.isManualControlEnabled()){
             return;
         }
-        this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.getForce().setThrust(40);
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(-autopilotOutputs.getHorStabInclination());
