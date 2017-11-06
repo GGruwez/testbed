@@ -82,7 +82,10 @@ public class World {
             AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
             this.getAircraft().readAutopilotOutputs(autopilotOutputs);
             this.getAircraft().updateAirplane(dt);
-
+            
+            this.chaseCam.resize(200, 200, false);
+            this.topDownCam.resize(200, 200, false);
+            
             Vector newChaseCamPosition = this.getAircraft().getCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getAircraft().getCoordinates();
