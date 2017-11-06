@@ -107,8 +107,8 @@ public class World {
     }
     
     public void endSimulation() {
-//        this.simulation = false;
-//        this.getAutopilot().simulationEnded();
+        this.simulation = false;
+        this.getAutopilot().simulationEnded();
     }
     
     public boolean isSimulating() {

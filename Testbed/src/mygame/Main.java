@@ -121,7 +121,7 @@ public class Main extends SimpleApplication {
         }
         sas.grabCamera();
         if (! world.isSimulating()) {
-            stop();
+//            stop();
         }
         
         this.refreshAircraftInfo();
