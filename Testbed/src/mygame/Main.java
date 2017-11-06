@@ -46,7 +46,7 @@ public class Main extends SimpleApplication {
         
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20, 50, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
         // Plane camera viewport
@@ -61,7 +61,7 @@ public class Main extends SimpleApplication {
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
         // Move aircraft to starting position
-        aircraft.setLocalTranslation(0, 10, 80);
+        aircraft.setLocalTranslation(0, 10, 100);
         
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.LightGray);

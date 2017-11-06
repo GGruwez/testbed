@@ -18,7 +18,7 @@ public class AutopilotConfig implements p_en_o_cw_2017.AutopilotConfig {
     private float wingMass = 2;
     private float tailMass = 2;
     private float maxThrust = 40;
-    private float maxAOA = 40;
+    private float maxAOA = (float) Math.PI/5;
     private float wingLiftSlope = 1.1f;
     private float horStabLiftSlope = 0.1f;
     private float verStabLiftSlope = 0.1f;
