@@ -120,7 +120,6 @@ public class World {
         if (distanceToGoal<=4) {
             endSimulation();
         }
-
     }
     
     public void startSimulation() {

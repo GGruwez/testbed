@@ -187,7 +187,6 @@ public class Force {
         return (float) angle;
     }
 
-
     public void setLeftWingLift(){
         float s2 = getLeftWingProjectedAirspeed().dotProduct(getLeftWingProjectedAirspeed());
         float ct = s2*getAircraft().getConfig().getWingLiftSlope()*getLeftWingAngleOfAttack();
