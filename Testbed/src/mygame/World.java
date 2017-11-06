@@ -11,6 +11,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.CameraNode;
+import com.jme3.scene.control.CameraControl;
 import p_en_o_cw_2017.*;
 import autopilot.Autopilot;
 import p_en_o_cw_2017.AutopilotOutputs;
@@ -24,11 +28,21 @@ public class World {
     private boolean simulation;
     private Vector goal;
 
+    private Camera chaseCam;
+    private CameraNode chaseCamNode;
+
     public World() {
         byte[] inbuf = new byte[1000000];
         this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
         this.outstream = new DataOutputStream(new ByteArrayOutputStream());
         this.autopilot = new Autopilot();
+
+        // Chase camera
+        this.chaseCam = new Camera(200, 200);
+        this.chaseCam.setFrustumPerspective(120,1,1,1000);
+        this.chaseCam.setViewPort(4f, 5f, 1f, 2f);
+        this.chaseCamNode = new CameraNode("Chase cam Node", this.chaseCam);
+        this.chaseCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
     }
     
     public DataInputStream getInputStream() {
@@ -58,6 +72,11 @@ public class World {
             AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
             this.getAircraft().readAutopilotOutputs(autopilotOutputs);
             this.getAircraft().updateAirplane(dt);
+
+            Vector newChaseCamPosition = this.getAircraft().getCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
+            this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
+            Vector aircraftCoordinates = this.getAircraft().getCoordinates();
+            this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         }
         double distanceToGoal = Math.sqrt(
             Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
@@ -66,6 +85,7 @@ public class World {
         if (distanceToGoal<=4) {
             endSimulation();
         }
+
     }
     
     public void startSimulation() {
@@ -74,8 +94,8 @@ public class World {
     }
     
     public void endSimulation() {
-        this.simulation = false;
-        this.getAutopilot().simulationEnded();
+//        this.simulation = false;
+//        this.getAutopilot().simulationEnded();
     }
     
     public boolean isSimulating() {
@@ -88,6 +108,14 @@ public class World {
     
     public void setGoal(float x, float y, float z) {
         this.goal = new Vector(x, y, z);
+    }
+
+    public Camera getChaseCam(){
+        return this.chaseCam;
+    }
+
+    public CameraNode getChaseCamNode(){
+        return this.chaseCamNode;
     }
     
 }

@@ -54,6 +54,14 @@ public class Main extends SimpleApplication {
         planeCamViewPort.setClearFlags(true, true, true);
         planeCamViewPort.attachScene(rootNode);
         planeCamViewPort.setBackgroundColor(ColorRGBA.Black);
+
+        // Plane chase camera viewport
+        ViewPort chaseCamViewPort = renderManager.createMainView("chasecam view", world.getChaseCam());
+        chaseCamViewPort.setClearFlags(true, true, true);
+        chaseCamViewPort.attachScene(rootNode);
+        chaseCamViewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        Box b2 = new Box(1, 1, 1);
+        rootNode.attachChild(world.getChaseCamNode());
         
         // Aircraft material
         Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -64,7 +72,7 @@ public class Main extends SimpleApplication {
         aircraft.setLocalTranslation(0, 10, 80);
         
         // Set viewport background color to white
-        this.viewPort.setBackgroundColor(ColorRGBA.LightGray);
+        this.viewPort.setBackgroundColor(ColorRGBA.White);
         
         rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
