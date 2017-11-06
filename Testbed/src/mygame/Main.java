@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
 import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -35,7 +36,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         this.setPauseOnLostFocus(false);
-        world = new World();
+        world = new World(this);
         
         Box b = new Box(1, 1, 1);
         Geometry goalCube = new Geometry("Box", b);
@@ -105,6 +106,7 @@ public class Main extends SimpleApplication {
         // Change camera view to show both cube and aircraft in one shot
         cam.setLocation(new Vector3f(-100, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
+        
     }
 
     private boolean initialFrame = true;
@@ -208,4 +210,5 @@ public class Main extends SimpleApplication {
           }
       }
     };
+
 }

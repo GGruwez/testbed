@@ -11,10 +11,16 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import com.jme3.app.SimpleApplication;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.scene.shape.Box;
 import p_en_o_cw_2017.*;
 import autopilot.Autopilot;
 import p_en_o_cw_2017.AutopilotOutputs;
@@ -35,7 +41,9 @@ public class World {
     private Camera sideCam;
     private CameraNode sideCamNode;
 
-    public World() {
+    private SimpleApplication app;
+
+    public World(SimpleApplication app) {
         byte[] inbuf = new byte[1000000];
         this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
         this.outstream = new DataOutputStream(new ByteArrayOutputStream());
@@ -63,6 +71,8 @@ public class World {
         this.sideCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
         this.sideCamNode.setLocalTranslation(-50, 0, 0);
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
+
+        this.app = app;
     }
     
     public DataInputStream getInputStream() {
@@ -156,6 +166,16 @@ public class World {
 
     public CameraNode getSideCamNode(){
         return this.sideCamNode;
+    }
+
+    public void generateCube(float x, float y, float z){
+        Box b = new Box(1, 1, 1);
+        Geometry cube = new Geometry("", b);
+        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Green);
+        cube.setMaterial(mat);
+        cube.setLocalTranslation(x, y, z);
+        app.getRootNode().attachChild(cube);
     }
 
 }
