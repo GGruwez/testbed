@@ -120,9 +120,6 @@ public class Main extends SimpleApplication {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         sas.grabCamera();
-        if (! world.isSimulating()) {
-//            stop();
-        }
         
         this.refreshAircraftInfo();
         log.addLine(this.getAircraft());
