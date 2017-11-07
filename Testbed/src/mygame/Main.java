@@ -1,6 +1,7 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
 import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -35,7 +36,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         this.setPauseOnLostFocus(false);
-        world = new World();
+        world = new World(this);
         
         Box b = new Box(1, 1, 1);
         Geometry goalCube = new Geometry("Box", b);
@@ -54,7 +55,26 @@ public class Main extends SimpleApplication {
         planeCamViewPort.setClearFlags(true, true, true);
         planeCamViewPort.attachScene(rootNode);
         planeCamViewPort.setBackgroundColor(ColorRGBA.Black);
-        
+
+        // Plane chase camera viewport
+        ViewPort chaseCamViewPort = renderManager.createMainView("chasecam view", world.getChaseCam());
+        chaseCamViewPort.setClearFlags(true, true, true);
+        chaseCamViewPort.attachScene(rootNode);
+        chaseCamViewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        rootNode.attachChild(world.getChaseCamNode());
+        // Top down camera viewport
+        ViewPort topDownCamViewPort = renderManager.createMainView("top down cam view", world.getTopDownCam());
+        topDownCamViewPort.setClearFlags(true, true, true);
+        topDownCamViewPort.attachScene(rootNode);
+        topDownCamViewPort.setBackgroundColor(ColorRGBA.Black);
+        rootNode.attachChild(world.getTopDownCamNode());
+        // Side camera viewport
+        ViewPort sideCamViewPort = renderManager.createMainView("top down cam view", world.getSideCam());
+        sideCamViewPort.setClearFlags(true, true, true);
+        sideCamViewPort.attachScene(rootNode);
+        sideCamViewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        rootNode.attachChild(world.getSideCamNode());
+
         // Aircraft material
         Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         planeMaterial.setColor("Color", ColorRGBA.Gray);
@@ -64,7 +84,7 @@ public class Main extends SimpleApplication {
         aircraft.setLocalTranslation(0, 10, 100);
         
         // Set viewport background color to white
-        this.viewPort.setBackgroundColor(ColorRGBA.LightGray);
+        this.viewPort.setBackgroundColor(ColorRGBA.White);
         
         rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
@@ -86,6 +106,7 @@ public class Main extends SimpleApplication {
         // Change camera view to show both cube and aircraft in one shot
         cam.setLocation(new Vector3f(-100, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
+        
     }
 
     private boolean initialFrame = true;
@@ -107,9 +128,6 @@ public class Main extends SimpleApplication {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         sas.grabCamera();
-        if (! world.isSimulating()) {
-            stop();
-        }
         
         this.refreshAircraftInfo();
         log.addLine(this.getAircraft());
@@ -192,4 +210,5 @@ public class Main extends SimpleApplication {
           }
       }
     };
+
 }
