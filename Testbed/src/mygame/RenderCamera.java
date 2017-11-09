@@ -127,11 +127,9 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             renderer.readFrameBufferWithFormat(out, outBuf, Image.Format.RGB8);
             ByteBuffer outBuf2 = outBuf.duplicate();
             outBuf2.flip();
-<<<<<<< HEAD
+
             //System.out.println(outBuf2.capacity());
-=======
-//            System.out.println(outBuf2.capacity());
->>>>>>> 4e8110bceac4e94f79152b6ab6dbe8fdbaadd91a
+
             byte[] bArray = new byte[outBuf2.capacity()];
             outBuf2.clear();
             outBuf2.get(bArray, 0, bArray.length);
