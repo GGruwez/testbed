@@ -32,6 +32,7 @@ public class World {
     private Aircraft aircraft;
     private Autopilot autopilot;
     private boolean simulation;
+    private boolean paused;
     private Vector goal;
 
     private Camera chaseCam;
@@ -97,7 +98,7 @@ public class World {
     }
     
     public void evolve(float dt) throws IOException {
-        if (this.isSimulating()) {
+        if (this.isSimulating() && !this.isPaused()) {
             AutopilotInputs autopilotInputs = this.getAircraft().getAutopilotInputs();
             AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
             this.getAircraft().readAutopilotOutputs(autopilotOutputs);
@@ -176,6 +177,18 @@ public class World {
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
         app.getRootNode().attachChild(cube);
+    }
+
+    public void pauseSimulation(){
+        paused = true;
+    }
+
+    public void continueSimulation(){
+        paused = false;
+    }
+
+    public boolean isPaused(){
+        return paused;
     }
 
 }

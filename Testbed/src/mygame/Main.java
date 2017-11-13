@@ -161,9 +161,11 @@ public class Main extends SimpleApplication {
         aircraftInfoText += "\r\n";
         aircraftInfoText += String.format("Elapsed time: %.2f", this.aircraft.getElapsedTime());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Manual control: %b", this.aircraft.isManualControlEnabled());
+        aircraftInfoText += String.format("Manual control [q]: %b", this.aircraft.isManualControlEnabled());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Mouse released: %b", this.isMouseVisible());
+        aircraftInfoText += String.format("Mouse released [r]: %b", this.isMouseVisible());
+        aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Paused [p]: %b", this.world.isPaused());
         aircraftInfoText += "\r\n";
         aircraftInfo.setText(aircraftInfoText);
     }
@@ -186,8 +188,9 @@ public class Main extends SimpleApplication {
       inputManager.addMapping("PlanePosStab",  new KeyTrigger(KeyInput.KEY_W));
       inputManager.addMapping("PlaneNegStab",  new KeyTrigger(KeyInput.KEY_S));
       inputManager.addMapping("ReleaseMouse",  new KeyTrigger(KeyInput.KEY_R));
+      inputManager.addMapping("Pause",  new KeyTrigger(KeyInput.KEY_P));
       // Add the names to the action listener.
-      inputManager.addListener(actionListener,"SwitchControl", "ReleaseMouse");
+      inputManager.addListener(actionListener,"SwitchControl", "ReleaseMouse", "Pause");
       inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab");
 
     }
@@ -200,6 +203,12 @@ public class Main extends SimpleApplication {
               inputManager.setCursorVisible(!mouseVisible);
               flyCam.setEnabled(mouseVisible);
               mouseVisible = !mouseVisible;
+          }else if(name.equals("Pause") && !keyPressed){
+              if(world.isPaused()){
+                  world.continueSimulation();
+              }else{
+                  world.pauseSimulation();
+              }
           }
         }
     };
@@ -216,7 +225,7 @@ public class Main extends SimpleApplication {
           }else if(name == "PlanePosStab"){
               ac.setHorStabInclination(ac.getHorStabInclination() + 0.001f);              
           }else if(name == "PlaneNegStab"){
-              ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);              
+              ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);
           }
       }
     };
