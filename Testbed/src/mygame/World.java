@@ -117,9 +117,9 @@ public class World {
             Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
             Math.pow(getAircraft().getCoordinates().getY()-getGoal().getY(), 2) +
             Math.pow(getAircraft().getCoordinates().getZ()-getGoal().getZ(), 2) );
-        if (distanceToGoal<=4) {
-            endSimulation();
-        }
+//        if (distanceToGoal<=4) {
+//            endSimulation();
+//        }
     }
     
     public void startSimulation() {
