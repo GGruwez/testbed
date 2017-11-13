@@ -1,7 +1,6 @@
 package mygame;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.AssetManager;
 import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -27,6 +26,8 @@ public class Main extends SimpleApplication {
     private World world;
     private BitmapText aircraftInfo;
     private Log log = new Log();
+
+    private boolean mouseVisible = false;
     
     public static void main(String[] args) {
         Main app = new Main();
@@ -106,7 +107,9 @@ public class Main extends SimpleApplication {
         // Change camera view to show both cube and aircraft in one shot
         cam.setLocation(new Vector3f(-100, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
-        
+
+        new UI(world);
+
     }
 
     private boolean initialFrame = true;
@@ -160,6 +163,8 @@ public class Main extends SimpleApplication {
         aircraftInfoText += "\r\n";
         aircraftInfoText += String.format("Manual control: %b", this.aircraft.isManualControlEnabled());
         aircraftInfoText += "\r\n";
+        aircraftInfoText += String.format("Mouse released: %b", this.isMouseVisible());
+        aircraftInfoText += "\r\n";
         aircraftInfo.setText(aircraftInfoText);
     }
     
@@ -180,8 +185,9 @@ public class Main extends SimpleApplication {
       inputManager.addMapping("PlaneRight",  new KeyTrigger(KeyInput.KEY_D));
       inputManager.addMapping("PlanePosStab",  new KeyTrigger(KeyInput.KEY_W));
       inputManager.addMapping("PlaneNegStab",  new KeyTrigger(KeyInput.KEY_S));
+      inputManager.addMapping("ReleaseMouse",  new KeyTrigger(KeyInput.KEY_R));
       // Add the names to the action listener.
-      inputManager.addListener(actionListener,"SwitchControl");
+      inputManager.addListener(actionListener,"SwitchControl", "ReleaseMouse");
       inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab");
 
     }
@@ -190,6 +196,10 @@ public class Main extends SimpleApplication {
         public void onAction(String name, boolean keyPressed, float tpf) {
           if (name.equals("SwitchControl") && !keyPressed) {
               Main.this.getAircraft().toggleManualControl();
+          }else if(name.equals("ReleaseMouse") && !keyPressed){
+              inputManager.setCursorVisible(!mouseVisible);
+              flyCam.setEnabled(mouseVisible);
+              mouseVisible = !mouseVisible;
           }
         }
     };
@@ -210,5 +220,9 @@ public class Main extends SimpleApplication {
           }
       }
     };
+
+    private boolean isMouseVisible(){
+        return mouseVisible;
+    }
 
 }
