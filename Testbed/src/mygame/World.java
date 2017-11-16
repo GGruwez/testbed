@@ -74,6 +74,7 @@ public class World {
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         this.app = app;
+        this.generateTestBeam(4);
     }
     
     public DataInputStream getInputStream() {
@@ -177,6 +178,17 @@ public class World {
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
         app.getRootNode().attachChild(cube);
+    }
+    
+    public void generateTestBeam(int n){
+        for(int i=0; i<n; i++) {
+            float z = (float)i/(float)(n-1)*(-90)-10;
+            System.out.println(z);
+            float x = (float) Math.random()*20-10;
+            float y = (float) Math.random()*10;
+            this.generateCube(x, y, z);
+        }
+                
     }
 
     public void pauseSimulation(){

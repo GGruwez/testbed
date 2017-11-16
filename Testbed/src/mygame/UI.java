@@ -35,13 +35,13 @@ class UI extends JFrame {
         this.add(this.zField);
         addCube.setSize(170, 20);
         addCube.setLocation(15, 40);
-        addCube.addActionListener( e -> {
-            getWorld().generateCube(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), Float.parseFloat(zField.getText()));
-            xField.setText("");
-            yField.setText("");
-            zField.setText("");
-        });
-        this.add(addCube);
+//        addCube.addActionListener( e -> {
+  //          getWorld().generateCube(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), Float.parseFloat(zField.getText()));
+    //        xField.setText("");
+      //      yField.setText("");
+        //    zField.setText("");
+          //});
+        //this.add(addCube);
 
 
     }
