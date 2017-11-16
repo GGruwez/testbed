@@ -74,7 +74,7 @@ public class World {
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         this.app = app;
-        this.generateTestBeam(4);
+        this.generateTestBeam(5);
     }
     
     public DataInputStream getInputStream() {
@@ -170,11 +170,12 @@ public class World {
         return this.sideCamNode;
     }
 
-    public void generateCube(float x, float y, float z){
+    public void generateCube(float x, float y, float z, ColorRGBA color){
         Box b = new Box(1, 1, 1);
         Geometry cube = new Geometry("", b);
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Green);
+        mat.setColor("Color", color);
+        
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
         app.getRootNode().attachChild(cube);
@@ -183,10 +184,9 @@ public class World {
     public void generateTestBeam(int n){
         for(int i=0; i<n; i++) {
             float z = (float)i/(float)(n-1)*(-90)-10;
-            System.out.println(z);
             float x = (float) Math.random()*20-10;
             float y = (float) Math.random()*10;
-            this.generateCube(x, y, z);
+            this.generateCube(x, y, z, ColorRGBA.randomColor());
         }
                 
     }
