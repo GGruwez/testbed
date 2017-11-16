@@ -43,6 +43,8 @@ public class World {
     private CameraNode sideCamNode;
 
     private SimpleApplication app;
+    
+    private ColorRGBA[] usedColors;
 
     public World(SimpleApplication app) {
         byte[] inbuf = new byte[1000000];
@@ -74,6 +76,8 @@ public class World {
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         this.app = app;
+        
+        this.usedColors = new ColorRGBA[5];
         this.generateTestBeam(5);
     }
     
@@ -186,7 +190,10 @@ public class World {
             float z = (float)i/(float)(n-1)*(-90)-10;
             float x = (float) Math.random()*20-10;
             float y = (float) Math.random()*10;
-            this.generateCube(x, y, z, ColorRGBA.randomColor());
+            ColorRGBA color = ColorRGBA.randomColor();
+            while (colorIsUsed(color)) color = ColorRGBA.randomColor();
+            this.getUsedColors()[i] = color;
+            this.generateCube(x, y, z, color);
         }
                 
     }
@@ -201,6 +208,17 @@ public class World {
 
     public boolean isPaused(){
         return paused;
+    }
+    
+    public ColorRGBA[] getUsedColors() {return this.usedColors;}
+    
+    public boolean colorIsUsed(ColorRGBA color) {
+        ColorRGBA[] usedColors = this.getUsedColors();
+        int n = usedColors.length;
+        for(int i=0; i<n; i++) {
+            if (usedColors[i] == color) return true;
+        }
+        return false;
     }
 
 }
