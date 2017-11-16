@@ -48,7 +48,7 @@ public class Main extends SimpleApplication {
         
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -30, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
         // Plane camera viewport

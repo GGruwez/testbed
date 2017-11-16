@@ -339,7 +339,7 @@ public class Aircraft extends Node {
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(-autopilotOutputs.getHorStabInclination());
-        this.setVerStabInclination(0f);
+        this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
     }
     
     void setImage(byte[] imageArray){
