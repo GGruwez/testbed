@@ -81,8 +81,7 @@ public class World {
 
         this.app = app;
         
-        this.usedColors = new ColorRGBA[5];
-        this.generateTestBeam(5);
+        this.generateCubes(this.readFile("cubePositions.txt"));
     }
     
     public DataInputStream getInputStream() {
@@ -202,7 +201,15 @@ public class World {
                 
     }
     
-    
+    public void generateCubes(Vector[] positions) {
+        for(int i=0; i<positions.length; i++) {
+            Vector currentPos = positions[i];
+            ColorRGBA color = ColorRGBA.randomColor();
+            while (colorIsUsed(color)) color = ColorRGBA.randomColor();
+            this.getUsedColors()[i] = color;
+            this.generateCube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color);
+        }
+    }
     
     public Vector[] readFile(String fileName) {
         ArrayList<Vector> positions = new ArrayList<Vector>();
@@ -224,6 +231,7 @@ public class World {
         for(int i=0; i<positions.size(); i++) {
             pos[i] = positions.get(i);
         }
+        this.usedColors = new ColorRGBA[pos.length];
         return pos;
     }
 
