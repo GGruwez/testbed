@@ -10,6 +10,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.awt.List;
+import java.util.ArrayList;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
@@ -196,6 +200,31 @@ public class World {
             this.generateCube(x, y, z, color);
         }
                 
+    }
+    
+    
+    
+    public Vector[] readFile(String fileName) {
+        ArrayList<Vector> positions = new ArrayList<Vector>();
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while((line = reader.readLine()) != null) {
+                String[] stringValues = line.split(" ");
+                float[] values = new float[3];
+                for(int i=0; i<3; i++) {
+                    values[i] = Float.valueOf(stringValues[i]);
+                }
+                positions.add(new Vector(values[0],values[1],values[2]));
+            }
+            reader.close();
+        }
+        catch(Exception e) {}
+        Vector[] pos = new Vector[positions.size()];
+        for(int i=0; i<positions.size(); i++) {
+            pos[i] = positions.get(i);
+        }
+        return pos;
     }
 
     public void pauseSimulation(){
