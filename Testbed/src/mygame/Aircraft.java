@@ -266,15 +266,16 @@ public class Aircraft extends Node {
         
         
         // Rotatie tonen 
-        Quaternion pitchQuat = new Quaternion();
-        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
-        Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
-        Quaternion yawQuat = new Quaternion();
-        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
-        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
-        this.setLocalRotation(totalQuat);
-        
+//////        Quaternion pitchQuat = new Quaternion();
+//////        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+//////        Quaternion rollQuat = new Quaternion();
+//////        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+//////        Quaternion yawQuat = new Quaternion();
+//////        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+//////        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
+//////        this.setLocalRotation(totalQuat);
+
+
 //        System.out.println("time" + time);
 //        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
@@ -335,7 +336,7 @@ public class Aircraft extends Node {
         if(this.isManualControlEnabled()){
             return;
         }
-        this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.getForce().setThrust(0f);
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(-autopilotOutputs.getHorStabInclination());

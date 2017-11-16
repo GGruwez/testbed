@@ -11,7 +11,7 @@ package mygame;
  */
 public class AutopilotConfig implements p_en_o_cw_2017.AutopilotConfig {
     
-    private float gravity = 9.81f;
+    private float gravity = 0f;
     private float wingX = 1;
     private float tailSize = 1;
     private float engineMass = 2;
