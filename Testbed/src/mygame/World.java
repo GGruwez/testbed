@@ -25,9 +25,10 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Box;
-import p_en_o_cw_2017.*;
-import autopilot.Autopilot;
-import p_en_o_cw_2017.AutopilotOutputs;
+import interfaces.Autopilot;
+import interfaces.AutopilotFactory;
+import interfaces.AutopilotInputs;
+import interfaces.AutopilotOutputs;
 
 public class World {
     
@@ -54,7 +55,7 @@ public class World {
         byte[] inbuf = new byte[1000000];
         this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
         this.outstream = new DataOutputStream(new ByteArrayOutputStream());
-        this.autopilot = new Autopilot();
+        this.autopilot = AutopilotFactory.createAutopilot();
 
         // Chase camera
         this.chaseCam = new Camera(200, 200);

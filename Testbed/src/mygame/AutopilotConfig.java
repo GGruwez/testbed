@@ -9,7 +9,7 @@ package mygame;
  *
  * @author Stien
  */
-public class AutopilotConfig implements p_en_o_cw_2017.AutopilotConfig {
+public class AutopilotConfig implements interfaces.AutopilotConfig {
     
     private float gravity = 9.81f;
     private float wingX = 1;
