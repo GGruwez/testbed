@@ -240,25 +240,30 @@ public class Aircraft extends Node {
     
     public void updateAirplane(float time){
         this.getForce().UpdateForce();
+        this.setElapsedTime(this.getElapsedTime()+time);
         
+        setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
+        setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
     	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
-    	setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
-    	setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
+    	
+    	
 
         //getForce().getTotalForce().printVector("voor transform ");
         //Vector totalF = getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll());
         //totalF.printVector("na transform");
-
+        
+        setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
+        setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
     	setPitch(getPitch() + getAngularVelocity().getX()*time);
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
-    	setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
-    	setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
+    	
+    	
 
         //Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
         //totalM.printVector("totalm ");
         //getAngularVelocity().printVector("angleacc");
-        this.setElapsedTime(this.getElapsedTime()+time);
+        
         
         // Rotatie tonen 
         Quaternion pitchQuat = new Quaternion();
@@ -275,13 +280,16 @@ public class Aircraft extends Node {
 //        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
 //        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
 //        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
-//        System.out.println("force " + getForce().getTotalForce().getX() + " " + getForce().getTotalForce().getY() + " " + getForce().getTotalForce().getZ());
-//        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
-//        System.out.println("");
-
-//      System.out.println("Right wing lift: " + getForce().getRightWingLift().getX() + " " + getForce().getRightWingLift().getY() + " " + getForce().getRightWingLift().getZ());
-//        System.out.println("Left wing lift: " + getForce().getLeftWingLift().getX() + " " + getForce().getLeftWingLift().getY() + " " + getForce().getLeftWingLift().getZ());
-//        System.out.println("Left wing: " + this.getLeftWingInclination());
+        
+//        System.out.println("pitch " + pitch);
+//        this.getForce().getTotalForce().transform(heading, pitch, roll).printVector("force");
+//        this.getAcceleration().printVector("acc ");
+ //       this.getVelocity().printVector("vel ");
+////        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
+////        System.out.println("");
+//        this.getForce().getTotalGravityForce().transform(heading, pitch, roll).printVector("gravity");
+//        this.getForce().getLeftWingLift().transform(heading, pitch, roll).printVector("leftlift");
+//       System.out.println("Left wing: " + this.getLeftWingInclination());
     }
 
     public float getGravityConstant(){
