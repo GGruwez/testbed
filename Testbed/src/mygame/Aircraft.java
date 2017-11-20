@@ -274,7 +274,8 @@ public class Aircraft extends Node {
         yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
         Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
         this.setLocalRotation(totalQuat);
-        
+
+
 //        System.out.println("time" + time);
 //        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());

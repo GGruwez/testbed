@@ -12,8 +12,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.awt.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
@@ -22,7 +21,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Box;
 import interfaces.Autopilot;
@@ -37,7 +35,7 @@ public class World {
     private Aircraft aircraft;
     private Autopilot autopilot;
     private boolean simulation;
-    private boolean paused;
+    private boolean paused = true;
     private Vector goal;
 
     private Camera chaseCam;
@@ -50,6 +48,9 @@ public class World {
     private SimpleApplication app;
     
     private ColorRGBA[] usedColors;
+    private HashMap<Geometry,Vector> cubePositions;
+    private Set<Geometry> cubesInWorld;
+    
 
     public World(SimpleApplication app) {
         byte[] inbuf = new byte[1000000];
@@ -81,6 +82,8 @@ public class World {
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         this.app = app;
+        this.cubesInWorld = new HashSet<Geometry>();
+        this.cubePositions = new HashMap<Geometry,Vector>();
         
         this.generateCubes(this.readFile("cubePositions.txt"));
     }
@@ -92,7 +95,7 @@ public class World {
     public DataOutputStream getOutputStream() {
         return this.outstream;
     }
-    
+
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
         getAircraft().setWorld(this);
@@ -122,13 +125,17 @@ public class World {
             Vector aircraftCoordinates = this.getAircraft().getCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         }
-//        double distanceToGoal = Math.sqrt(
-//            Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
-//            Math.pow(getAircraft().getCoordinates().getY()-getGoal().getY(), 2) +
-//            Math.pow(getAircraft().getCoordinates().getZ()-getGoal().getZ(), 2) );
-//        if (distanceToGoal<=4) {
-//            //endSimulation();
-//        }
+
+        Geometry cubeToRemove = null;
+        for(Geometry cube:this.getCubesInWorld()) {
+            Vector cubePos = this.getCubePositions().get(cube);
+            if(this.getAircraft().getCoordinates().calculateDistance(cubePos)<=4) {
+                cubeToRemove = cube;
+                this.getCubePositions().remove(cube);
+                app.getRootNode().detachChild(cube);
+            }
+        }
+        this.getCubesInWorld().remove(cubeToRemove);
 
     }
     
@@ -181,13 +188,16 @@ public class World {
     public void generateCube(float x, float y, float z, ColorRGBA color){
         Box b = new Box(1, 1, 1);
         Geometry cube = new Geometry("", b);
-        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        
+        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+        mat.setBoolean("UseMaterialColors",true);
+        mat.setColor("Diffuse",color);
+        mat.setColor("Specular",color);
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
-        //app.getRootNode().attachChild(cube);
-    }
+        app.getRootNode().attachChild(cube);
+        this.getCubesInWorld().add(cube);
+        this.getCubePositions().put(cube, new Vector(x,y,z));
+        }
     
     public void generateTestBeam(int n){
         for(int i=0; i<n; i++) {
@@ -258,5 +268,14 @@ public class World {
         }
         return false;
     }
-
+    
+    public Set<Geometry> getCubesInWorld() {
+        return this.cubesInWorld;
+    }
+    
+    public HashMap<Geometry,Vector> getCubePositions() {
+        return this.cubePositions;
+    }
+    
+    
 }
