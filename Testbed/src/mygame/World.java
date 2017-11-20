@@ -183,8 +183,8 @@ public class World {
         Geometry cube = new Geometry("", b);
         Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
         mat.setBoolean("UseMaterialColors",true);
-        mat.setColor("Diffuse",ColorRGBA.Green);
-        mat.setColor("Specular",ColorRGBA.Green);
+        mat.setColor("Diffuse",color);
+        mat.setColor("Specular",color);
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
         app.getRootNode().attachChild(cube);
