@@ -37,7 +37,7 @@ public class World {
     private Aircraft aircraft;
     private Autopilot autopilot;
     private boolean simulation;
-    private boolean paused;
+    private boolean paused = true;
     private Vector goal;
 
     private Camera chaseCam;
