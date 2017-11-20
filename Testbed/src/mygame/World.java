@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.awt.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
@@ -50,6 +50,9 @@ public class World {
     private SimpleApplication app;
     
     private ColorRGBA[] usedColors;
+    private HashMap<Geometry,Vector> cubePositions;
+    private Set<Geometry> cubesInWorld;
+    
 
     public World(SimpleApplication app) {
         byte[] inbuf = new byte[1000000];
@@ -81,6 +84,8 @@ public class World {
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         this.app = app;
+        this.cubesInWorld = new HashSet<Geometry>();
+        this.cubePositions = new HashMap<Geometry,Vector>();
         
         this.generateCubes(this.readFile("cubePositions.txt"));
     }
@@ -122,13 +127,23 @@ public class World {
             Vector aircraftCoordinates = this.getAircraft().getCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         }
-        double distanceToGoal = Math.sqrt(
-            Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
-            Math.pow(getAircraft().getCoordinates().getY()-getGoal().getY(), 2) +
-            Math.pow(getAircraft().getCoordinates().getZ()-getGoal().getZ(), 2) );
-        if (distanceToGoal<=4) {
-            endSimulation();
+        Geometry cubeToRemove = null;
+        for(Geometry cube:this.getCubesInWorld()) {
+            Vector cubePos = this.getCubePositions().get(cube);
+            if(this.getAircraft().getCoordinates().calculateDistance(cubePos)<=4) {
+                cubeToRemove = cube;
+                this.getCubePositions().remove(cube);
+                app.getRootNode().detachChild(cube);
+            }
         }
+        this.getCubesInWorld().remove(cubeToRemove);
+//        double distanceToGoal = Math.sqrt(
+//            Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
+//            Math.pow(getAircraft().getCoordinates().getY()-getGoal().getY(), 2) +
+//            Math.pow(getAircraft().getCoordinates().getZ()-getGoal().getZ(), 2) );
+//        if (distanceToGoal<=4) {
+//            endSimulation();
+//        }
 
     }
     
@@ -188,6 +203,9 @@ public class World {
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
         app.getRootNode().attachChild(cube);
+        this.getCubesInWorld().add(cube);
+        this.getCubePositions().put(cube, new Vector(x,y,z));
+        
     }
     
     public void generateTestBeam(int n){
@@ -259,5 +277,14 @@ public class World {
         }
         return false;
     }
-
+    
+    public Set<Geometry> getCubesInWorld() {
+        return this.cubesInWorld;
+    }
+    
+    public HashMap<Geometry,Vector> getCubePositions() {
+        return this.cubePositions;
+    }
+    
+    
 }
