@@ -88,16 +88,19 @@ public class Main extends SimpleApplication {
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
         
         // Move aircraft to starting position
-         Quaternion pitchQuat = new Quaternion();
-        pitchQuat.fromAngleAxis((float) 0, new Vector3f(1, 0, 0));
-        Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(0f, new Vector3f(0, 0, 1));
-        Quaternion yawQuat = new Quaternion();
-        yawQuat.fromAngleAxis((float) (Math.PI/2), new Vector3f(0, 1, 0));
-        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
+//         Quaternion pitchQuat = new Quaternion();
+//        pitchQuat.fromAngleAxis((float) 0, new Vector3f(1, 0, 0));
+//        Quaternion rollQuat = new Quaternion();
+//        rollQuat.fromAngleAxis(0f, new Vector3f(0, 0, 1));
+//        Quaternion yawQuat = new Quaternion();
+//        yawQuat.fromAngleAxis((float) (Math.PI/2), new Vector3f(0, 1, 0));
+//        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
 
-        aircraft.setLocalTranslation(20f, 0,0);
-        aircraft.setLocalRotation(totalQuat);
+        float d =24;
+        double x =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
+        double y =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
+        aircraft.setLocalTranslation((float) x,(float) y,d);
+//        aircraft.setLocalRotation(totalQuat);
         
         
         

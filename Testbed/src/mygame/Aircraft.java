@@ -13,8 +13,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Box;
-import p_en_o_cw_2017.AutopilotInputs;
-import p_en_o_cw_2017.AutopilotOutputs;
+import interfaces.AutopilotInputs;
+import interfaces.AutopilotOutputs;
 
 public class Aircraft extends Node {
     
@@ -266,14 +266,14 @@ public class Aircraft extends Node {
         
         
         // Rotatie tonen 
-//////        Quaternion pitchQuat = new Quaternion();
-//////        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
-//////        Quaternion rollQuat = new Quaternion();
-//////        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
-//////        Quaternion yawQuat = new Quaternion();
-//////        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
-//////        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
-//////        this.setLocalRotation(totalQuat);
+        Quaternion pitchQuat = new Quaternion();
+        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+        Quaternion rollQuat = new Quaternion();
+        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+        Quaternion yawQuat = new Quaternion();
+        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
+        this.setLocalRotation(totalQuat);
 
 
 //        System.out.println("time" + time);
