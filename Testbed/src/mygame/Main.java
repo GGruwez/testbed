@@ -9,7 +9,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class Main {
-
+    
     private static boolean USE_CUSTOM_WINDOW = false;
 
     public static void main(String[] args) {
