@@ -215,8 +215,21 @@ public class World {
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
             this.generateCube(x, y, z, color);
+        }           
+    }
+    
+    public void generateRandomCubes(int n) {
+        this.usedColors = new ColorRGBA[n];
+        for(int i=1; i<n+1; i++) {
+            float z = i*-40;
+            float x = (float) Math.random()*10;
+            float y = (float) Math.random()*(10-x);
+            ColorRGBA color = ColorRGBA.randomColor();
+            while (colorIsUsed(color)) color = ColorRGBA.randomColor();
+            this.getUsedColors()[i-1] = color;
+            this.generateCube(x, y, z, color);
+            
         }
-                
     }
     
     public void generateCubes(Vector[] positions) {
