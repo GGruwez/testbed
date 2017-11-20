@@ -16,38 +16,36 @@ public class Main {
             MainSwingCanvas app = new MainSwingCanvas();
             app.start();
         }else {
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    int width = 1024;
-                    int height = 768;
+            java.awt.EventQueue.invokeLater(() -> {
+                int width = 1024;
+                int height = 768;
 
-                    MainSwingCanvas canvasApplication = new MainSwingCanvas();
-                    AppSettings settings = new AppSettings(true);
-                    settings.setWidth(width);
-                    settings.setHeight(height);
-                    canvasApplication.setSettings(settings);
-                    canvasApplication.createCanvas(); // create canvas!
-                    JmeCanvasContext ctx = (JmeCanvasContext) canvasApplication.getContext();
-                    ctx.setSystemListener(canvasApplication);
-                    Dimension dim = new Dimension(width, height);
-                    ctx.getCanvas().setPreferredSize(dim);
+                MainSwingCanvas canvasApplication = new MainSwingCanvas();
+                AppSettings settings = new AppSettings(true);
+                settings.setWidth(width);
+                settings.setHeight(height);
+                canvasApplication.setSettings(settings);
+                canvasApplication.createCanvas(); // create canvas!
+                JmeCanvasContext ctx = (JmeCanvasContext) canvasApplication.getContext();
+                ctx.setSystemListener(canvasApplication);
+                Dimension dim = new Dimension(width, height);
+                ctx.getCanvas().setPreferredSize(dim);
 
-                    JFrame window = new JFrame("Testbed");
-                    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                JFrame window = new JFrame("Testbed");
+                window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                    JPanel panel = new JPanel(new FlowLayout()); // a panel
-                    // add all your Swing components ...
-                    panel.add(new JButton("Button"));
+                JPanel panel = new JPanel(new FlowLayout()); // a panel
+                // add all your Swing components ...
+                panel.add(new JButton("Button"));
 
-                    // add the JME canvas
-                    panel.add(ctx.getCanvas());
+                // add the JME canvas
+                panel.add(ctx.getCanvas());
 
-                    window.add(panel);
-                    window.pack();
-                    window.setVisible(true);
+                window.add(panel);
+                window.pack();
+                window.setVisible(true);
 
-                    canvasApplication.start(JmeContext.Type.Canvas);
-                }
+                canvasApplication.start(JmeContext.Type.Canvas);
             });
         }
     }
