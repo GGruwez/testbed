@@ -125,6 +125,7 @@ public class World {
             Vector aircraftCoordinates = this.getAircraft().getCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         }
+
         Geometry cubeToRemove = null;
         for(Geometry cube:this.getCubesInWorld()) {
             Vector cubePos = this.getCubePositions().get(cube);
@@ -135,13 +136,6 @@ public class World {
             }
         }
         this.getCubesInWorld().remove(cubeToRemove);
-//        double distanceToGoal = Math.sqrt(
-//            Math.pow(getAircraft().getCoordinates().getX()-getGoal().getX(), 2) +
-//            Math.pow(getAircraft().getCoordinates().getY()-getGoal().getY(), 2) +
-//            Math.pow(getAircraft().getCoordinates().getZ()-getGoal().getZ(), 2) );
-//        if (distanceToGoal<=4) {
-//            endSimulation();
-//        }
 
     }
     
@@ -203,8 +197,7 @@ public class World {
         app.getRootNode().attachChild(cube);
         this.getCubesInWorld().add(cube);
         this.getCubePositions().put(cube, new Vector(x,y,z));
-        
-    }
+        }
     
     public void generateTestBeam(int n){
         for(int i=0; i<n; i++) {
