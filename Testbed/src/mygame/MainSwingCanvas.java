@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SwingCanvasTest extends com.jme3.app.SimpleApplication{
+public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
     private RenderCamera sas;
     private Aircraft aircraft;
@@ -233,7 +233,7 @@ public class SwingCanvasTest extends com.jme3.app.SimpleApplication{
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String name, boolean keyPressed, float tpf) {
             if (name.equals("SwitchControl") && !keyPressed) {
-                SwingCanvasTest.this.getAircraft().toggleManualControl();
+                MainSwingCanvas.this.getAircraft().toggleManualControl();
             }else if(name.equals("ReleaseMouse") && !keyPressed){
                 inputManager.setCursorVisible(!mouseVisible);
                 flyCam.setEnabled(mouseVisible);
@@ -250,7 +250,7 @@ public class SwingCanvasTest extends com.jme3.app.SimpleApplication{
 
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
-            Aircraft ac = SwingCanvasTest.this.getAircraft();
+            Aircraft ac = MainSwingCanvas.this.getAircraft();
             if(name == "PlaneLeft"){
                 ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
                 ac.setRightWingInclination(ac.getRightWingInclination() + 0.01f);

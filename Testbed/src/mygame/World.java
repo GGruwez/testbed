@@ -12,7 +12,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.awt.List;
 import java.util.*;
 
 import com.jme3.app.SimpleApplication;
@@ -22,7 +21,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Box;
 import interfaces.Autopilot;
@@ -97,7 +95,7 @@ public class World {
     public DataOutputStream getOutputStream() {
         return this.outstream;
     }
-    
+
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
         getAircraft().setWorld(this);
