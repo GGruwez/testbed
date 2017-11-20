@@ -6,8 +6,11 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -39,14 +42,17 @@ public class SwingCanvasTest extends com.jme3.app.SimpleApplication{
 
         Box b = new Box(1, 1, 1);
         Geometry goalCube = new Geometry("Box", b);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Red);
+        Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        mat.setBoolean("UseMaterialColors",true);
+        mat.setColor("Diffuse",ColorRGBA.Red);
+        mat.setColor("Specular",ColorRGBA.Red);
+        mat.setColor("Ambient", ColorRGBA.Red);
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
 
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
 
         // Plane camera viewport
@@ -80,7 +86,10 @@ public class SwingCanvasTest extends com.jme3.app.SimpleApplication{
         aircraft.getAircraftGeometry().setMaterial(planeMaterial);
 
         // Move aircraft to starting position
-        aircraft.setLocalTranslation(0, 10, 80);
+        float d =24;
+        double x =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
+        double y =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
+        aircraft.setLocalTranslation((float) x,(float) y,d);
 
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.White);
@@ -107,6 +116,22 @@ public class SwingCanvasTest extends com.jme3.app.SimpleApplication{
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
 
         new UI(world);
+
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(new Vector3f(-0.85f,-1,-0.7f).normalizeLocal());
+        sun.setColor(ColorRGBA.White.mult(1.23f));
+        rootNode.addLight(sun);
+
+
+        DirectionalLight moon = new DirectionalLight();
+        moon.setDirection(new Vector3f(0.3f,0f,0.6f).normalizeLocal());
+        moon.setColor(ColorRGBA.White.mult(0.35f));
+        rootNode.addLight(moon);
+
+
+        AmbientLight al = new AmbientLight();
+        al.setColor(ColorRGBA.White.mult(0.15f));
+        rootNode.addLight(al);
 
     }
 
