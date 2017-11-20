@@ -65,6 +65,13 @@ public class Vector {
 		return (float) Math.sqrt(this.dotProduct(this));
 	}
 	
+        public double calculateDistance(Vector other) {
+            float x1 = other.getX();
+            float y1 = other.getY();
+            float z1 = other.getZ();
+            return Math.sqrt(Math.pow(x-x1, 2)+Math.pow(y-y1, 2)+Math.pow(z-z1, 2));
+        }
+        
 	/**
 	 * returnt de hoek tussen twee vectoren in radialen!
 	 */
