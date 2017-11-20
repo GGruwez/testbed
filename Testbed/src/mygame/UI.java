@@ -1,5 +1,7 @@
 package mygame;
 
+import com.jme3.math.ColorRGBA;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -35,13 +37,13 @@ class UI extends JFrame {
         this.add(this.zField);
         addCube.setSize(170, 20);
         addCube.setLocation(15, 40);
-//        addCube.addActionListener( e -> {
-  //          getWorld().generateCube(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), Float.parseFloat(zField.getText()));
-    //        xField.setText("");
-      //      yField.setText("");
-        //    zField.setText("");
-          //});
-        //this.add(addCube);
+        addCube.addActionListener( e -> {
+            getWorld().generateCube(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), Float.parseFloat(zField.getText()), ColorRGBA.Green);
+            xField.setText("");
+            yField.setText("");
+            zField.setText("");
+          });
+        this.add(addCube);
 
 
     }
