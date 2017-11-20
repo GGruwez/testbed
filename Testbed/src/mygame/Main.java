@@ -45,7 +45,7 @@ public class Main extends SimpleApplication {
         mat.setColor("Color", ColorRGBA.Red);
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
-        
+                
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
         aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -30, 0, 0, 0, 0, 0);
@@ -87,7 +87,7 @@ public class Main extends SimpleApplication {
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.White);
         
-        rootNode.attachChild(goalCube);
+        //rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
         
         sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight(), aircraft);
@@ -109,7 +109,6 @@ public class Main extends SimpleApplication {
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
 
         new UI(world);
-
     }
 
     private boolean initialFrame = true;
@@ -126,7 +125,7 @@ public class Main extends SimpleApplication {
             initialFrame = false;
         }
         try {
-            world.evolve(tpf);
+            world.evolve(0.001f);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
