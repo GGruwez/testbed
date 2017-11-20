@@ -181,9 +181,10 @@ public class World {
     public void generateCube(float x, float y, float z, ColorRGBA color){
         Box b = new Box(1, 1, 1);
         Geometry cube = new Geometry("", b);
-        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        
+        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
+        mat.setBoolean("UseMaterialColors",true);
+        mat.setColor("Diffuse",ColorRGBA.Green);
+        mat.setColor("Specular",ColorRGBA.Green);
         cube.setMaterial(mat);
         cube.setLocalTranslation(x, y, z);
         app.getRootNode().attachChild(cube);
