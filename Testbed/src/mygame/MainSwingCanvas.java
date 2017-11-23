@@ -50,6 +50,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         mat.setColor("Ambient", ColorRGBA.Red);
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
+        world.getCubesInWorld().add(goalCube);
+        world.getCubePositions().put(goalCube, new Vector(0,0,0));
 
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
