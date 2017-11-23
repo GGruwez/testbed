@@ -28,9 +28,13 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     private World world;
     private BitmapText aircraftInfo;
     private Log log = new Log();
+    private Callback callbackAfterAppInit;
 
     private boolean mouseVisible = false;
 
+    public void addCallBackAfterAppInit(Callback callbackAfterAppInit) {
+        this.callbackAfterAppInit = callbackAfterAppInit;
+    }
 
     @Override
     public void simpleInitApp() {
@@ -130,7 +134,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         cam.setLocation(new Vector3f(-100, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
 
-        new UI(world);
+//        new CubeUI(world);
 
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.85f,-1,-0.7f).normalizeLocal());
@@ -147,6 +151,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White.mult(0.15f));
         rootNode.addLight(al);
+
+        callbackAfterAppInit.run();
     }
 
     private boolean initialFrame = true;
@@ -210,6 +216,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     public Aircraft getAircraft(){
         return this.aircraft;
     }
+
+    public World getWorld(){return this.world;}
 
     @Override
     public void simpleRender(RenderManager rm) {

@@ -200,6 +200,7 @@ public class World {
         }
     
     public void generateTestBeam(int n){
+        this.usedColors = new ColorRGBA[n];
         for(int i=0; i<n; i++) {
             float z = (float)i/(float)(n-1)*(-90)-10;
             float x = (float) Math.random()*20-10;
@@ -207,7 +208,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            this.generateCube(x, y, z, color);
+            Cube cube = new Cube(x,y,z,color,app.getAssetManager(),app.getRootNode());
         }           
     }
     
@@ -220,7 +221,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i-1] = color;
-            this.generateCube(x, y, z, color);
+            Cube cube = new Cube(x,y,z,color,app.getAssetManager(),app.getRootNode());
             
         }
     }
@@ -231,7 +232,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            this.generateCube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color);
+            Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, app.getAssetManager(),app.getRootNode());
         }
     }
     
