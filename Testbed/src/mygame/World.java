@@ -48,8 +48,8 @@ public class World {
     private SimpleApplication app;
     
     private ColorRGBA[] usedColors;
-    private HashMap<Geometry,Vector> cubePositions;
-    private Set<Geometry> cubesInWorld;
+    private HashMap<Cube,Vector> cubePositions;
+    private Set<Cube> cubesInWorld;
     
 
     public World(SimpleApplication app) {
@@ -82,8 +82,8 @@ public class World {
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
         this.app = app;
-        this.cubesInWorld = new HashSet<Geometry>();
-        this.cubePositions = new HashMap<Geometry,Vector>();
+        this.cubesInWorld = new HashSet<Cube>();
+        this.cubePositions = new HashMap<Cube,Vector>();
         
         this.generateCubes(this.readFile("cubePositions.txt"));
     }
@@ -185,19 +185,6 @@ public class World {
         return this.sideCamNode;
     }
 
-    public void generateCube(float x, float y, float z, ColorRGBA color){
-        Box b = new Box(1, 1, 1);
-        Geometry cube = new Geometry("", b);
-        Material mat = new Material(app.getAssetManager(), "Common/MatDefs/Light/Lighting.j3md");
-        mat.setBoolean("UseMaterialColors",true);
-        mat.setColor("Diffuse",color);
-        mat.setColor("Specular",color);
-        cube.setMaterial(mat);
-        cube.setLocalTranslation(x, y, z);
-        app.getRootNode().attachChild(cube);
-        this.getCubesInWorld().add(cube);
-        this.getCubePositions().put(cube, new Vector(x,y,z));
-        }
     
     public void generateTestBeam(int n){
         this.usedColors = new ColorRGBA[n];
@@ -209,6 +196,8 @@ public class World {
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
             Cube cube = new Cube(x,y,z,color,app.getAssetManager(),app.getRootNode());
+            this.getCubesInWorld().add(cube);
+            this.getCubePositions().put(cube, new Vector(x,y,z));
         }           
     }
     
@@ -222,7 +211,8 @@ public class World {
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i-1] = color;
             Cube cube = new Cube(x,y,z,color,app.getAssetManager(),app.getRootNode());
-            
+            this.getCubesInWorld().add(cube);
+            this.getCubePositions().put(cube, new Vector(x,y,z));
         }
     }
     
@@ -233,6 +223,8 @@ public class World {
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
             Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, app.getAssetManager(),app.getRootNode());
+            this.getCubesInWorld().add(cube);
+            this.getCubePositions().put(cube, new Vector(currentPos.getX(),currentPos.getY(), currentPos.getZ()));
         }
     }
     
@@ -283,11 +275,11 @@ public class World {
         return false;
     }
     
-    public Set<Geometry> getCubesInWorld() {
+    public Set<Cube> getCubesInWorld() {
         return this.cubesInWorld;
     }
     
-    public HashMap<Geometry,Vector> getCubePositions() {
+    public HashMap<Cube,Vector> getCubePositions() {
         return this.cubePositions;
     }
     
