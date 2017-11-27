@@ -32,6 +32,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     private Log log = new Log();
     private Callback callbackAfterAppInit;
 
+    public CustomView cv;
+
     private boolean mouseVisible = false;
 
     public void addCallBackAfterAppInit(Callback callbackAfterAppInit) {
@@ -41,6 +43,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     @Override
     public void simpleInitApp() {
         this.setPauseOnLostFocus(false);
+        releaseMouse();
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
 
@@ -157,7 +160,11 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
 //        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
 
+        cv = new CustomView(rootNode, guiNode);
+        cv.createCanvas();
+
         callbackAfterAppInit.run();
+
     }
 
     private boolean initialFrame = true;
@@ -256,9 +263,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
             if (name.equals("SwitchControl") && !keyPressed) {
                 MainSwingCanvas.this.getAircraft().toggleManualControl();
             }else if(name.equals("ReleaseMouse") && !keyPressed){
-                inputManager.setCursorVisible(!mouseVisible);
-                flyCam.setEnabled(mouseVisible);
-                mouseVisible = !mouseVisible;
+                releaseMouse();
             }else if(name.equals("Pause") && !keyPressed){
                 if(world.isPaused()){
                     world.continueSimulation();
@@ -268,6 +273,12 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
             }
         }
     };
+
+    private void releaseMouse() {
+        inputManager.setCursorVisible(!mouseVisible);
+        flyCam.setEnabled(mouseVisible);
+        mouseVisible = !mouseVisible;
+    }
 
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {

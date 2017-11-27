@@ -74,6 +74,7 @@ public class Main {
                                 int currentIndex = tabbedPane.getSelectedIndex();
                                 if (currentIndex == 1){
                                     panel1.remove(c);
+                                    panel1.add(((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
                                 }else if(currentIndex == 0){
                                     panel1.add(c);
                                 }
