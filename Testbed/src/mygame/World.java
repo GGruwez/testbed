@@ -85,7 +85,7 @@ public class World {
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube,Vector>();
         
-        this.generateCubes(this.readFile("cubePositions.txt"));
+        //this.generateCubes(this.readFile("cubePositions.txt"));
     }
     
     public DataInputStream getInputStream() {
