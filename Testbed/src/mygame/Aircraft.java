@@ -1,24 +1,19 @@
 package mygame;
 
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.scene.shape.Box;
 import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
 
 public class Aircraft extends Node {
     
-    private Vector coordinates = Vector.NULL;
+    private Vector calcCoordinates = Vector.NULL;
     private Vector velocity = Vector.NULL;
     private Vector acceleration = Vector.NULL;
     private Force forces;
@@ -80,7 +75,7 @@ public class Aircraft extends Node {
         this.aircraftCameraNode.lookAt(new Vector3f(0,0,-1), Vector3f.UNIT_Y); // Front of the plane is in -z direction
         
         // Fysica
-        this.setCoordinates(new Vector(x, y, z));
+        this.setCalcCoordinates(new Vector(x, y, z));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
         this.forces = new Force(0,this);
     }
@@ -93,22 +88,38 @@ public class Aircraft extends Node {
         return this.aircraftCamera;
     }
 
-    public Vector getCoordinates(){
-        return this.coordinates;
-    }	
-    
-    public void move(Vector v){
-        this.setLocalTranslation(this.coordinates.getX() + (float)v.getX(), this.coordinates.getY() + (float)v.getY(), this.coordinates.getZ() + (float)v.getZ());
+    public Vector getCalcCoordinates(){
+        return this.calcCoordinates;
     }
     
     @Override
-    public void setLocalTranslation(float x, float y, float z){
-        this.coordinates = new Vector(x, y, z);
+    public void setLocalTranslation(float x, float y, float z){ // TODO: use in evolve
+        this.setCalcCoordinates(new Vector(x, y, z));
         super.setLocalTranslation(x, y, z);
     }
 
-    public void setCoordinates(Vector coordinates){
-        this.setLocalTranslation(coordinates.getX(), coordinates.getY(), coordinates.getZ());
+    public void updateVisualRotation(){
+        // Rotatie tonen
+        Quaternion pitchQuat = new Quaternion();
+        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+        Quaternion rollQuat = new Quaternion();
+        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+        Quaternion yawQuat = new Quaternion();
+        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
+        this.setLocalRotation(totalQuat); // TODO: put back
+    }
+
+    public void setCoordinates(Vector calcCoordinates){
+        this.setLocalTranslation(calcCoordinates.getX(), calcCoordinates.getY(), calcCoordinates.getZ());
+    }
+
+    public void setCalcCoordinates(Vector coordinates){
+        this.calcCoordinates = coordinates;
+    }
+
+    public void updateVisualCoordinates(){
+        this.setCoordinates(this.getCalcCoordinates());
     }
     
     public Vector getVelocity() {
@@ -241,10 +252,10 @@ public class Aircraft extends Node {
     public void updateAirplane(float time){
         this.getForce().UpdateForce();
         this.setElapsedTime(this.getElapsedTime()+time);
-        
+
         setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
         setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
-    	setCoordinates(getCoordinates().add(getVelocity().constantProduct(time)));
+    	setCalcCoordinates(getCalcCoordinates().add(getVelocity().constantProduct(time))); // TODO: put back
     	
     	
 
@@ -263,22 +274,12 @@ public class Aircraft extends Node {
         //Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
         //totalM.printVector("totalm ");
         //getAngularVelocity().printVector("angleacc");
-        
-        
-        // Rotatie tonen 
-        Quaternion pitchQuat = new Quaternion();
-        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
-        Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
-        Quaternion yawQuat = new Quaternion();
-        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
-        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
-        this.setLocalRotation(totalQuat);
+
 
 
 //        System.out.println("time" + time);
 //        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
-//        System.out.println("Coordinates: " + getCoordinates().getX() + " " + getCoordinates().getY() + " " + getCoordinates().getZ());
+//        System.out.println("Coordinates: " + getCalcCoordinates().getX() + " " + getCalcCoordinates().getY() + " " + getCalcCoordinates().getZ());
 //        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
 //        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
         
@@ -361,17 +362,17 @@ public class Aircraft extends Node {
 
             @Override
             public float getX() {
-                return Aircraft.this.getCoordinates().getX();
+                return Aircraft.this.getCalcCoordinates().getX();
             }
 
             @Override
             public float getY() {
-                return Aircraft.this.getCoordinates().getY();
+                return Aircraft.this.getCalcCoordinates().getY();
             }
 
             @Override
             public float getZ() {
-                return Aircraft.this.getCoordinates().getZ();
+                return Aircraft.this.getCalcCoordinates().getZ();
             }
 
             @Override

@@ -13,22 +13,24 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.scene.shape.Box;
 import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
 import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
 
 public class World {
+
+    private static long SIMULATION_PERIOD = 10; // Simulation period in milliseconds, determines how fast autopilot calculations happen
     
     private DataOutputStream outstream;
     private DataInputStream instream;
@@ -84,6 +86,22 @@ public class World {
         this.app = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube,Vector>();
+
+        // Simulated evolve
+        // Run autopilot every 10 milliseconds
+        Timer simulationTimer = new Timer(true);
+        TimerTask simulationTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                try{
+                    evolveAutopilot((float)SIMULATION_PERIOD/1000);
+                }catch(Exception ex){
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Evolve failed", ex);
+                }
+            }
+        };
+        simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, SIMULATION_PERIOD);
+
         
         //this.generateCubes(this.readFile("cubePositions.txt"));
     }
@@ -108,28 +126,37 @@ public class World {
     public Autopilot getAutopilot() {
         return this.autopilot;
     }
-    
-    public void evolve(float dt) throws IOException {
+
+    private void evolveAutopilot(float dt){
         if (this.isSimulating() && !this.isPaused()) {
             AutopilotInputs autopilotInputs = this.getAircraft().getAutopilotInputs();
             AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
             this.getAircraft().readAutopilotOutputs(autopilotOutputs);
             this.getAircraft().updateAirplane(dt);
+        }
+    }
+    
+    public void evolve(float dt) throws IOException {
+        if (this.isSimulating() && !this.isPaused()) {
+            // Update visual position of aircraft
+            this.getAircraft().updateVisualCoordinates();
+            this.getAircraft().updateVisualRotation();
+            // Aircraft's calc coordinates and actual visual position coordinates are now the same
 
             // Camera's
             this.chaseCam.resize(200, 200, false);
             this.topDownCam.resize(200, 200, false);
             this.sideCam.resize(200, 200, false);
-            Vector newChaseCamPosition = this.getAircraft().getCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
+            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
-            Vector aircraftCoordinates = this.getAircraft().getCoordinates();
+            Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         }
 
         Geometry cubeToRemove = null;
         for(Geometry cube:this.getCubesInWorld()) {
             Vector cubePos = this.getCubePositions().get(cube);
-            if(this.getAircraft().getCoordinates().calculateDistance(cubePos)<=4) {
+            if(this.getAircraft().getCalcCoordinates().calculateDistance(cubePos)<=4) {
                 cubeToRemove = cube;
                 this.getCubePositions().remove(cube);
                 app.getRootNode().detachChild(cube);
@@ -185,6 +212,11 @@ public class World {
         return this.sideCamNode;
     }
 
+    public void generateCube(float x, float y, float z, ColorRGBA color){
+        Cube cube = new Cube(1, 1, 1, color, app.getAssetManager(), app.getRootNode());
+        this.getCubesInWorld().add(cube);
+        this.getCubePositions().put(cube, new Vector(x,y,z));
+        }
     
     public void generateTestBeam(int n){
         this.usedColors = new ColorRGBA[n];

@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.*;
 
 public class Main {
     
@@ -54,10 +55,12 @@ public class Main {
 
                 JComponent panel1 = new JPanel();
                 Canvas c = ctx.getCanvas();
+                
                 panel1.add(new Panel());
                 panel1.add(c);
 
                 tabbedPane.addTab("Regular view", null, panel1);
+                CanvasManager canvasManager = new CanvasManager(c);
 
                 Callback aai = new Callback() {
 
@@ -66,17 +69,15 @@ public class Main {
                         JComponent panel2 = new JPanel();
                         panel2.add(new CubeUI(canvasApplication.getWorld()));
                         tabbedPane.addTab("Configuration", null, panel2);
+                        canvasManager.put(1, ((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
 
 
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
                             public void stateChanged(ChangeEvent e) {
                                 int currentIndex = tabbedPane.getSelectedIndex();
-                                if (currentIndex == 1){
-                                    panel1.remove(c);
-                                }else if(currentIndex == 0){
-                                    panel1.add(c);
-                                }
+                                panel1.remove(canvasManager.getActiveCanvas());
+                                panel1.add(canvasManager.getCanvas(currentIndex));
                             }
                         });
                     }

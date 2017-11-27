@@ -16,7 +16,6 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import com.jme3.util.SkyFactory;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -32,6 +31,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     private Log log = new Log();
     private Callback callbackAfterAppInit;
 
+    public CustomView cv;
+
     private boolean mouseVisible = false;
 
     public void addCallBackAfterAppInit(Callback callbackAfterAppInit) {
@@ -41,6 +42,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     @Override
     public void simpleInitApp() {
         this.setPauseOnLostFocus(false);
+        releaseMouse();
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
 
@@ -157,7 +159,11 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
 //        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
 
+        cv = new CustomView(rootNode, guiNode);
+        cv.createCanvas();
+
         callbackAfterAppInit.run();
+
     }
 
     private boolean initialFrame = true;
@@ -178,9 +184,9 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (Math.sqrt(Math.pow(aircraft.getCoordinates().getX()-goal.getX(), 2) +
-                Math.pow(aircraft.getCoordinates().getY()-goal.getY(), 2) +
-                Math.pow(aircraft.getCoordinates().getZ()-goal.getZ(), 2)) <=4) {
+        if (Math.sqrt(Math.pow(aircraft.getCalcCoordinates().getX()-goal.getX(), 2) +
+                Math.pow(aircraft.getCalcCoordinates().getY()-goal.getY(), 2) +
+                Math.pow(aircraft.getCalcCoordinates().getZ()-goal.getZ(), 2)) <=4) {
             goal.destroy();
             this.goal = new Cube(0, 0, -80, ColorRGBA.Red, assetManager, rootNode);
         }
@@ -193,7 +199,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
     public void refreshAircraftInfo(){
         String aircraftInfoText = "Aircraft Info:\r\n";
-        aircraftInfoText += "Position: " + this.aircraft.getCoordinates().toString();
+        aircraftInfoText += "Position: " + this.aircraft.getCalcCoordinates().toString();
         aircraftInfoText += "\r\n";
         aircraftInfoText += "Velocity: " + this.aircraft.getVelocity().toString();
         aircraftInfoText += "\r\n";
@@ -256,9 +262,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
             if (name.equals("SwitchControl") && !keyPressed) {
                 MainSwingCanvas.this.getAircraft().toggleManualControl();
             }else if(name.equals("ReleaseMouse") && !keyPressed){
-                inputManager.setCursorVisible(!mouseVisible);
-                flyCam.setEnabled(mouseVisible);
-                mouseVisible = !mouseVisible;
+                releaseMouse();
             }else if(name.equals("Pause") && !keyPressed){
                 if(world.isPaused()){
                     world.continueSimulation();
@@ -268,6 +272,12 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
             }
         }
     };
+
+    private void releaseMouse() {
+        inputManager.setCursorVisible(!mouseVisible);
+        flyCam.setEnabled(mouseVisible);
+        mouseVisible = !mouseVisible;
+    }
 
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
