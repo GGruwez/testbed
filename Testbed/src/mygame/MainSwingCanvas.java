@@ -26,6 +26,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     private RenderCamera sas;
     private Aircraft aircraft;
     private World world;
+    public Cube goal;
     private BitmapText aircraftInfo;
     private Log log = new Log();
 
@@ -55,6 +56,9 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
         aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
+        
+        goal = new Cube(0, 5, -30, ColorRGBA.Red, assetManager, rootNode);
+//        Cube goal2 = new Cube(0, 0, -60, ColorRGBA.Blue, assetManager, rootNode);
 
         // Plane camera viewport
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
@@ -107,7 +111,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.White);
 
-        rootNode.attachChild(goalCube);
+        //rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
 
         sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight(), aircraft);
@@ -164,6 +168,12 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
             world.evolve(tpf);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (Math.sqrt(Math.pow(aircraft.getCoordinates().getX()-goal.getX(), 2) +
+                Math.pow(aircraft.getCoordinates().getY()-goal.getY(), 2) +
+                Math.pow(aircraft.getCoordinates().getZ()-goal.getZ(), 2)) <=4) {
+            goal.destroy();
+            this.goal = new Cube(0, 0, -80, ColorRGBA.Red, assetManager, rootNode);
         }
         sas.grabCamera();
 

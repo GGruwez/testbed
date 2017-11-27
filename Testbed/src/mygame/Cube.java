@@ -21,9 +21,24 @@ import com.jme3.util.BufferUtils;
  *
  * @author Stien
  */
+
 public class Cube extends Geometry {
     
+    public float x;
+    public float y;
+    public float z;
+    public ColorRGBA color;
+    public AssetManager assetManager;
+    public Node rootNode;
+    
     public Cube(float x, float y, float z, ColorRGBA color, AssetManager assetManager, Node rootNode) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.color = color;
+        this.assetManager = assetManager;
+        this.rootNode = rootNode;
+        
         Mesh pX = new Mesh();
         Mesh pY = new Mesh();
         Mesh pZ = new Mesh();
@@ -143,6 +158,28 @@ public class Cube extends Geometry {
         rootNode.attachChild(geom_nZ);
     }
     
-    //        Cube goal = new Cube(0, 20, 0, ColorRGBA.Blue, assetManager, rootNode);
+    public float getX() {
+        return this.x;
+    }
+    
+    public float getY() {
+        return this.y;
+    }
+    
+    public float getZ() {
+        return this.z;
+    }
 
+    public ColorRGBA getColor() {
+        return this.color;
+    }
+    
+    public void destroy() {
+        this.rootNode.detachChildNamed("pX");
+        this.rootNode.detachChildNamed("pY");
+        this.rootNode.detachChildNamed("pZ");
+        this.rootNode.detachChildNamed("nX");
+        this.rootNode.detachChildNamed("nY");
+        this.rootNode.detachChildNamed("nZ");
+    }
 }
