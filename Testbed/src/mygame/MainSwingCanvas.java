@@ -59,7 +59,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -30f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
         goal = new Cube(0, 5, -30, ColorRGBA.Red, assetManager, rootNode);
