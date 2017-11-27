@@ -16,6 +16,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import com.jme3.util.SkyFactory;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -29,9 +30,13 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     public Cube goal;
     private BitmapText aircraftInfo;
     private Log log = new Log();
+    private Callback callbackAfterAppInit;
 
     private boolean mouseVisible = false;
 
+    public void addCallBackAfterAppInit(Callback callbackAfterAppInit) {
+        this.callbackAfterAppInit = callbackAfterAppInit;
+    }
 
     @Override
     public void simpleInitApp() {
@@ -132,23 +137,27 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         cam.setLocation(new Vector3f(-100, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
 
-        new UI(world);
+//        new CubeUI(world);
 
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.85f,-1,-0.7f).normalizeLocal());
         sun.setColor(ColorRGBA.White.mult(1.23f));
-        rootNode.addLight(sun);
+        getRootNode().addLight(sun);
 
 
         DirectionalLight moon = new DirectionalLight();
         moon.setDirection(new Vector3f(0.3f,0f,0.6f).normalizeLocal());
         moon.setColor(ColorRGBA.White.mult(0.35f));
-        rootNode.addLight(moon);
+        getRootNode().addLight(moon);
 
 
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White.mult(0.15f));
-        rootNode.addLight(al);
+        getRootNode().addLight(al);
+
+//        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
+
+        callbackAfterAppInit.run();
     }
 
     private boolean initialFrame = true;
@@ -218,6 +227,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     public Aircraft getAircraft(){
         return this.aircraft;
     }
+
+    public World getWorld(){return this.world;}
 
     @Override
     public void simpleRender(RenderManager rm) {

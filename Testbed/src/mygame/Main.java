@@ -2,7 +2,7 @@ package mygame;
 
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
-import com.jme3.system.JmeContext;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -16,6 +16,17 @@ public class Main {
 
         if(!USE_CUSTOM_WINDOW) {
             MainSwingCanvas app = new MainSwingCanvas();
+            app.addCallBackAfterAppInit(new Callback() {
+                @Override
+                public void run() {
+                    JFrame window = new JFrame("Testbed");
+                    window.setVisible(true);
+                    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    window.setSize(new Dimension(200,200));
+                    window.setLocation(10,240);
+                    window.add(new CubeUI(app.getWorld()));
+                }
+            });
             app.start();
         }else {
             java.awt.EventQueue.invokeLater(() -> {
@@ -23,6 +34,7 @@ public class Main {
                 int height = 768;
 
                 MainSwingCanvas canvasApplication = new MainSwingCanvas();
+
                 AppSettings settings = new AppSettings(true);
                 settings.setWidth(width);
                 settings.setHeight(height);
@@ -47,29 +59,36 @@ public class Main {
 
                 tabbedPane.addTab("Regular view", null, panel1);
 
-                JComponent panel2 = new JPanel();
-                panel2.add(new JButton("Button"));
-                tabbedPane.addTab("Configuration", null, panel2);
+                Callback aai = new Callback() {
 
-
-                tabbedPane.addChangeListener(new ChangeListener() {
                     @Override
-                    public void stateChanged(ChangeEvent e) {
-                        int currentIndex = tabbedPane.getSelectedIndex();
-                        if (currentIndex == 1){
-                            panel1.remove(c);
-                        }else if(currentIndex == 0){
-                            panel1.add(c);
-                        }
+                    public void run() {
+                        JComponent panel2 = new JPanel();
+                        panel2.add(new CubeUI(canvasApplication.getWorld()));
+                        tabbedPane.addTab("Configuration", null, panel2);
+
+
+                        tabbedPane.addChangeListener(new ChangeListener() {
+                            @Override
+                            public void stateChanged(ChangeEvent e) {
+                                int currentIndex = tabbedPane.getSelectedIndex();
+                                if (currentIndex == 1){
+                                    panel1.remove(c);
+                                }else if(currentIndex == 0){
+                                    panel1.add(c);
+                                }
+                            }
+                        });
                     }
-                });
+                };
+                canvasApplication.addCallBackAfterAppInit(aai);
 
                 panel.add(tabbedPane);
                 window.add(panel);
                 window.pack();
                 window.setVisible(true);
 
-                canvasApplication.start(JmeContext.Type.Canvas);
+//                canvasApplication.start(JmeContext.Type.Canvas);
             });
         }
     }
