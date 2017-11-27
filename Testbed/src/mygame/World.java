@@ -185,6 +185,11 @@ public class World {
         return this.sideCamNode;
     }
 
+    public void generateCube(float x, float y, float z, ColorRGBA color){
+        Cube cube = new Cube(1, 1, 1, color, app.getAssetManager(), app.getRootNode());
+        this.getCubesInWorld().add(cube);
+        this.getCubePositions().put(cube, new Vector(x,y,z));
+        }
     
     public void generateTestBeam(int n){
         this.usedColors = new ColorRGBA[n];
