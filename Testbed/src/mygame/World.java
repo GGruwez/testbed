@@ -315,5 +315,8 @@ public class World {
         return this.cubePositions;
     }
     
+    public void generateCylinder() {
+        this.generateRandomCubes(5);
+    }
     
 }

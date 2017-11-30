@@ -7,11 +7,13 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 public class Main {
     
-    private static boolean USE_CUSTOM_WINDOW = false;
+    private static boolean USE_CUSTOM_WINDOW = true;
 
     public static void main(String[] args) {
 
@@ -68,6 +70,16 @@ public class Main {
                     public void run() {
                         JComponent panel2 = new JPanel();
                         panel2.add(new CubeUI(canvasApplication.getWorld()));
+                        JButton b = new JButton("generate cylinder");
+                        b.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().generateCylinder();}
+                        });
+                        panel2.add(new JButton("generate cylinder"));
+                        JButton b1 = new JButton("read from file");
+                        b1.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().readFile("cubePositions.txt");}
+                        });
+                        panel2.add(b1);
                         tabbedPane.addTab("Configuration", null, panel2);
                         canvasManager.put(1, ((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
 
