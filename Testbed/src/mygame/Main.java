@@ -68,18 +68,24 @@ public class Main {
 
                     @Override
                     public void run() {
+                        World world = canvasApplication.getWorld();
                         JComponent panel2 = new JPanel();
                         panel2.add(new CubeUI(canvasApplication.getWorld()));
                         JButton b = new JButton("generate cylinder");
                         b.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().generateCylinder();}
+                            public void actionPerformed(ActionEvent e) {world.generateCylinder();}
                         });
                         panel2.add(new JButton("generate cylinder"));
                         JButton b1 = new JButton("read from file");
                         b1.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().readFile("cubePositions.txt");}
+                            public void actionPerformed(ActionEvent e) {world.generateCubes(world.readFile("cubePositions.txt"));}
                         });
                         panel2.add(b1);
+                        JButton b2 = new JButton("save setup");
+                        b2.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {world.writeFile("cubePositions");}
+                        });
+                        panel2.add(b2);
                         tabbedPane.addTab("Configuration", null, panel2);
                         canvasManager.put(1, ((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
 

@@ -27,6 +27,8 @@ import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
 import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 public class World {
 
@@ -102,7 +104,7 @@ public class World {
         };
         simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, SIMULATION_PERIOD);
 
-        
+
         //this.generateCubes(this.readFile("cubePositions.txt"));
     }
     
@@ -319,4 +321,19 @@ public class World {
         this.generateRandomCubes(5);
     }
     
+    public void writeFile(String filename) {
+        try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+            for(Cube cube:cubesInWorld) {
+                Vector pos = this.cubePositions.get(cube);
+                String empty = " ";
+                String line = String.valueOf(pos.getX())+empty + String.valueOf(pos.getY())+empty+String.valueOf(pos.getZ()) + "\n";
+                writer.write(line);  
+            }
+            writer.close();
+        }
+        catch(IOException e) {}
+       
+       
+    }
 }
