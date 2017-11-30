@@ -7,11 +7,13 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 public class Main {
     
-    private static boolean USE_CUSTOM_WINDOW = false;
+    private static boolean USE_CUSTOM_WINDOW = true;
 
     public static void main(String[] args) {
 
@@ -66,8 +68,27 @@ public class Main {
 
                     @Override
                     public void run() {
+                        World world = canvasApplication.getWorld();
                         JComponent panel2 = new JPanel();
-                        panel2.add(new CubeUI(canvasApplication.getWorld()));
+                        panel2.setLayout(new BoxLayout(panel2,BoxLayout.PAGE_AXIS));
+                        panel2.add(new CubeUI(world));
+                        panel2.add(new CubeGeneratorUI(world));
+                        JButton b = new JButton("generate cylinder");
+                        b.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {world.generateCylinder();}
+                        });
+                        panel2.add(new JButton("generate cylinder"));
+                        JButton b1 = new JButton("read from file");
+                        b1.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {world.generateCubes(world.readFile("cubePositions.txt"));}
+                        });
+                        panel2.add(b1);
+                        JButton b2 = new JButton("save setup");
+                        b2.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {world.writeFile("cubePositions");}
+                        });
+                        panel2.add(b2);
+                        
                         tabbedPane.addTab("Configuration", null, panel2);
                         canvasManager.put(1, ((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
 
