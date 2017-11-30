@@ -103,7 +103,7 @@ public class Aircraft extends Node {
         Quaternion pitchQuat = new Quaternion();
         pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
         Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, -1));
         Quaternion yawQuat = new Quaternion();
         yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
         Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);

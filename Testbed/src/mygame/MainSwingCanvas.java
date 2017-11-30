@@ -61,10 +61,10 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -30f, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -40f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
-        goal = new Cube(0, 5, -30, ColorRGBA.Red, assetManager, rootNode);
+        goal = new Cube(0, 10, -80, ColorRGBA.Red, assetManager, rootNode);
 //        Cube goal2 = new Cube(0, 0, -60, ColorRGBA.Blue, assetManager, rootNode);
 
         // Plane camera viewport
@@ -188,7 +188,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
                 Math.pow(aircraft.getCalcCoordinates().getY()-goal.getY(), 2) +
                 Math.pow(aircraft.getCalcCoordinates().getZ()-goal.getZ(), 2)) <=4) {
             goal.destroy();
-            this.goal = new Cube(0, 0, -80, ColorRGBA.Red, assetManager, rootNode);
+            //this.goal = new Cube(0, 20, -80, ColorRGBA.Red, assetManager, rootNode);
         }
         sas.grabCamera();
 
