@@ -105,7 +105,7 @@ public class World {
         simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, SIMULATION_PERIOD);
 
 
-        //this.generateCubes(this.readFile("cubePositions.txt"));
+        this.generateCubes(this.readFile("cubePositions.txt"));
     }
     
     public DataInputStream getInputStream() {
@@ -155,13 +155,13 @@ public class World {
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         }
 
-        Geometry cubeToRemove = null;
-        for(Geometry cube:this.getCubesInWorld()) {
+        Cube cubeToRemove = null;
+        for(Cube cube:this.getCubesInWorld()) {
             Vector cubePos = this.getCubePositions().get(cube);
             if(this.getAircraft().getCalcCoordinates().calculateDistance(cubePos)<=4) {
                 cubeToRemove = cube;
                 this.getCubePositions().remove(cube);
-                app.getRootNode().detachChild(cube);
+                cube.destroy();
             }
         }
         this.getCubesInWorld().remove(cubeToRemove);
@@ -256,6 +256,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
+            color = ColorRGBA.Red;
             Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, app.getAssetManager(),app.getRootNode());
             this.getCubesInWorld().add(cube);
             this.getCubePositions().put(cube, new Vector(currentPos.getX(),currentPos.getY(), currentPos.getZ()));

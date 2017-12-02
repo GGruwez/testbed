@@ -145,6 +145,7 @@ public class Aircraft extends Node {
     public float getWingMass(){
     return this.getConfig().getWingMass();
     }
+    
     public float getTotalMass(){
     	return this.getEngineMass()+this.getWingMass()*2+ this.getTailMass();
     }
@@ -190,11 +191,11 @@ public class Aircraft extends Node {
     }
     
     public Vector getWingX(){
-    	return this.wingX;
+    	return this.wingX.inverseTransform(getHeading(), getPitch(), getRoll());
     }
     
     public Vector getTailSize(){
-    	return this.tailSize;
+    	return this.tailSize.inverseTransform(getHeading(), getPitch(), getRoll());
     }
     
     public float getTailMass(){
@@ -206,7 +207,7 @@ public class Aircraft extends Node {
     }
     
     public Vector getEnginePlace(){
-	return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
+	return this.getTailSize().inverseTransform(getHeading(), getPitch(), getRoll()).constantProduct(-this.getTailMass()/this.getEngineMass());
     }
 
     public float getLeftWingInclination() {
@@ -253,17 +254,15 @@ public class Aircraft extends Node {
         this.getForce().UpdateForce();
         this.setElapsedTime(this.getElapsedTime()+time);
 
-        setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
+        setAcceleration(getForce().getTotalForce().inverseTransform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
         setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
     	setCalcCoordinates(getCalcCoordinates().add(getVelocity().constantProduct(time))); // TODO: put back
-    	
-    	
 
         //getForce().getTotalForce().printVector("voor transform ");
         //Vector totalF = getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll());
         //totalF.printVector("na transform");
         
-        setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
+        setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue).inverseTransform(getHeading(), getPitch(), getRoll()));
         setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
     	setPitch(getPitch() + getAngularVelocity().getX()*time);
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
