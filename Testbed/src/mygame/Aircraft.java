@@ -291,6 +291,7 @@ public class Aircraft extends Node {
 ////        System.out.println("");
 //        this.getForce().getTotalGravityForce().transform(heading, pitch, roll).printVector("gravity");
 //        this.getForce().getLeftWingLift().transform(heading, pitch, roll).printVector("leftlift");
+//       System.out.println("incl: "+ this.getLeftWingInclination());
 //       System.out.println("Left wing: " + this.getLeftWingInclination());
     }
 
