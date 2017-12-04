@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Main {
     
-    private static boolean USE_CUSTOM_WINDOW = false;
+    private static boolean USE_CUSTOM_WINDOW = true;
 
     public static void main(String[] args) {
 
@@ -75,9 +75,12 @@ public class Main {
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
                             public void stateChanged(ChangeEvent e) {
-                                int currentIndex = tabbedPane.getSelectedIndex();
-                                panel1.remove(canvasManager.getActiveCanvas());
-                                panel1.add(canvasManager.getCanvas(currentIndex));
+//                                int currentIndex = tabbedPane.getSelectedIndex();
+//                                panel1.remove(canvasManager.getActiveCanvas());
+//                                panel1.add(canvasManager.getCanvas(currentIndex));
+                                canvasApplication.keepUpdating = false;
+                                panel1.removeAll();
+                                panel2.add(((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
                             }
                         });
                     }

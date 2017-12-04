@@ -1,37 +1,29 @@
 package mygame;
 
-import com.jme3.app.DebugKeysAppState;
-import com.jme3.app.FlyCamAppState;
 import com.jme3.app.LegacyApplication;
-import com.jme3.app.StatsAppState;
 import com.jme3.app.state.AppState;
-import com.jme3.audio.AudioListenerState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
-import com.jme3.input.FlyByCamera;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.Trigger;
 import com.jme3.profile.AppStep;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.system.AppSettings;
+import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeSystem;
-import com.jme3.system.JmeContext.Type;
+
+import java.awt.*;
 
 public class CustomView extends LegacyApplication {
     protected Node rootNode;
     protected Node guiNode;
     protected BitmapText fpsText;
     protected BitmapFont guiFont;
-    protected FlyByCamera flyCam;
     protected boolean showSettings;
-    private CustomView.AppActionListener actionListener;
 
     public CustomView(Node rootNode, Node guiNode) {
-        this(rootNode, guiNode, new AppState[]{new StatsAppState(), new FlyCamAppState(), new AudioListenerState(), new DebugKeysAppState()});
+        this(rootNode, guiNode, new AppState[]{new CustomViewStatsAppState()});
     }
 
     public CustomView(Node rootNode, Node guiNode, AppState... initialStates) {
@@ -39,7 +31,20 @@ public class CustomView extends LegacyApplication {
         this.rootNode = rootNode;
         this.guiNode = new Node("Custom View Gui Node");
         this.showSettings = true;
-        this.actionListener = new CustomView.AppActionListener();
+        super.inputEnabled = false;
+
+        int width = 1024;
+        int height = 768;
+
+        AppSettings settings = new AppSettings(true);
+        settings.setWidth(width);
+        settings.setHeight(height);
+        this.setSettings(settings);
+        this.createCanvas(); // create canvas!
+        JmeCanvasContext ctx = (JmeCanvasContext) this.getContext();
+        ctx.setSystemListener(this);
+        Dimension dim = new Dimension(width, height);
+        ctx.getCanvas().setPreferredSize(dim);
     }
 
     public void start() {
@@ -82,28 +87,10 @@ public class CustomView extends LegacyApplication {
         this.guiNode.setCullHint(CullHint.Never);
         this.viewPort.attachScene(this.rootNode);
         this.guiViewPort.attachScene(this.guiNode);
-        if(this.inputManager != null) {
-//            if(this.stateManager.getState(FlyCamAppState.class) != null) {
-//                this.flyCam = new FlyByCamera(this.cam);
-//                this.flyCam.setMoveSpeed(1.0F);
-//                ((FlyCamAppState)this.stateManager.getState(FlyCamAppState.class)).setCamera(this.flyCam);
-//            }
 
-            if(this.context.getType() == Type.Display) {
-                this.inputManager.addMapping("SIMPLEAPP_Exit", new Trigger[]{new KeyTrigger(1)});
-            }
-
-            if(this.stateManager.getState(StatsAppState.class) != null) {
-                this.inputManager.addMapping("SIMPLEAPP_HideStats", new Trigger[]{new KeyTrigger(63)});
-                this.inputManager.addListener(this.actionListener, new String[]{"SIMPLEAPP_HideStats"});
-            }
-
-            this.inputManager.addListener(this.actionListener, new String[]{"SIMPLEAPP_Exit"});
-        }
-
-        if(this.stateManager.getState(StatsAppState.class) != null) {
-            ((StatsAppState)this.stateManager.getState(StatsAppState.class)).setFont(this.guiFont);
-            this.fpsText = ((StatsAppState)this.stateManager.getState(StatsAppState.class)).getFpsText();
+        if(this.stateManager.getState(CustomViewStatsAppState.class) != null) {
+            ((CustomViewStatsAppState)this.stateManager.getState(CustomViewStatsAppState.class)).setFont(this.guiFont);
+            this.fpsText = ((CustomViewStatsAppState)this.stateManager.getState(CustomViewStatsAppState.class)).getFpsText();
         }
 
         this.simpleInitApp();
@@ -151,15 +138,15 @@ public class CustomView extends LegacyApplication {
     }
 
     public void setDisplayFps(boolean show) {
-        if(this.stateManager.getState(StatsAppState.class) != null) {
-            ((StatsAppState)this.stateManager.getState(StatsAppState.class)).setDisplayFps(show);
+        if(this.stateManager.getState(CustomViewStatsAppState.class) != null) {
+            ((CustomViewStatsAppState)this.stateManager.getState(CustomViewStatsAppState.class)).setDisplayFps(show);
         }
 
     }
 
     public void setDisplayStatView(boolean show) {
-        if(this.stateManager.getState(StatsAppState.class) != null) {
-            ((StatsAppState)this.stateManager.getState(StatsAppState.class)).setDisplayStatView(show);
+        if(this.stateManager.getState(CustomViewStatsAppState.class) != null) {
+            ((CustomViewStatsAppState)this.stateManager.getState(CustomViewStatsAppState.class)).setDisplayStatView(show);
         }
 
     }
@@ -170,21 +157,5 @@ public class CustomView extends LegacyApplication {
     }
 
     public void simpleRender(RenderManager rm) {
-    }
-
-    private class AppActionListener implements ActionListener {
-        private AppActionListener() {
-        }
-
-        public void onAction(String name, boolean value, float tpf) {
-            if(value) {
-                if(name.equals("SIMPLEAPP_Exit")) {
-                    CustomView.this.stop();
-                } else if(name.equals("SIMPLEAPP_HideStats") && CustomView.this.stateManager.getState(StatsAppState.class) != null) {
-                    ((StatsAppState)CustomView.this.stateManager.getState(StatsAppState.class)).toggleStats();
-                }
-
-            }
-        }
     }
 }
