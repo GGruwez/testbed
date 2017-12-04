@@ -291,7 +291,8 @@ public class Force {
 
         double Iyy1 = 2*Math.pow(getAircraft().getWingX().inverseTransform(
                 getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll())
-                .getX(), 2)*getAircraft().getWingMass() + Math.pow(getAircraft().getTailSize().getZ(),2)*getAircraft().getTailMass() + Math.pow(getAircraft().getEnginePlace().getZ(),2)*getAircraft().getEngineMass();
+                .getX(), 2)*getAircraft().getWingMass() + Math.pow(getAircraft().getTailSize().inverseTransform(
+                getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).getZ(),2)*getAircraft().getTailMass() + Math.pow(getAircraft().getEnginePlace().getZ(),2)*getAircraft().getEngineMass();
         float Iyy = (float)Iyy1;
 
         double Izz1 = 2*Math.pow(getAircraft().getWingX().inverseTransform(
