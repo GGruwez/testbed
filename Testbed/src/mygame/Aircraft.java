@@ -191,7 +191,7 @@ public class Aircraft extends Node {
     }
     
     public Vector getWingX(){
-    	return this.wingX.transform(getHeading(), getPitch(), getRoll());
+    	return this.wingX;
     }
     
     public Vector getTailSize(){
@@ -279,17 +279,18 @@ public class Aircraft extends Node {
 //        System.out.println("time" + time);
 //        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCalcCoordinates().getX() + " " + getCalcCoordinates().getY() + " " + getCalcCoordinates().getZ());
-//        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
+        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
 //        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
         
 //        System.out.println("pitch " + pitch);
 //        this.getForce().getTotalForce().transform(heading, pitch, roll).printVector("force");
 //        this.getAcceleration().printVector("acc ");
  //       this.getVelocity().printVector("vel ");
-////        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
+        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
 ////        System.out.println("");
 //        this.getForce().getTotalGravityForce().transform(heading, pitch, roll).printVector("gravity");
-//        this.getForce().getLeftWingLift().transform(heading, pitch, roll).printVector("leftlift");
+        this.getForce().getLeftWingLift().transform(heading, pitch, roll).printVector("leftlift");
+//       System.out.println("incl: "+ this.getLeftWingInclination());
 //       System.out.println("Left wing: " + this.getLeftWingInclination());
     }
 
