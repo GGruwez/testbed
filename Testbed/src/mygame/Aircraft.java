@@ -195,7 +195,7 @@ public class Aircraft extends Node {
     }
     
     public Vector getTailSize(){
-    	return this.tailSize.transform(getHeading(), getPitch(), getRoll());
+    	return this.tailSize;
     }
     
     public float getTailMass(){
