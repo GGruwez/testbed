@@ -34,7 +34,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     private Callback callbackAfterAppInit;
 
     public CustomView cv;
-    public boolean keepUpdating = true;
+    private boolean keepUpdating = true;
 
     private boolean mouseVisible = false;
 
@@ -301,6 +301,14 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
     private boolean isMouseVisible(){
         return mouseVisible;
+    }
+
+    public void selectView(){
+        this.keepUpdating = true;
+    }
+
+    public void deselectView(){
+        this.keepUpdating = false;
     }
 
 }

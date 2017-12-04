@@ -4,8 +4,6 @@ import com.jme3.app.LegacyApplication;
 import com.jme3.app.state.AppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
-import com.jme3.input.CameraInput;
-import com.jme3.math.ColorRGBA;
 import com.jme3.profile.AppStep;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -16,9 +14,6 @@ import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeSystem;
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class CustomView extends LegacyApplication {
     protected Node rootNode;
@@ -27,7 +22,7 @@ public class CustomView extends LegacyApplication {
     protected BitmapFont guiFont;
     protected boolean showSettings;
 
-    public boolean keepUpdating = false;
+    private boolean keepUpdating = false;
 
     private MainSwingCanvas mainCanvas;
 
@@ -68,22 +63,6 @@ public class CustomView extends LegacyApplication {
             this.setSettings(this.settings);
             super.start();
         }
-    }
-
-    public Node getGuiNode() {
-        return this.guiNode;
-    }
-
-    public Node getRootNode() {
-        return this.rootNode;
-    }
-
-    public boolean isShowSettings() {
-        return this.showSettings;
-    }
-
-    public void setShowSettings(boolean showSettings) {
-        this.showSettings = showSettings;
     }
 
     protected BitmapFont loadGuiFont() {
@@ -170,6 +149,13 @@ public class CustomView extends LegacyApplication {
         this.mainCanvas.simpleUpdate(tpf);
     }
 
-    public void simpleRender(RenderManager rm) {
+    public void simpleRender(RenderManager rm) {}
+
+    public void selectView(){
+        this.keepUpdating = true;
+    }
+
+    public void deselectView(){
+        this.keepUpdating = false;
     }
 }
