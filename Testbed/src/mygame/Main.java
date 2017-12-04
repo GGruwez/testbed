@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Main {
     
-    private static boolean USE_CUSTOM_WINDOW = true;
+    private static boolean USE_CUSTOM_WINDOW = false;
 
     public static void main(String[] args) {
 
