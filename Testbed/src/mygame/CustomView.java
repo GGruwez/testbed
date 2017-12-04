@@ -4,6 +4,8 @@ import com.jme3.app.LegacyApplication;
 import com.jme3.app.state.AppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.input.CameraInput;
+import com.jme3.math.ColorRGBA;
 import com.jme3.profile.AppStep;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -14,6 +16,9 @@ import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeSystem;
 
 import java.awt.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CustomView extends LegacyApplication {
     protected Node rootNode;
@@ -22,8 +27,13 @@ public class CustomView extends LegacyApplication {
     protected BitmapFont guiFont;
     protected boolean showSettings;
 
-    public CustomView(Node rootNode, Node guiNode) {
-        this(rootNode, guiNode, new AppState[]{new CustomViewStatsAppState()});
+    public boolean keepUpdating = false;
+
+    private MainSwingCanvas mainCanvas;
+
+    public CustomView(MainSwingCanvas mainCanvas) {
+        this(mainCanvas.getRootNode(), mainCanvas.getGuiNode(), new AppState[]{new CustomViewStatsAppState()});
+        this.mainCanvas = mainCanvas;
     }
 
     public CustomView(Node rootNode, Node guiNode, AppState... initialStates) {
@@ -97,6 +107,8 @@ public class CustomView extends LegacyApplication {
     }
 
     public void update() {
+        if(!this.keepUpdating) return;
+
         if(this.prof != null) {
             this.prof.appStep(AppStep.BeginFrame);
         }
@@ -130,7 +142,7 @@ public class CustomView extends LegacyApplication {
             this.renderManager.render(tpf, this.context.isRenderable());
             this.simpleRender(this.renderManager);
             this.stateManager.postRender();
-            if(this.prof != null) {
+            if (this.prof != null) {
                 this.prof.appStep(AppStep.EndFrame);
             }
 
@@ -154,6 +166,8 @@ public class CustomView extends LegacyApplication {
     public void simpleInitApp(){};
 
     public void simpleUpdate(float tpf) {
+
+        this.mainCanvas.simpleUpdate(tpf);
     }
 
     public void simpleRender(RenderManager rm) {

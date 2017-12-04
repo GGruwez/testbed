@@ -41,14 +41,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         this.callbackAfterAppInit = callbackAfterAppInit;
     }
 
-    public void update(){
-        if(this.keepUpdating) super.update();
-        else{
-            float tpf = this.timer.getTimePerFrame() * this.speed;
-            this.simpleUpdate(tpf);
-        };
-    }
-
     @Override
     public void simpleInitApp() {
         this.setPauseOnLostFocus(false);
@@ -169,11 +161,16 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
 //        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
 
-        cv = new CustomView(rootNode, guiNode);
+        cv = new CustomView(this);
 //        cv.start(JmeContext.Type.Canvas);
 
         callbackAfterAppInit.run();
 
+    }
+
+    @Override
+    public void update(){
+        if(this.keepUpdating) super.update();
     }
 
     private boolean initialFrame = true;

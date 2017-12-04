@@ -11,7 +11,7 @@ import java.util.*;
 
 public class Main {
     
-    private static boolean USE_CUSTOM_WINDOW = true;
+    private static boolean USE_CUSTOM_WINDOW = false;
 
     public static void main(String[] args) {
 
@@ -80,6 +80,7 @@ public class Main {
 //                                panel1.add(canvasManager.getCanvas(currentIndex));
                                 canvasApplication.keepUpdating = false;
                                 panel1.removeAll();
+                                canvasApplication.cv.keepUpdating = true;
                                 panel2.add(((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
                             }
                         });
