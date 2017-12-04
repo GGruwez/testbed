@@ -41,17 +41,26 @@ public class Log {
 //        lines += aircraft.getForce().getTotalMoment().getY() + "; ";
 //        lines += aircraft.getForce().getTotalMoment().getZ() + "; ";
 //        lines += aircraft.getElapsedTime();
-            Vector lift_tot = aircraft.getForce().getTotalLift().inverseTransform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
+            Vector lift_tot = aircraft.getForce().getTotalLift().transform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
             lines += lift_tot.getX() + "; ";
             lines += lift_tot.getY() + "; ";
             lines += lift_tot.getZ() + "; ";
-            Vector gravity = aircraft.getForce().getTotalGravityForce().inverseTransform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
+            Vector gravity = aircraft.getForce().getTotalGravityForce().transform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
             lines += gravity.getX() + "; ";
             lines += gravity.getY() + "; ";
             lines += gravity.getZ() + "; ";
             lines += aircraft.getForce().getLeftWingAngleOfAttack() + "; ";
             lines += aircraft.getForce().getRightWingAngleOfAttack() + "; ";
             lines += aircraft.getForce().getHorizontalStabilizerAngleOfAttack() + "; ";
+            Vector droneSpeed = aircraft.getVelocity().inverseTransform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
+            lines += droneSpeed.getX() + "; ";
+            lines += droneSpeed.getY() + "; ";
+            lines += droneSpeed.getZ() + "; ";
+            lines += aircraft.getHeading() + "; ";
+            Vector angularVelocity = aircraft.getAngularVelocity();
+            lines += angularVelocity.getX() + "; ";
+            lines += angularVelocity.getY() + "; ";
+            lines += angularVelocity.getZ() + "; ";
     }
 
     public void save(){
