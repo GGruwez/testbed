@@ -27,6 +27,8 @@ import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
 import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 public class World {
 
@@ -102,8 +104,8 @@ public class World {
         };
         simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, SIMULATION_PERIOD);
 
-        
-        //this.generateCubes(this.readFile("cubePositions.txt"));
+
+        this.generateCubes(this.readFile("cubePositions.txt"));
     }
     
     public DataInputStream getInputStream() {
@@ -153,13 +155,13 @@ public class World {
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         }
 
-        Geometry cubeToRemove = null;
-        for(Geometry cube:this.getCubesInWorld()) {
+        Cube cubeToRemove = null;
+        for(Cube cube:this.getCubesInWorld()) {
             Vector cubePos = this.getCubePositions().get(cube);
             if(this.getAircraft().getCalcCoordinates().calculateDistance(cubePos)<=4) {
                 cubeToRemove = cube;
                 this.getCubePositions().remove(cube);
-                app.getRootNode().detachChild(cube);
+                cube.destroy();
             }
         }
         this.getCubesInWorld().remove(cubeToRemove);
@@ -254,6 +256,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
+            color = ColorRGBA.Red;
             Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, app.getAssetManager(),app.getRootNode());
             this.getCubesInWorld().add(cube);
             this.getCubePositions().put(cube, new Vector(currentPos.getX(),currentPos.getY(), currentPos.getZ()));
@@ -315,5 +318,23 @@ public class World {
         return this.cubePositions;
     }
     
+    public void generateCylinder() {
+        this.generateRandomCubes(5);
+    }
     
+    public void writeFile(String filename) {
+        try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+            for(Cube cube:cubesInWorld) {
+                Vector pos = this.cubePositions.get(cube);
+                String empty = " ";
+                String line = String.valueOf(pos.getX())+empty + String.valueOf(pos.getY())+empty+String.valueOf(pos.getZ()) + "\n";
+                writer.write(line);  
+            }
+            writer.close();
+        }
+        catch(IOException e) {}
+       
+       
+    }
 }

@@ -28,6 +28,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     private Aircraft aircraft;
     private World world;
     public Cube goal;
+    public Cube goal2;
     private BitmapText aircraftInfo;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
@@ -63,10 +64,9 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -30f, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         
-        goal = new Cube(0, 5, -30, ColorRGBA.Red, assetManager, rootNode);
 //        Cube goal2 = new Cube(0, 0, -60, ColorRGBA.Blue, assetManager, rootNode);
 
         // Plane camera viewport
@@ -108,7 +108,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 //        yawQuat.fromAngleAxis((float) (Math.PI/2), new Vector3f(0, 1, 0));
 //        Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
 
-        float d =24;
+        float d =0;
         double x =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
         double y =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
         aircraft.setLocalTranslation((float) x,(float) y,d);
@@ -190,12 +190,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
             world.evolve(tpf);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (Math.sqrt(Math.pow(aircraft.getCalcCoordinates().getX()-goal.getX(), 2) +
-                Math.pow(aircraft.getCalcCoordinates().getY()-goal.getY(), 2) +
-                Math.pow(aircraft.getCalcCoordinates().getZ()-goal.getZ(), 2)) <=4) {
-            goal.destroy();
-            this.goal = new Cube(0, 0, -80, ColorRGBA.Red, assetManager, rootNode);
         }
         sas.grabCamera();
 

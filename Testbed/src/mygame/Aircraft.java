@@ -103,7 +103,7 @@ public class Aircraft extends Node {
         Quaternion pitchQuat = new Quaternion();
         pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
         Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(getRoll(), new Vector3f(0, 0, 1));
+        rollQuat.fromAngleAxis(getRoll(), (new Vector3f(0, 0, 1)));
         Quaternion yawQuat = new Quaternion();
         yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
         Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
@@ -145,6 +145,7 @@ public class Aircraft extends Node {
     public float getWingMass(){
     return this.getConfig().getWingMass();
     }
+    
     public float getTotalMass(){
     	return this.getEngineMass()+this.getWingMass()*2+ this.getTailMass();
     }
@@ -154,7 +155,7 @@ public class Aircraft extends Node {
     }
     
     public void setPitch(float pitch){
-    	this.pitch = (float)(pitch  % (2 * Math.PI));
+    	this.pitch = (float) pitch;
     }
     
     public float getRoll(){
@@ -162,7 +163,7 @@ public class Aircraft extends Node {
     }
     
     public void setRoll(float roll){
-    	this.roll = (float)(roll % (2 * Math.PI));
+    	this.roll = (float) roll;
     }
     
     public float getHeading(){
@@ -170,7 +171,7 @@ public class Aircraft extends Node {
     }
     
     public void setHeading(float heading){
-    	this.heading = (float)(heading % (2 * Math.PI));
+    	this.heading = (float) heading;
     }
     
     public Vector getAngularVelocity(){
@@ -256,14 +257,12 @@ public class Aircraft extends Node {
         setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(NeglectValue));
         setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(NeglectValue)));
     	setCalcCoordinates(getCalcCoordinates().add(getVelocity().constantProduct(time))); // TODO: put back
-    	
-    	
 
         //getForce().getTotalForce().printVector("voor transform ");
         //Vector totalF = getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll());
         //totalF.printVector("na transform");
         
-        setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue));
+        setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue).transform(getHeading(), getPitch(), getRoll()));
         setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
     	setPitch(getPitch() + getAngularVelocity().getX()*time);
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
@@ -287,10 +286,11 @@ public class Aircraft extends Node {
 //        this.getForce().getTotalForce().transform(heading, pitch, roll).printVector("force");
 //        this.getAcceleration().printVector("acc ");
  //       this.getVelocity().printVector("vel ");
-////        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
+//        System.out.println("h-p-r"+ this.getHeading() + " " + this.getPitch() + " " + this.getRoll());
 ////        System.out.println("");
 //        this.getForce().getTotalGravityForce().transform(heading, pitch, roll).printVector("gravity");
 //        this.getForce().getLeftWingLift().transform(heading, pitch, roll).printVector("leftlift");
+//       System.out.println("incl: "+ this.getLeftWingInclination());
 //       System.out.println("Left wing: " + this.getLeftWingInclination());
     }
 
