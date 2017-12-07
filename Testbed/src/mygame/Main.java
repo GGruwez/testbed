@@ -96,9 +96,13 @@ public class Main {
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
                             public void stateChanged(ChangeEvent e) {
-                                int currentIndex = tabbedPane.getSelectedIndex();
-                                panel1.remove(canvasManager.getActiveCanvas());
-                                panel1.add(canvasManager.getCanvas(currentIndex));
+//                                int currentIndex = tabbedPane.getSelectedIndex();
+//                                panel1.remove(canvasManager.getActiveCanvas());
+//                                panel1.add(canvasManager.getCanvas(currentIndex));
+                                canvasApplication.deselectView();
+                                panel1.removeAll();
+                                canvasApplication.cv.selectView();
+                                panel2.add(((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
                             }
                         });
                     }
