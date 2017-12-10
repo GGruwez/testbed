@@ -10,12 +10,14 @@ public class Log {
     String lines = "";
 
     Log(){
-        lines += "Position; Velocity; Acceleration; Pitch; Roll; Heading; LeftWingInclination; rightWingInclination; horStabInclination; verStabInclination; LliftX; LliftY; LliftZ; RliftX; RliftY; RliftZ; horLiftX; horLiftY; horLiftZ; verLiftX; verLiftY; verLiftZ; momentX; momentY; momentZ";
+        lines += "X; Y; Z; Velocity; Acceleration; Pitch; Roll; Heading; LeftWingInclination; rightWingInclination; horStabInclination; verStabInclination; LliftX; LliftY; LliftZ; RliftX; RliftY; RliftZ; horLiftX; horLiftY; horLiftZ; verLiftX; verLiftY; verLiftZ; momentX; momentY; momentZ";
     }
 
     public void addLine(Aircraft aircraft){
         lines += "\r\n";
-//        lines += aircraft.getCalcCoordinates().toString() + "; ";
+        lines += aircraft.getCalcCoordinates().getX() + "; ";
+        lines += aircraft.getCalcCoordinates().getY() + "; ";
+        lines += aircraft.getCalcCoordinates().getZ() + "; ";
 //        lines += aircraft.getVelocity().toString() + "; ";
 //        lines += aircraft.getAcceleration().toString() + "; ";
 //        lines += aircraft.getPitch() + "; ";
@@ -41,26 +43,26 @@ public class Log {
 //        lines += aircraft.getForce().getTotalMoment().getY() + "; ";
 //        lines += aircraft.getForce().getTotalMoment().getZ() + "; ";
 //        lines += aircraft.getElapsedTime();
-            Vector lift_tot = aircraft.getForce().getTotalLift().transform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
-            lines += lift_tot.getX() + "; ";
-            lines += lift_tot.getY() + "; ";
-            lines += lift_tot.getZ() + "; ";
-            Vector gravity = aircraft.getForce().getTotalGravityForce().transform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
-            lines += gravity.getX() + "; ";
-            lines += gravity.getY() + "; ";
-            lines += gravity.getZ() + "; ";
-            lines += aircraft.getForce().getLeftWingAngleOfAttack() + "; ";
-            lines += aircraft.getForce().getRightWingAngleOfAttack() + "; ";
-            lines += aircraft.getForce().getHorizontalStabilizerAngleOfAttack() + "; ";
-            Vector droneSpeed = aircraft.getVelocity().inverseTransform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
-            lines += droneSpeed.getX() + "; ";
-            lines += droneSpeed.getY() + "; ";
-            lines += droneSpeed.getZ() + "; ";
-            lines += aircraft.getHeading() + "; ";
-            Vector angularVelocity = aircraft.getAngularVelocity();
-            lines += angularVelocity.getX() + "; ";
-            lines += angularVelocity.getY() + "; ";
-            lines += angularVelocity.getZ() + "; ";
+//            Vector lift_tot = aircraft.getForce().getTotalLift().transform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
+//            lines += lift_tot.getX() + "; ";
+        //            lines += lift_tot.getY() + "; ";
+        //            lines += lift_tot.getZ() + "; ";
+        //            Vector gravity = aircraft.getForce().getTotalGravityForce().transform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
+        //           lines += gravity.getX() + "; ";
+        //            lines += gravity.getY() + "; ";
+        //          lines += gravity.getZ() + "; ";
+        //   lines += aircraft.getForce().getLeftWingAngleOfAttack() + "; ";
+        //    lines += aircraft.getForce().getRightWingAngleOfAttack() + "; ";
+        //    lines += aircraft.getForce().getHorizontalStabilizerAngleOfAttack() + "; ";
+        //    Vector droneSpeed = aircraft.getVelocity().inverseTransform(aircraft.getHeading(), aircraft.getPitch(), aircraft.getRoll());
+        //    lines += droneSpeed.getX() + "; ";
+        //    lines += droneSpeed.getY() + "; ";
+        //    lines += droneSpeed.getZ() + "; ";
+        //    lines += aircraft.getHeading() + "; ";
+        //    Vector angularVelocity = aircraft.getAngularVelocity();
+        //    lines += angularVelocity.getX() + "; ";
+        //    lines += angularVelocity.getY() + "; ";
+        //    lines += angularVelocity.getZ() + "; ";
     }
 
     public void save(){

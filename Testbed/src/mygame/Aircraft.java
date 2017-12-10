@@ -268,7 +268,7 @@ public class Aircraft extends Node {
     	setRoll(getRoll() + getAngularVelocity().getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
     	
-    	
+    	System.out.println()
 
         //Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
         //totalM.printVector("totalm ");
