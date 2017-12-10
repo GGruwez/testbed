@@ -10,7 +10,7 @@ public class Log {
     String lines = "";
 
     Log(){
-        lines += "Position; Velocity; Acceleration; Pitch; Roll; Heading; LeftWingInclination; rightWingInclination; horStabInclination; verStabInclination; LliftX; LliftY; LliftZ; RliftX; RliftY; RliftZ; horLiftX; horLiftY; horLiftZ; verLiftX; verLiftY; verLiftZ; momentX; momentY; momentZ";
+        lines += "X; Y; Z; Velocity; Acceleration; Pitch; Roll; Heading; LeftWingInclination; rightWingInclination; horStabInclination; verStabInclination; LliftX; LliftY; LliftZ; RliftX; RliftY; RliftZ; horLiftX; horLiftY; horLiftZ; verLiftX; verLiftY; verLiftZ; momentX; momentY; momentZ";
     }
 
     public void addLine(Aircraft aircraft){
@@ -60,7 +60,6 @@ public class Log {
 //            Vector angularVelocity = aircraft.getAngularVelocity();
 //            lines += angularVelocity.getX() + "; ";
 //            lines += angularVelocity.getY() + "; ";
-//            lines += angularVelocity.getZ() + "; ";
     }
 
     public void save(){
