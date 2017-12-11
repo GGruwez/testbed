@@ -107,13 +107,27 @@ public class Main {
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
                             public void stateChanged(ChangeEvent e) {
-//                                int currentIndex = tabbedPane.getSelectedIndex();
+                                int currentIndex = tabbedPane.getSelectedIndex();
 //                                panel1.remove(canvasManager.getActiveCanvas());
 //                                panel1.add(canvasManager.getCanvas(currentIndex));
-                                canvasApplication.deselectView();
-                                panel1.removeAll();
-                                canvasApplication.chaseCameraCustomView.selectView();
-                                panel2.add(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
+                                switch (currentIndex){
+                                    case 0:{
+                                        // Show normal view
+                                        canvasApplication.chaseCameraCustomView.deselectView();
+                                        panel2.removeAll();
+                                        canvasApplication.selectView();
+                                        panel1.add(ctx.getCanvas());
+                                        break;
+                                    }
+                                    case 1:{
+                                        // Show chase cam
+                                        canvasApplication.deselectView();
+                                        panel1.removeAll();
+                                        canvasApplication.chaseCameraCustomView.selectView();
+                                        panel2.add(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
+                                        break;
+                                    }
+                                }
                             }
                         });
                     }
