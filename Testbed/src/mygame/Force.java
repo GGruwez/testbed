@@ -327,9 +327,7 @@ public class Force {
         //System.out.println(wingL.getX() + " " + wingL.getY() + " " + wingL.getZ());
         Vector tail  = getAircraft().getTailSize()
                 .crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
-        Vector engine = getEnginePlace().inverseTransform(
-                getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll())
-                .crossProduct(getEngineGravityForce().add(getThrustForce()));   
+        Vector engine = getEnginePlace().crossProduct(getEngineGravityForce());   
         return wingR.add(wingL).add(tail).add(engine);
     }
 
