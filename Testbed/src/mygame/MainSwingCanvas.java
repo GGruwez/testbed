@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
+public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
     private RenderCamera sas;
     private Aircraft aircraft;

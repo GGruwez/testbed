@@ -1,5 +1,6 @@
 package mygame;
 
+import com.jme3.app.LegacyApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeContext;
@@ -10,6 +11,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     
@@ -33,6 +36,9 @@ public class Main {
             app.start();
         }else {
             java.awt.EventQueue.invokeLater(() -> {
+                final CustomCanvas[] previousCanvas = {null};
+                Map<JPanel, CustomCanvas> canvasLinks = new HashMap<JPanel, CustomCanvas>();
+
                 int width = 1024;
                 int height = 768;
 
@@ -55,10 +61,12 @@ public class Main {
 
                 JTabbedPane tabbedPane = new JTabbedPane();
 
-                JComponent panel1 = new JPanel();
+                JPanel panel1 = new JPanel();
                 Canvas c = ctx.getCanvas();
                 panel1.add(new Panel());
                 panel1.add(c);
+                previousCanvas[0] = canvasApplication;
+                canvasLinks.put(panel1, canvasApplication);
                 JButton playButton = new JButton("start");
                 playButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
@@ -74,7 +82,6 @@ public class Main {
                         }});
                 panel1.add(pauzeButton);
                 tabbedPane.addTab("Regular view", null, panel1);
-                CanvasManager canvasManager = new CanvasManager(c);
 
                 Callback aai = new Callback() {
 
@@ -103,38 +110,26 @@ public class Main {
                         
                         tabbedPane.addTab("Configuration", null, panel2);
 
-
-                        JComponent panel3 = new JPanel();
+                        JPanel panel3 = new JPanel();
                         panel3.add(new Panel());
                         tabbedPane.addTab("Chase cam", null, panel3);
 
-
-                        canvasManager.put(1, ((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
-
+                        canvasLinks.put(panel3, canvasApplication.chaseCameraCustomView);
 
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
                             public void stateChanged(ChangeEvent e) {
-                                int currentIndex = tabbedPane.getSelectedIndex();
-//                                panel1.remove(canvasManager.getActiveCanvas());
-//                                panel1.add(canvasManager.getCanvas(currentIndex));
-                                switch (currentIndex){
-                                    case 0:{
-                                        // Show normal view
-                                        canvasApplication.chaseCameraCustomView.deselectView();
-                                        panel3.remove(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
-                                        canvasApplication.selectView();
-                                        panel1.add(ctx.getCanvas());
-                                        break;
-                                    }
-                                    case 2:{
-                                        // Show chase cam
-                                        canvasApplication.deselectView();
-                                        panel1.remove(ctx.getCanvas());
-                                        canvasApplication.chaseCameraCustomView.selectView();
-                                        panel3.add(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
-                                        break;
-                                    }
+                                JPanel currentJPanel = (JPanel) tabbedPane.getSelectedComponent();
+                                canvasLinks.forEach((key, value) -> key.removeAll());
+                                if(canvasLinks.containsKey(currentJPanel)) {
+                                    CustomCanvas currentCanvas = canvasLinks.get(currentJPanel);
+                                    Canvas currentRealCanvas = ((JmeCanvasContext) currentCanvas.getContext()).getCanvas();
+                                    previousCanvas[0].deselectView();
+
+                                    currentCanvas.selectView();
+                                    currentJPanel.add(currentRealCanvas);
+                                    previousCanvas[0] = currentCanvas;
+
                                 }
                             }
                         });

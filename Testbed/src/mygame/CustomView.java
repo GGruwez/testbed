@@ -20,7 +20,7 @@ import com.jme3.system.JmeSystem;
 
 import java.awt.*;
 
-public class CustomView extends LegacyApplication {
+public class CustomView extends LegacyApplication implements CustomCanvas {
     protected Node rootNode;
     protected Node guiNode;
     protected BitmapText fpsText;
