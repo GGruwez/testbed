@@ -2,6 +2,7 @@ package mygame;
 
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
+import com.jme3.system.JmeContext;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -101,6 +102,13 @@ public class Main {
                         panel2.add(b2);
                         
                         tabbedPane.addTab("Configuration", null, panel2);
+
+
+                        JComponent panel3 = new JPanel();
+                        panel3.add(new Panel());
+                        tabbedPane.addTab("Chase cam", null, panel3);
+
+
                         canvasManager.put(1, ((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
 
 
@@ -114,17 +122,17 @@ public class Main {
                                     case 0:{
                                         // Show normal view
                                         canvasApplication.chaseCameraCustomView.deselectView();
-                                        panel2.removeAll();
+                                        panel3.remove(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
                                         canvasApplication.selectView();
                                         panel1.add(ctx.getCanvas());
                                         break;
                                     }
-                                    case 1:{
+                                    case 2:{
                                         // Show chase cam
                                         canvasApplication.deselectView();
-                                        panel1.removeAll();
+                                        panel1.remove(ctx.getCanvas());
                                         canvasApplication.chaseCameraCustomView.selectView();
-                                        panel2.add(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
+                                        panel3.add(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
                                         break;
                                     }
                                 }
