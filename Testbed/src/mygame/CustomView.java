@@ -4,11 +4,16 @@ import com.jme3.app.LegacyApplication;
 import com.jme3.app.state.AppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
 import com.jme3.profile.AppStep;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.control.CameraControl;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeSystem;
@@ -22,9 +27,14 @@ public class CustomView extends LegacyApplication {
     protected BitmapFont guiFont;
     protected boolean showSettings;
 
+    private int width;
+    private int height;
+
     private boolean keepUpdating = false;
 
     private MainSwingCanvas mainCanvas;
+
+    private CameraNode camNode;
 
     public CustomView(MainSwingCanvas mainCanvas) {
         this(mainCanvas.getRootNode(), mainCanvas.getGuiNode(), new AppState[]{new CustomViewStatsAppState()});
@@ -35,11 +45,13 @@ public class CustomView extends LegacyApplication {
         super(initialStates);
         this.rootNode = rootNode;
         this.guiNode = new Node("Custom View Gui Node");
-        this.showSettings = true;
+        this.showSettings = false;
         super.inputEnabled = false;
+        this.setDisplayFps(false);
+        this.setDisplayStatView(false);
 
-        int width = 1024;
-        int height = 768;
+        this.width = 1024;
+        this.height = 768;
 
         AppSettings settings = new AppSettings(true);
         settings.setWidth(width);
@@ -83,6 +95,11 @@ public class CustomView extends LegacyApplication {
         }
 
         this.simpleInitApp();
+    }
+
+    public void updateCamera(CustomViewCallback customCameraUpdate){
+        if(this.getCamera() != null && this.getCameraNode() != null)
+            customCameraUpdate.run(this);
     }
 
     public void update() {
@@ -142,7 +159,21 @@ public class CustomView extends LegacyApplication {
 
     }
 
-    public void simpleInitApp(){};
+    public void simpleInitApp(){
+        // Create camera
+        this.cam = new Camera(width, height);
+        this.cam.setFrustumPerspective(120,1,1,1000); // TODO: change this..? aspect...
+        this.camNode = new CameraNode("Cam Node", this.cam);
+        this.camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
+        rootNode.attachChild(this.camNode);
+
+        ViewPort camViewport = renderManager.createMainView("cam view", this.cam);
+        camViewport.setClearFlags(true, true, true);
+        camViewport.attachScene(rootNode);
+        camViewport.setBackgroundColor(ColorRGBA.White);
+        this.viewPort = camViewport;
+
+    };
 
     public void simpleUpdate(float tpf) {
 
@@ -158,4 +189,12 @@ public class CustomView extends LegacyApplication {
     public void deselectView(){
         this.keepUpdating = false;
     }
+
+    CameraNode getCameraNode(){
+        return this.camNode;
+    }
+}
+
+interface CustomViewCallback {
+    void run(CustomView cv);
 }

@@ -16,12 +16,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.control.CameraControl;
 import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
@@ -49,14 +47,14 @@ public class World {
     private Camera sideCam;
     private CameraNode sideCamNode;
 
-    private SimpleApplication app;
+    private MainSwingCanvas mainSwingCanvas;
     
     private ColorRGBA[] usedColors;
     private HashMap<Cube,Vector> cubePositions;
     private Set<Cube> cubesInWorld;
     
 
-    public World(SimpleApplication app) {
+    public World(MainSwingCanvas app) {
         byte[] inbuf = new byte[1000000];
         this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
         this.outstream = new DataOutputStream(new ByteArrayOutputStream());
@@ -85,7 +83,7 @@ public class World {
         this.sideCamNode.setLocalTranslation(-50, 0, 0);
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
-        this.app = app;
+        this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube,Vector>();
 
@@ -153,6 +151,14 @@ public class World {
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
+
+            // CustomView camera updating
+            this.mainSwingCanvas.chaseCameraCustomView.updateCamera(cv -> {
+                Vector newChaseCamPosition1 = getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
+                cv.getCameraNode().setLocalTranslation(newChaseCamPosition1.getX(), newChaseCamPosition1.getY(), newChaseCamPosition1.getZ());
+                Vector aircraftCoordinates1 = getAircraft().getCalcCoordinates();
+                cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates1.getX(), aircraftCoordinates1.getY(), aircraftCoordinates1.getZ()), Vector3f.UNIT_Y);
+            });
         }
 
         Cube cubeToRemove = null;
@@ -215,7 +221,7 @@ public class World {
     }
 
     public void generateCube(float x, float y, float z, ColorRGBA color){
-        Cube cube = new Cube(1, 1, 1, color, app.getAssetManager(), app.getRootNode());
+        Cube cube = new Cube(1, 1, 1, color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
         this.getCubesInWorld().add(cube);
         this.getCubePositions().put(cube, new Vector(x,y,z));
         }
@@ -229,7 +235,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            Cube cube = new Cube(x,y,z,color,app.getAssetManager(),app.getRootNode());
+            Cube cube = new Cube(x,y,z,color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
             this.getCubesInWorld().add(cube);
             this.getCubePositions().put(cube, new Vector(x,y,z));
         }           
@@ -244,7 +250,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i-1] = color;
-            Cube cube = new Cube(x,y,z,color,app.getAssetManager(),app.getRootNode());
+            Cube cube = new Cube(x,y,z,color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
             this.getCubesInWorld().add(cube);
             this.getCubePositions().put(cube, new Vector(x,y,z));
         }
@@ -257,7 +263,7 @@ public class World {
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
             color = ColorRGBA.Red;
-            Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, app.getAssetManager(),app.getRootNode());
+            Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
             this.getCubesInWorld().add(cube);
             this.getCubePositions().put(cube, new Vector(currentPos.getX(),currentPos.getY(), currentPos.getZ()));
         }

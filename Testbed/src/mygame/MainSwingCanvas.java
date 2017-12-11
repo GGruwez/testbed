@@ -16,7 +16,6 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import com.jme3.system.JmeContext;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -27,13 +26,11 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
     private RenderCamera sas;
     private Aircraft aircraft;
     private World world;
-    public Cube goal;
-    public Cube goal2;
     private BitmapText aircraftInfo;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
 
-    public CustomView cv;
+    public CustomView chaseCameraCustomView;
     private boolean keepUpdating = true;
 
     private boolean mouseVisible = false;
@@ -161,8 +158,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
 //        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
 
-        cv = new CustomView(this);
-//        cv.start(JmeContext.Type.Canvas);
+        chaseCameraCustomView = new CustomView(this);
+//        chaseCameraCustomView.start(JmeContext.Type.Canvas);
 
         callbackAfterAppInit.run();
 

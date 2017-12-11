@@ -9,7 +9,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
 
 public class Main {
     
@@ -90,7 +89,7 @@ public class Main {
                         panel2.add(b2);
                         
                         tabbedPane.addTab("Configuration", null, panel2);
-                        canvasManager.put(1, ((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
+                        canvasManager.put(1, ((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
 
 
                         tabbedPane.addChangeListener(new ChangeListener() {
@@ -101,8 +100,8 @@ public class Main {
 //                                panel1.add(canvasManager.getCanvas(currentIndex));
                                 canvasApplication.deselectView();
                                 panel1.removeAll();
-                                canvasApplication.cv.selectView();
-                                panel2.add(((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
+                                canvasApplication.chaseCameraCustomView.selectView();
+                                panel2.add(((JmeCanvasContext) canvasApplication.chaseCameraCustomView.getContext()).getCanvas());
                             }
                         });
                     }
