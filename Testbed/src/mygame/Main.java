@@ -57,10 +57,22 @@ public class Main {
 
                 JComponent panel1 = new JPanel();
                 Canvas c = ctx.getCanvas();
-                
                 panel1.add(new Panel());
                 panel1.add(c);
-
+                JButton playButton = new JButton("start");
+                playButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        World world = canvasApplication.getWorld();
+                        if (world.isPaused()) world.continueSimulation();
+                        }});
+                panel1.add(playButton);
+                JButton pauzeButton = new JButton("stop");
+                pauzeButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        World world = canvasApplication.getWorld();
+                        if (!world.isPaused()) world.pauseSimulation();
+                        }});
+                panel1.add(pauzeButton);
                 tabbedPane.addTab("Regular view", null, panel1);
                 CanvasManager canvasManager = new CanvasManager(c);
 
