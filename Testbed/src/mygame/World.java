@@ -261,7 +261,6 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            color = ColorRGBA.Red;
             Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
             this.getCubesInWorld().add(cube);
             this.getCubePositions().put(cube, new Vector(currentPos.getX(),currentPos.getY(), currentPos.getZ()));
