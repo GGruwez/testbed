@@ -15,13 +15,11 @@ public class Log {
 
     public void addLine(Aircraft aircraft){
         lines += "\r\n";
-        lines += aircraft.getCalcCoordinates().getX() + "; ";
-        lines += aircraft.getCalcCoordinates().getY() + "; ";
-        lines += aircraft.getCalcCoordinates().getZ() + "; ";
-//        lines += aircraft.getVelocity().toString() + "; ";
-//        lines += aircraft.getAcceleration().toString() + "; ";
-//        lines += aircraft.getPitch() + "; ";
-//        lines += aircraft.getRoll() + "; ";
+        lines += aircraft.getCalcCoordinates().getY()+ "; ";
+        lines += aircraft.getVelocity().toString() + "; ";
+        lines += aircraft.getAcceleration().toString() + "; ";
+        lines += aircraft.getPitch() + "; ";
+        lines += aircraft.getRoll() + "; ";
         lines += aircraft.getHeading() + "; ";
 //        lines += aircraft.getLeftWingInclination() + "; ";
 //        lines += aircraft.getRightWingInclination() + "; ";

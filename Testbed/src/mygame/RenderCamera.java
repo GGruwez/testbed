@@ -137,30 +137,30 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             // The following image byte array will be passed to the autopilot
             byte[] imageByteArray = new byte[width*height*3];
 
-            int i = 0;
+            int i = 1;
             for (int y = viewY; y < height+viewY; y++) {
-                for (int x = viewX; x < width+viewX; x++) {
-                    // Save image to file
-                    // TODO: remove this + cleanup
-                    int r = bArray[3*(y*totalWidth+x)+0]& 0xff;
-                    int g = bArray[3*(y*totalWidth+x)+1]& 0xff;
-                    int b = bArray[3*(y*totalWidth+x)+2]& 0xff;
-                    int rgb = 65536*r + 256*g + b;
-                    image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
+                for (int x = width+viewX; x > viewX ; x--) {
+//                    // Save image to file
+//                    // TODO: remove this + cleanup
+//                    int r = bArray[(3*(y*totalWidth+x)+0)]& 0xff;
+//                    int g = bArray[(3*(y*totalWidth+x)+1)]& 0xff;
+//                    int b = bArray[(3*(y*totalWidth+x)+2)]& 0xff;
+//                    int rgb = 65536*r + 256*g + b;
+//                    image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
 
                     // Fill image byte array
-                    imageByteArray[i++] = bArray[3*(y*totalWidth+x)+0];
-                    imageByteArray[i++] = bArray[3*(y*totalWidth+x)+1];
-                    imageByteArray[i++] = bArray[3*(y*totalWidth+x)+2];
+                    imageByteArray[imageByteArray.length - i++] = bArray[3*(y*totalWidth+(x))+0];
+                    imageByteArray[imageByteArray.length - i++] = bArray[3*(y*totalWidth+(x))+1];
+                    imageByteArray[imageByteArray.length - i++] = bArray[3*(y*totalWidth+(x))+2];
                 }
             }
             // Set aircraft image
             this.aircraft.setImage(imageByteArray);
 
-            File outputFile = new File("output.jpeg");
-            try {
-                ImageIO.write(image, "jpeg", outputFile);
-            }catch (IOException exc) {}
+//            File outputFile = new File("output.jpeg");
+//            try {
+//                ImageIO.write(image, "jpeg", outputFile);
+//            }catch (IOException exc) {}
 
        }
     }

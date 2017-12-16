@@ -18,7 +18,7 @@ public class Aircraft extends Node {
     private Vector acceleration = Vector.NULL;
     private Force forces;
     private float pitch;
-    private float roll;
+    private float roll = 0f;
     private float heading = 0;
     private Vector wingX = new Vector(1, 0, 0);
     private Vector tailSize = new Vector(0, 0, 1);
@@ -268,8 +268,6 @@ public class Aircraft extends Node {
         setPitch(getPitch() + angularVel.getX()*time);
     	setRoll(getRoll() + angularVel.getZ()*time);
     	setHeading(getHeading() + angularVel.getY()*time);
-    	
-    	System.out.println();
 
         //Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
         //totalM.printVector("totalm ");
@@ -341,7 +339,7 @@ public class Aircraft extends Node {
         this.getForce().setThrust(autopilotOutputs.getThrust());
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
-        this.setHorStabInclination(-autopilotOutputs.getHorStabInclination());
+        this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
         this.setVerStabInclination(autopilotOutputs.getVerStabInclination());
     }
     
