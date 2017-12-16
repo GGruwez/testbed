@@ -98,7 +98,7 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
     }
 
     public void updateCamera(CustomViewCallback customCameraUpdate){
-        if(this.getCamera() != null && this.getCameraNode() != null)
+        if(this.getCamera() != null && this.getCameraNode() != null && this.mustKeepUpdating())
             customCameraUpdate.run(this);
     }
 
@@ -188,6 +188,10 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
 
     public void deselectView(){
         this.keepUpdating = false;
+    }
+
+    public boolean mustKeepUpdating(){
+        return this.keepUpdating;
     }
 
     CameraNode getCameraNode(){

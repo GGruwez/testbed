@@ -45,6 +45,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         releaseMouse();
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
+        settings.setRenderer("JOGL");
 
         world = new World(this);
 
@@ -63,8 +64,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
         aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
-        
-//        Cube goal2 = new Cube(0, 0, -60, ColorRGBA.Blue, assetManager, rootNode);
 
         // Plane camera viewport
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
@@ -158,11 +157,20 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
 //        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
 
-        chaseCameraCustomView = new CustomView(this);
-//        chaseCameraCustomView.start(JmeContext.Type.Canvas);
+        createChaseCameraCustomView();
 
         callbackAfterAppInit.run();
 
+    }
+
+    private void createChaseCameraCustomView() {
+        chaseCameraCustomView = new CustomView(this);
+//        chaseCameraCustomView.start(JmeContext.Type.Canvas);
+    }
+
+    CustomView createAndGetChaseCameraCustomView(){
+        this.createChaseCameraCustomView();
+        return this.chaseCameraCustomView;
     }
 
     @Override
@@ -185,12 +193,18 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         }
         try {
             world.evolve(tpf);
+
+            // Update chase camera
+            this.chaseCameraCustomView.updateCamera(cv -> {
+                Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
+                cv.getCameraNode().setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
+                Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
+                cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
+            });
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         sas.grabCamera();
-
-        
 
         this.refreshAircraftInfo();
         log.addLine(this.getAircraft());
