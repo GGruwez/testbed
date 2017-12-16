@@ -31,9 +31,7 @@ import java.io.FileWriter;
 public class World {
 
     private static long SIMULATION_PERIOD = 10; // Simulation period in milliseconds, determines how fast autopilot calculations happen
-    
-    private DataOutputStream outstream;
-    private DataInputStream instream;
+
     private Aircraft aircraft;
     private Autopilot autopilot;
     private boolean simulation;
@@ -55,14 +53,11 @@ public class World {
     
 
     public World(MainSwingCanvas app) {
-        byte[] inbuf = new byte[1000000];
-        this.instream = new DataInputStream(new ByteArrayInputStream(inbuf));
-        this.outstream = new DataOutputStream(new ByteArrayOutputStream());
         this.autopilot = AutopilotFactory.createAutopilot();
 
         // Chase camera
         this.chaseCam = new Camera(200, 200);
-        this.chaseCam.setFrustumPerspective(120,1,1,1000);
+        this.chaseCam.setFrustumPerspective(120, 1, 1, 1000);
         this.chaseCam.setViewPort(4f, 5f, 1f, 2f);
         this.chaseCamNode = new CameraNode("Chase cam Node", this.chaseCam);
         this.chaseCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
@@ -85,7 +80,7 @@ public class World {
 
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
-        this.cubePositions = new HashMap<Cube,Vector>();
+        this.cubePositions = new HashMap<Cube, Vector>();
 
         // Simulated evolve
         // Run autopilot every 10 milliseconds
@@ -93,9 +88,9 @@ public class World {
         TimerTask simulationTimerTask = new TimerTask() {
             @Override
             public void run() {
-                try{
-                    evolveAutopilot((float)SIMULATION_PERIOD/1000);
-                }catch(Exception ex){
+                try {
+                    evolveAutopilot((float) SIMULATION_PERIOD / 1000);
+                } catch (Exception ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Evolve failed", ex);
                 }
             }
@@ -104,14 +99,6 @@ public class World {
 
 
         this.generateCubes(this.readFile("cubePositions.txt"));
-    }
-    
-    public DataInputStream getInputStream() {
-        return this.instream;
-    }
-    
-    public DataOutputStream getOutputStream() {
-        return this.outstream;
     }
 
     public void setAircraft(Aircraft aircraft) {
