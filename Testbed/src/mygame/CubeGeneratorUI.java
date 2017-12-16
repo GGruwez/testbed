@@ -8,12 +8,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class CubeGeneratorUI extends JPanel{
+class CubeGeneratorUI extends JPanel{
     private MainSwingCanvas canvasApplication;
     private JTextField text = new JTextField();
     private JButton b = new JButton("generate amount of cubes");
     
-    public CubeGeneratorUI(MainSwingCanvas canvasApplication) {
+    CubeGeneratorUI(MainSwingCanvas canvasApplication) {
         super(new FlowLayout());
 
         this.canvasApplication = canvasApplication;
@@ -27,7 +27,7 @@ public class CubeGeneratorUI extends JPanel{
         this.add(b);
     }
 
-    public World getWorld() {
+    private World getWorld() {
         return canvasApplication.getWorld();
     }
 }

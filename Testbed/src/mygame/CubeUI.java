@@ -8,7 +8,7 @@ import java.awt.*;
 /**
  * Created by daanlenaerts on 23/11/2017.
  */
-public class CubeUI extends JPanel {
+class CubeUI extends JPanel {
 
     private MainSwingCanvas canvasApplication;
 

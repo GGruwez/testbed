@@ -1,9 +1,7 @@
 package mygame;
 
-import com.jme3.app.LegacyApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
-import com.jme3.system.JmeContext;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -11,9 +9,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 public class Main {
     
