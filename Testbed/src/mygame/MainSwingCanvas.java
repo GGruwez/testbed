@@ -15,9 +15,11 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +31,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private BitmapText aircraftInfo;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
+    private LinkedList<Spatial> newSpatialQueue = new LinkedList<Spatial>();
+    private LinkedList<Spatial> destructibleSpatialQueue = new LinkedList<Spatial>();
 
     public CustomView chaseCameraCustomView;
     private boolean keepUpdating = true;
@@ -192,6 +196,13 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             initialFrame = false;
         }
         try {
+            // Link new items
+            newSpatialQueue.forEach(i->rootNode.attachChild(i));
+            emptyNewSpatialQueue();
+            // Unlink old items
+            destructibleSpatialQueue.forEach(i->rootNode.detachChild(i));
+            emptyDestructibleSpatialQueue();
+
             world.evolve(tpf);
 
             // Update chase camera
@@ -320,6 +331,22 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
     public void deselectView(){
         this.keepUpdating = false;
+    }
+
+    public void emptyNewSpatialQueue(){
+        this.newSpatialQueue.clear();
+    }
+
+    public void addToNewSpatialQueue(Spatial newItem){
+        this.newSpatialQueue.add(newItem);
+    }
+
+    public void emptyDestructibleSpatialQueue(){
+        this.destructibleSpatialQueue.clear();
+    }
+
+    public void addToDestructibleSpatialQueue(Spatial newItem){
+        this.destructibleSpatialQueue.add(newItem);
     }
 
 }

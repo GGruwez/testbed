@@ -31,7 +31,7 @@ public class Main {
                     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     window.setSize(new Dimension(200,200));
                     window.setLocation(10,240);
-                    window.add(new CubeUI(app.getWorld()));
+                    window.add(new CubeUI(app));
                 }
             });
             app.start();
@@ -58,7 +58,6 @@ public class Main {
                 JFrame window = new JFrame("Testbed");
                 window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                JPanel panel = new JPanel(new BorderLayout());
 
                 JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -111,8 +110,10 @@ public class Main {
                 };
                 canvasApplication.addCallBackAfterAppInit(aai);
 
-                panel.add(tabbedPane);
+
                 window.setLayout(new BoxLayout(window.getContentPane(),BoxLayout.X_AXIS));
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.add(tabbedPane);
                 window.add(panel);
                 JPanel buttonPanel = new JPanel();
                 JButton playButton = new JButton("start");
@@ -145,8 +146,8 @@ public class Main {
                 buttonPanel.add(b);
                 buttonPanel.add(b1);
                 buttonPanel.add(b2);
-                buttonPanel.add(new CubeUI(canvasApplication.getWorld())); // TODO: fix
-                buttonPanel.add(new CubeGeneratorUI(canvasApplication.getWorld())); // TODO: fix
+                buttonPanel.add(new CubeUI(canvasApplication));
+                buttonPanel.add(new CubeGeneratorUI(canvasApplication));
                 window.add(buttonPanel);
                 window.pack();
                 window.setVisible(true);

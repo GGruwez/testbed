@@ -10,17 +10,17 @@ import java.awt.*;
  */
 public class CubeUI extends JPanel {
 
-    private World world;
+    private MainSwingCanvas canvasApplication;
 
     private JTextField xField = new JTextField();
     private JTextField yField = new JTextField();
     private JTextField zField = new JTextField();
     private JButton addCube = new JButton("Add cube");
 
-    public CubeUI(World world) {
+    public CubeUI(MainSwingCanvas canvasApplication) {
         super(new FlowLayout());
 
-        this.world = world;
+        this.canvasApplication = canvasApplication;
 
         xField.setPreferredSize(new Dimension(60, 20));
         this.add(this.xField);
@@ -41,7 +41,7 @@ public class CubeUI extends JPanel {
     }
 
     public World getWorld() {
-        return world;
+        return canvasApplication.getWorld();
     }
 
 }

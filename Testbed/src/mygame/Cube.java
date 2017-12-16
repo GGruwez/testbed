@@ -14,8 +14,11 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
+
+import java.util.LinkedList;
 
 /**
  *
@@ -24,20 +27,21 @@ import com.jme3.util.BufferUtils;
 
 public class Cube extends Geometry {
     
-    public float x;
-    public float y;
-    public float z;
-    public ColorRGBA color;
-    public AssetManager assetManager;
-    public Node rootNode;
+    private float x;
+    private float y;
+    private float z;
+    private ColorRGBA color;
+    private AssetManager assetManager;
+    private MainSwingCanvas canvasApplication;
+    private LinkedList<Spatial> spatials = new LinkedList<Spatial>();
     
-    public Cube(float x, float y, float z, ColorRGBA color, AssetManager assetManager, Node rootNode) {
+    public Cube(float x, float y, float z, ColorRGBA color, AssetManager assetManager, MainSwingCanvas canvasApplication) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.color = color;
         this.assetManager = assetManager;
-        this.rootNode = rootNode;
+        this.canvasApplication = canvasApplication;
         
         Mesh pX = new Mesh();
         Mesh pY = new Mesh();
@@ -150,12 +154,15 @@ public class Cube extends Geometry {
         mat_nZ.setColor("Color", color.mult(0.45f));
         geom_nZ.setMaterial(mat_nZ);
 
-        rootNode.attachChild(geom_pX);
-        rootNode.attachChild(geom_pY);
-        rootNode.attachChild(geom_pZ);
-        rootNode.attachChild(geom_nX);
-        rootNode.attachChild(geom_nY);
-        rootNode.attachChild(geom_nZ);
+        spatials.add(geom_pX);
+        spatials.add(geom_pY);
+        spatials.add(geom_pZ);
+        spatials.add(geom_nX);
+        spatials.add(geom_nY);
+        spatials.add(geom_nZ);
+
+        spatials.forEach(s -> canvasApplication.addToNewSpatialQueue(s));
+
     }
     
     public float getX() {
@@ -175,11 +182,7 @@ public class Cube extends Geometry {
     }
     
     public void destroy() {
-        this.rootNode.detachChildNamed("pX");
-        this.rootNode.detachChildNamed("pY");
-        this.rootNode.detachChildNamed("pZ");
-        this.rootNode.detachChildNamed("nX");
-        this.rootNode.detachChildNamed("nY");
-        this.rootNode.detachChildNamed("nZ");
+        spatials.forEach(s -> canvasApplication.addToDestructibleSpatialQueue(s));
+        spatials.clear();
     }
 }

@@ -199,7 +199,7 @@ public class World {
     }
 
     public void generateCube(float x, float y, float z, ColorRGBA color){
-        Cube cube = new Cube(1, 1, 1, color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
+        Cube cube = new Cube(x,y,z, color, mainSwingCanvas.getAssetManager(), mainSwingCanvas);
         this.getCubesInWorld().add(cube);
         this.getCubePositions().put(cube, new Vector(x,y,z));
     }
@@ -213,9 +213,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            Cube cube = new Cube(x,y,z,color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
-            this.getCubesInWorld().add(cube);
-            this.getCubePositions().put(cube, new Vector(x,y,z));
+            generateCube(x,y,z,color);
         }           
     }
     
@@ -228,9 +226,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i-1] = color;
-            Cube cube = new Cube(x,y,z,color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
-            this.getCubesInWorld().add(cube);
-            this.getCubePositions().put(cube, new Vector(x,y,z));
+            generateCube(x,y,z,color);
         }
     }
     
@@ -240,9 +236,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
-            this.getCubesInWorld().add(cube);
-            this.getCubePositions().put(cube, new Vector(currentPos.getX(),currentPos.getY(), currentPos.getZ()));
+            generateCube(currentPos.getX(),currentPos.getY(),currentPos.getZ(),color);
         }
     }
     
