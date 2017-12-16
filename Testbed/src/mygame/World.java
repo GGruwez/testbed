@@ -1,21 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mygame;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -137,14 +127,6 @@ public class World {
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
-
-            // CustomView camera updating
-            this.mainSwingCanvas.chaseCameraCustomView.updateCamera(cv -> {
-                Vector newChaseCamPosition1 = getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
-                cv.getCameraNode().setLocalTranslation(newChaseCamPosition1.getX(), newChaseCamPosition1.getY(), newChaseCamPosition1.getZ());
-                Vector aircraftCoordinates1 = getAircraft().getCalcCoordinates();
-                cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates1.getX(), aircraftCoordinates1.getY(), aircraftCoordinates1.getZ()), Vector3f.UNIT_Y);
-            });
         }
 
         Cube cubeToRemove = null;
@@ -207,10 +189,10 @@ public class World {
     }
 
     public void generateCube(float x, float y, float z, ColorRGBA color){
-        Cube cube = new Cube(1, 1, 1, color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
+        Cube cube = new Cube(x,y,z, color, mainSwingCanvas.getAssetManager(), mainSwingCanvas);
         this.getCubesInWorld().add(cube);
         this.getCubePositions().put(cube, new Vector(x,y,z));
-        }
+    }
     
     public void generateTestBeam(int n){
         this.usedColors = new ColorRGBA[n];
@@ -221,9 +203,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            Cube cube = new Cube(x,y,z,color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
-            this.getCubesInWorld().add(cube);
-            this.getCubePositions().put(cube, new Vector(x,y,z));
+            generateCube(x,y,z,color);
         }           
     }
     
@@ -236,9 +216,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i-1] = color;
-            Cube cube = new Cube(x,y,z,color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
-            this.getCubesInWorld().add(cube);
-            this.getCubePositions().put(cube, new Vector(x,y,z));
+            generateCube(x,y,z,color);
         }
     }
     
@@ -248,9 +226,7 @@ public class World {
             ColorRGBA color = ColorRGBA.randomColor();
             while (colorIsUsed(color)) color = ColorRGBA.randomColor();
             this.getUsedColors()[i] = color;
-            Cube cube = new Cube(currentPos.getX(), currentPos.getY(), currentPos.getZ(), color, mainSwingCanvas.getAssetManager(), mainSwingCanvas.getRootNode());
-            this.getCubesInWorld().add(cube);
-            this.getCubePositions().put(cube, new Vector(currentPos.getX(),currentPos.getY(), currentPos.getZ()));
+            generateCube(currentPos.getX(),currentPos.getY(),currentPos.getZ(),color);
         }
     }
     

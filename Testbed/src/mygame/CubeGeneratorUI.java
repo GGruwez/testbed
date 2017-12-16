@@ -8,20 +8,26 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class CubeGeneratorUI extends JPanel{
-    private World world;
+class CubeGeneratorUI extends JPanel{
+    private MainSwingCanvas canvasApplication;
     private JTextField text = new JTextField();
     private JButton b = new JButton("generate amount of cubes");
     
-    public CubeGeneratorUI(World world) {
+    CubeGeneratorUI(MainSwingCanvas canvasApplication) {
         super(new FlowLayout());
-        this.world = world;
+
+        this.canvasApplication = canvasApplication;
+
         text.setPreferredSize(new Dimension(60,20));
         this.add(text);
         b.addActionListener(e -> {
-            world.generateRandomCubes(Integer.valueOf(text.getText()));
+            getWorld().generateRandomCubes(Integer.valueOf(text.getText()));
             text.setText("");
         });
         this.add(b);
+    }
+
+    private World getWorld() {
+        return canvasApplication.getWorld();
     }
 }

@@ -1,9 +1,7 @@
 package mygame;
 
-import com.jme3.app.LegacyApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
-import com.jme3.system.JmeContext;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -11,8 +9,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 public class Main {
     
@@ -30,14 +27,14 @@ public class Main {
                     window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     window.setSize(new Dimension(200,200));
                     window.setLocation(10,240);
-                    window.add(new CubeUI(app.getWorld()));
+                    window.add(new CubeUI(app));
                 }
             });
             app.start();
         }else {
             java.awt.EventQueue.invokeLater(() -> {
                 final CustomCanvas[] previousCanvas = {null};
-                Map<JPanel, CustomCanvas> canvasLinks = new HashMap<JPanel, CustomCanvas>();
+                LinkedList<JPanel> canvasPanels = new LinkedList<JPanel>();
 
                 int width = 1024;
                 int height = 768;
@@ -57,51 +54,62 @@ public class Main {
                 JFrame window = new JFrame("Testbed");
                 window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                JPanel panel = new JPanel(new BorderLayout());
 
                 JTabbedPane tabbedPane = new JTabbedPane();
 
                 JPanel panel1 = new JPanel();
-                Canvas c = ctx.getCanvas();
                 panel1.add(new Panel());
+                Canvas c = ctx.getCanvas();
                 panel1.add(c);
                 previousCanvas[0] = canvasApplication;
-                canvasLinks.put(panel1, canvasApplication);
+                canvasPanels.add(panel1);
                 tabbedPane.addTab("Regular view", null, panel1);
 
                 Callback aai = new Callback() {
 
                     @Override
                     public void run() {
+
                         JPanel panel3 = new JPanel();
                         panel3.add(new Panel());
                         tabbedPane.addTab("Chase cam", null, panel3);
-
-                        canvasLinks.put(panel3, canvasApplication.chaseCameraCustomView);
+                        canvasPanels.add(panel3);
 
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
                             public void stateChanged(ChangeEvent e) {
-                                JPanel currentJPanel = (JPanel) tabbedPane.getSelectedComponent();
-                                canvasLinks.forEach((key, value) -> key.removeAll());
-                                if(canvasLinks.containsKey(currentJPanel)) {
-                                    CustomCanvas currentCanvas = canvasLinks.get(currentJPanel);
-                                    Canvas currentRealCanvas = ((JmeCanvasContext) currentCanvas.getContext()).getCanvas();
-                                    previousCanvas[0].deselectView();
+                                JPanel newJPanel = (JPanel) tabbedPane.getSelectedComponent();
+                                canvasPanels.forEach(panel -> panel.removeAll());
 
-                                    currentCanvas.selectView();
-                                    currentJPanel.add(currentRealCanvas);
-                                    previousCanvas[0] = currentCanvas;
+                                previousCanvas[0].deselectView();
 
+                                CustomCanvas newCanvas;
+
+                                switch(tabbedPane.getSelectedIndex()){
+                                    case 1 :{
+                                        // Chase cam
+                                        newCanvas = canvasApplication.createAndGetChaseCameraCustomView();
+                                        break;
+                                    }
+                                    default:{
+                                        newCanvas = canvasApplication;
+                                    }
                                 }
+
+                                newCanvas.selectView();
+                                Canvas newRealCanvas = ((JmeCanvasContext) newCanvas.getContext()).getCanvas();
+                                newJPanel.add(newRealCanvas);
+                                previousCanvas[0] = newCanvas;
                             }
                         });
                     }
                 };
                 canvasApplication.addCallBackAfterAppInit(aai);
 
-                panel.add(tabbedPane);
+
                 window.setLayout(new BoxLayout(window.getContentPane(),BoxLayout.X_AXIS));
+                JPanel panel = new JPanel(new BorderLayout());
+                panel.add(tabbedPane);
                 window.add(panel);
                 JPanel buttonPanel = new JPanel();
                 JButton playButton = new JButton("start");
@@ -128,14 +136,30 @@ public class Main {
                 b2.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().writeFile("cubePositions");}
                     });
-                buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
-                buttonPanel.add(playButton);
-                buttonPanel.add(pauzeButton);
-                buttonPanel.add(b);
-                buttonPanel.add(b1);
-                buttonPanel.add(b2);
-                buttonPanel.add(new CubeUI(canvasApplication.getWorld())); // TODO: fix
-                buttonPanel.add(new CubeGeneratorUI(canvasApplication.getWorld())); // TODO: fix
+                buttonPanel.setLayout(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.fill = GridBagConstraints.NONE;
+
+                gbc.gridy = 0;
+                buttonPanel.add(playButton, gbc);
+
+                gbc.gridy = 1;
+                buttonPanel.add(pauzeButton, gbc);
+
+                gbc.gridy = 2;
+                buttonPanel.add(b, gbc);
+
+                gbc.gridy = 3;
+                buttonPanel.add(b1, gbc);
+
+                gbc.gridy = 4;
+                buttonPanel.add(b2, gbc);
+
+                gbc.gridy = 5;
+                buttonPanel.add(new CubeUI(canvasApplication), gbc);
+
+                gbc.gridy = 6;
+                buttonPanel.add(new CubeGeneratorUI(canvasApplication), gbc);
                 window.add(buttonPanel);
                 window.pack();
                 window.setVisible(true);
