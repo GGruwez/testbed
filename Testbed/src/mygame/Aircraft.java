@@ -264,10 +264,10 @@ public class Aircraft extends Node {
         
         setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(NeglectValue).transform(getHeading(), getPitch(), getRoll()));
         setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(NeglectValue));
-    	Vector angularVel = getAngularVelocity().inverseTransform(getHeading(), getPitch(), getRoll());
-        setPitch(getPitch() + angularVel.getX()*time);
-    	setRoll(getRoll() + angularVel.getZ()*time);
-    	setHeading(getHeading() + angularVel.getY()*time);
+    	
+        setPitch(getPitch() + getAngularVelocity().inverseTransform(getHeading(), 0, 0).getX()*time);
+    	setRoll(getRoll() + getAngularVelocity().inverseTransform(getHeading(), getPitch(), getRoll()).getZ()*time);
+    	setHeading(getHeading() + getAngularVelocity().getY()*time);
 
         //Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
         //totalM.printVector("totalm ");
