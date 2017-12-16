@@ -16,24 +16,21 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import com.jme3.system.JmeContext;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
+public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
     private RenderCamera sas;
     private Aircraft aircraft;
     private World world;
-    public Cube goal;
-    public Cube goal2;
     private BitmapText aircraftInfo;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
 
-    public CustomView cv;
+    public CustomView chaseCameraCustomView;
     private boolean keepUpdating = true;
 
     private boolean mouseVisible = false;
@@ -73,25 +70,25 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
         planeCamViewPort.setClearFlags(true, true, true);
         planeCamViewPort.attachScene(rootNode);
-        planeCamViewPort.setBackgroundColor(ColorRGBA.Black);
+        planeCamViewPort.setBackgroundColor(ColorRGBA.White);
 
         // Plane chase camera viewport
         ViewPort chaseCamViewPort = renderManager.createMainView("chasecam view", world.getChaseCam());
         chaseCamViewPort.setClearFlags(true, true, true);
         chaseCamViewPort.attachScene(rootNode);
-        chaseCamViewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        chaseCamViewPort.setBackgroundColor(ColorRGBA.White);
         rootNode.attachChild(world.getChaseCamNode());
         // Top down camera viewport
         ViewPort topDownCamViewPort = renderManager.createMainView("top down cam view", world.getTopDownCam());
         topDownCamViewPort.setClearFlags(true, true, true);
         topDownCamViewPort.attachScene(rootNode);
-        topDownCamViewPort.setBackgroundColor(ColorRGBA.Black);
+        topDownCamViewPort.setBackgroundColor(ColorRGBA.White);
         rootNode.attachChild(world.getTopDownCamNode());
         // Side camera viewport
         ViewPort sideCamViewPort = renderManager.createMainView("top down cam view", world.getSideCam());
         sideCamViewPort.setClearFlags(true, true, true);
         sideCamViewPort.attachScene(rootNode);
-        sideCamViewPort.setBackgroundColor(ColorRGBA.DarkGray);
+        sideCamViewPort.setBackgroundColor(ColorRGBA.White);
         rootNode.attachChild(world.getSideCamNode());
 
         // Aircraft material
@@ -161,8 +158,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication{
 
 //        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
 
-        cv = new CustomView(this);
-//        cv.start(JmeContext.Type.Canvas);
+        chaseCameraCustomView = new CustomView(this);
+//        chaseCameraCustomView.start(JmeContext.Type.Canvas);
 
         callbackAfterAppInit.run();
 

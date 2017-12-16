@@ -1,7 +1,9 @@
 package mygame;
 
+import com.jme3.app.LegacyApplication;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
+import com.jme3.system.JmeContext;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -9,7 +11,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     
@@ -33,6 +36,9 @@ public class Main {
             app.start();
         }else {
             java.awt.EventQueue.invokeLater(() -> {
+                final CustomCanvas[] previousCanvas = {null};
+                Map<JPanel, CustomCanvas> canvasLinks = new HashMap<JPanel, CustomCanvas>();
+
                 int width = 1024;
                 int height = 768;
 
@@ -55,54 +61,39 @@ public class Main {
 
                 JTabbedPane tabbedPane = new JTabbedPane();
 
-                JComponent panel1 = new JPanel();
+                JPanel panel1 = new JPanel();
                 Canvas c = ctx.getCanvas();
-                
                 panel1.add(new Panel());
                 panel1.add(c);
-
+                previousCanvas[0] = canvasApplication;
+                canvasLinks.put(panel1, canvasApplication);
                 tabbedPane.addTab("Regular view", null, panel1);
-                CanvasManager canvasManager = new CanvasManager(c);
 
                 Callback aai = new Callback() {
 
                     @Override
                     public void run() {
-                        World world = canvasApplication.getWorld();
-                        JComponent panel2 = new JPanel();
-                        panel2.setLayout(new BoxLayout(panel2,BoxLayout.PAGE_AXIS));
-                        panel2.add(new CubeUI(world));
-                        panel2.add(new CubeGeneratorUI(world));
-                        JButton b = new JButton("generate cylinder");
-                        b.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {world.generateCylinder();}
-                        });
-                        panel2.add(new JButton("generate cylinder"));
-                        JButton b1 = new JButton("read from file");
-                        b1.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {world.generateCubes(world.readFile("cubePositions.txt"));}
-                        });
-                        panel2.add(b1);
-                        JButton b2 = new JButton("save setup");
-                        b2.addActionListener(new ActionListener() {
-                            public void actionPerformed(ActionEvent e) {world.writeFile("cubePositions");}
-                        });
-                        panel2.add(b2);
-                        
-                        tabbedPane.addTab("Configuration", null, panel2);
-                        canvasManager.put(1, ((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
+                        JPanel panel3 = new JPanel();
+                        panel3.add(new Panel());
+                        tabbedPane.addTab("Chase cam", null, panel3);
 
+                        canvasLinks.put(panel3, canvasApplication.chaseCameraCustomView);
 
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
                             public void stateChanged(ChangeEvent e) {
-//                                int currentIndex = tabbedPane.getSelectedIndex();
-//                                panel1.remove(canvasManager.getActiveCanvas());
-//                                panel1.add(canvasManager.getCanvas(currentIndex));
-                                canvasApplication.deselectView();
-                                panel1.removeAll();
-                                canvasApplication.cv.selectView();
-                                panel2.add(((JmeCanvasContext) canvasApplication.cv.getContext()).getCanvas());
+                                JPanel currentJPanel = (JPanel) tabbedPane.getSelectedComponent();
+                                canvasLinks.forEach((key, value) -> key.removeAll());
+                                if(canvasLinks.containsKey(currentJPanel)) {
+                                    CustomCanvas currentCanvas = canvasLinks.get(currentJPanel);
+                                    Canvas currentRealCanvas = ((JmeCanvasContext) currentCanvas.getContext()).getCanvas();
+                                    previousCanvas[0].deselectView();
+
+                                    currentCanvas.selectView();
+                                    currentJPanel.add(currentRealCanvas);
+                                    previousCanvas[0] = currentCanvas;
+
+                                }
                             }
                         });
                     }
@@ -110,7 +101,42 @@ public class Main {
                 canvasApplication.addCallBackAfterAppInit(aai);
 
                 panel.add(tabbedPane);
+                window.setLayout(new BoxLayout(window.getContentPane(),BoxLayout.X_AXIS));
                 window.add(panel);
+                JPanel buttonPanel = new JPanel();
+                JButton playButton = new JButton("start");
+                playButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        World world = canvasApplication.getWorld();
+                        if (world.isPaused()) world.continueSimulation();
+                        }});
+                JButton pauzeButton = new JButton("stop");
+                pauzeButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        World world = canvasApplication.getWorld();
+                        if (!world.isPaused()) world.pauseSimulation();
+                        }});
+                JButton b = new JButton("generate cylinder");
+                        b.addActionListener(new ActionListener() {
+                            public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().generateCylinder();}
+                        });
+                JButton b1 = new JButton("read from file");
+                b1.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().generateCubes(canvasApplication.getWorld().readFile("cubePositions.txt"));}
+                    });
+                JButton b2 = new JButton("save config");
+                b2.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().writeFile("cubePositions");}
+                    });
+                buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
+                buttonPanel.add(playButton);
+                buttonPanel.add(pauzeButton);
+                buttonPanel.add(b);
+                buttonPanel.add(b1);
+                buttonPanel.add(b2);
+                buttonPanel.add(new CubeUI(canvasApplication.getWorld())); // TODO: fix
+                buttonPanel.add(new CubeGeneratorUI(canvasApplication.getWorld())); // TODO: fix
+                window.add(buttonPanel);
                 window.pack();
                 window.setVisible(true);
 
