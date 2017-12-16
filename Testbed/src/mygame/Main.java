@@ -136,14 +136,30 @@ public class Main {
                 b2.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {canvasApplication.getWorld().writeFile("cubePositions");}
                     });
-                buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
-                buttonPanel.add(playButton);
-                buttonPanel.add(pauzeButton);
-                buttonPanel.add(b);
-                buttonPanel.add(b1);
-                buttonPanel.add(b2);
-                buttonPanel.add(new CubeUI(canvasApplication));
-                buttonPanel.add(new CubeGeneratorUI(canvasApplication));
+                buttonPanel.setLayout(new GridBagLayout());
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.fill = GridBagConstraints.NONE;
+
+                gbc.gridy = 0;
+                buttonPanel.add(playButton, gbc);
+
+                gbc.gridy = 1;
+                buttonPanel.add(pauzeButton, gbc);
+
+                gbc.gridy = 2;
+                buttonPanel.add(b, gbc);
+
+                gbc.gridy = 3;
+                buttonPanel.add(b1, gbc);
+
+                gbc.gridy = 4;
+                buttonPanel.add(b2, gbc);
+
+                gbc.gridy = 5;
+                buttonPanel.add(new CubeUI(canvasApplication), gbc);
+
+                gbc.gridy = 6;
+                buttonPanel.add(new CubeGeneratorUI(canvasApplication), gbc);
                 window.add(buttonPanel);
                 window.pack();
                 window.setVisible(true);
