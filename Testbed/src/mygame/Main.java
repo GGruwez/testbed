@@ -74,6 +74,10 @@ public class Main {
                         panel3.add(new Panel());
                         tabbedPane.addTab("Chase cam", null, panel3);
                         canvasPanels.add(panel3);
+                        JPanel panel4 = new JPanel();
+                        panel3.add(new Panel());
+                        tabbedPane.addTab("Top down cam", null, panel4);
+                        canvasPanels.add(panel4);
 
                         tabbedPane.addChangeListener(new ChangeListener() {
                             @Override
@@ -89,6 +93,11 @@ public class Main {
                                     case 1 :{
                                         // Chase cam
                                         newCanvas = canvasApplication.createAndGetChaseCameraCustomView();
+                                        break;
+                                    }
+                                    case 2 :{
+                                        // Top down cam
+                                        newCanvas = canvasApplication.createAndGetTopDownCameraCustomView();
                                         break;
                                     }
                                     default:{
