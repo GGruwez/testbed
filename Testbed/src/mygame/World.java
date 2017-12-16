@@ -104,7 +104,6 @@ public class World {
         };
         simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, SIMULATION_PERIOD);
 
-
         this.generateCubes(this.readFile("cubePositions.txt"));
     }
     

@@ -15,7 +15,7 @@ public class Log {
 
     public void addLine(Aircraft aircraft){
         lines += "\r\n";
-        lines += aircraft.getCalcCoordinates().toString() + "; ";
+        lines += aircraft.getCalcCoordinates().getY()+ "; ";
         lines += aircraft.getVelocity().toString() + "; ";
         lines += aircraft.getAcceleration().toString() + "; ";
         lines += aircraft.getPitch() + "; ";
