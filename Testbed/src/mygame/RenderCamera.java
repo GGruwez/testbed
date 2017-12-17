@@ -140,13 +140,13 @@ public class RenderCamera extends AbstractAppState implements SceneProcessor {
             int i = 1;
             for (int y = viewY; y < height+viewY; y++) {
                 for (int x = width+viewX; x > viewX ; x--) {
-//                    // Save image to file
-//                    // TODO: remove this + cleanup
+                    // Save image to file
+                    // TODO: remove this + cleanup
 //                    int r = bArray[(3*(y*totalWidth+x)+0)]& 0xff;
 //                    int g = bArray[(3*(y*totalWidth+x)+1)]& 0xff;
 //                    int b = bArray[(3*(y*totalWidth+x)+2)]& 0xff;
 //                    int rgb = 65536*r + 256*g + b;
-//                    image.setRGB(x-viewX, height-(y-viewY)-1, rgb);
+//                    image.setRGB(x-viewX-1, height-(y-viewY)-1, rgb);
 
                     // Fill image byte array
                     imageByteArray[imageByteArray.length - i++] = bArray[3*(y*totalWidth+(x))+0];

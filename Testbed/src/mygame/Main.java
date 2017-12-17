@@ -72,6 +72,9 @@ public class Main {
                         }
                         default: {
                             newCanvas = canvasApplication;
+                            // Render camera
+                            canvasApplication.renderCamera = new RenderCamera(canvasApplication.getAircraft().getCamera(), settings.getWidth(), settings.getHeight(), canvasApplication.getAircraft());
+                            canvasApplication.renderCamera.initialize(canvasApplication.getStateManager(), canvasApplication);
                         }
                     }
 

@@ -34,6 +34,8 @@ public class CustomDualView extends CustomView {
         sideCamViewPort2.attachScene(rootNode);
         sideCamViewPort2.setBackgroundColor(ColorRGBA.White);
         rootNode.attachChild(secondCamNode);
+
+        attachPlaneCamViewport();
     }
 
     public Camera getSecondCamera(){
