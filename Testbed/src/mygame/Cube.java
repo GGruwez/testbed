@@ -75,10 +75,10 @@ public class Cube extends Geometry {
         vertices_nX[3] = new Vector3f(x-0.5f, y+0.5f, z+0.5f);
         
         Vector3f [] vertices_nY = new Vector3f[4];
-        vertices_nY[0] = new Vector3f(x-0.5f, y-0.5f, z+0.5f);
-        vertices_nY[1] = new Vector3f(x+0.5f, y-0.5f, z+0.5f);
-        vertices_nY[2] = new Vector3f(x-0.5f, y-0.5f, z-0.5f);
-        vertices_nY[3] = new Vector3f(x+0.5f, y-0.5f, z-0.5f);
+        vertices_nY[0] = new Vector3f(x+0.5f, y-0.5f, z+0.5f);
+        vertices_nY[1] = new Vector3f(x-0.5f, y-0.5f, z+0.5f);
+        vertices_nY[2] = new Vector3f(x+0.5f, y-0.5f, z-0.5f);
+        vertices_nY[3] = new Vector3f(x-0.5f, y-0.5f, z-0.5f);
         
         Vector3f [] vertices_nZ = new Vector3f[4];
         vertices_nZ[0] = new Vector3f(x+0.5f, y-0.5f, z-0.5f);
