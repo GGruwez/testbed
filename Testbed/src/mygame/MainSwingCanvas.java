@@ -38,7 +38,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private LinkedList<Spatial> destructibleSpatialQueue = new LinkedList<Spatial>();
 
     public CustomView chaseCameraCustomView;
-    public CustomView topDownCameraCustomView;
+    public CustomDualView topDownCameraCustomView;
     private boolean keepUpdating = true;
 
     private boolean mouseVisible = false;
@@ -183,7 +183,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
 
     private void createTopDownCameraCustomView() {
-        this.topDownCameraCustomView = new CustomView(this);
+        this.topDownCameraCustomView = new CustomDualView(this);
     }
 
     CustomView createAndGetTopDownCameraCustomView(){
@@ -241,9 +241,13 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         });
 
         // Update top down camera
-        this.topDownCameraCustomView.updateCamera(cv -> {
-            cv.getCameraNode().setLocalTranslation(0, 80, -100);
-            cv.getCameraNode().lookAt(new Vector3f(0, 0, -100), Vector3f.UNIT_X);
+        this.topDownCameraCustomView.updateCamera((CustomDualViewCallback) cv -> {
+            cv.getCameraNode().setLocalTranslation(-80, 80, -100);
+            cv.getCameraNode().lookAt(new Vector3f(-80, 0, -100), Vector3f.UNIT_X);
+
+            cv.getSecondCamera().resize(cv.width, cv.height/2, false);
+            cv.getSecondCameraNode().setLocalTranslation(-30, 0, -100);
+            cv.getSecondCameraNode().lookAt(new Vector3f(0, 0, -100), Vector3f.UNIT_Y);
         });
 
     }

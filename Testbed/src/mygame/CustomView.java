@@ -5,6 +5,7 @@ import com.jme3.app.state.AppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.profile.AppStep;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -19,6 +20,7 @@ import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeSystem;
 
 import java.awt.*;
+import java.util.HashMap;
 
 public class CustomView extends LegacyApplication implements CustomCanvas {
     protected Node rootNode;
@@ -27,8 +29,11 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
     protected BitmapFont guiFont;
     protected boolean showSettings;
 
-    private int width;
-    private int height;
+    protected int width;
+    protected int height;
+
+    private Camera secondCamera;
+    private CameraNode secondCameraNode;
 
     private boolean keepUpdating = false;
 
