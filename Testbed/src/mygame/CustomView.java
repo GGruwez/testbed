@@ -20,7 +20,6 @@ import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeSystem;
 
 import java.awt.*;
-import java.util.HashMap;
 
 public class CustomView extends LegacyApplication implements CustomCanvas {
     protected Node rootNode;
