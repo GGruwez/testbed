@@ -32,9 +32,6 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
     protected int width;
     protected int height;
 
-    private Camera secondCamera;
-    private CameraNode secondCameraNode;
-
     private boolean keepUpdating = false;
 
     private MainSwingCanvas mainCanvas;
