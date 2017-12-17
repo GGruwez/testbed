@@ -148,7 +148,7 @@ public class Main {
             JButton b2 = new JButton("save config");
             b2.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().writeFile("cubePositions");
+                    canvasApplication.getWorld().writeFile("cubePositions.txt");
                 }
             });
             buttonPanel.setLayout(new GridBagLayout());

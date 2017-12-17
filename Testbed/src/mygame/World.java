@@ -295,7 +295,7 @@ public class World {
             for(Cube cube:cubesInWorld) {
                 Vector pos = this.cubePositions.get(cube);
                 String empty = " ";
-                String line = String.valueOf(pos.getX())+empty + String.valueOf(pos.getY())+empty+String.valueOf(pos.getZ()) + "\n";
+                String line = String.valueOf(pos.getX())+empty + String.valueOf(pos.getY())+empty+String.valueOf(pos.getZ()) + System.lineSeparator();
                 writer.write(line);  
             }
             writer.close();
