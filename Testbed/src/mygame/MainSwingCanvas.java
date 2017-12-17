@@ -11,11 +11,14 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Box;
 
 import java.io.IOException;
@@ -35,6 +38,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private LinkedList<Spatial> destructibleSpatialQueue = new LinkedList<Spatial>();
 
     public CustomView chaseCameraCustomView;
+    public CustomDualView topDownCameraCustomView;
     private boolean keepUpdating = true;
 
     private boolean mouseVisible = false;
@@ -162,6 +166,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 //        getRootNode().attachChild(SkyFactory.createSky(getAssetManager(), "Textures/Sky/Bright/BrightSky.dds", SkyFactory.EnvMapType.CubeMap));
 
         createChaseCameraCustomView();
+        createTopDownCameraCustomView();
 
         callbackAfterAppInit.run();
 
@@ -175,6 +180,15 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     CustomView createAndGetChaseCameraCustomView(){
         this.createChaseCameraCustomView();
         return this.chaseCameraCustomView;
+    }
+
+    private void createTopDownCameraCustomView() {
+        this.topDownCameraCustomView = new CustomDualView(this);
+    }
+
+    CustomView createAndGetTopDownCameraCustomView(){
+        this.createTopDownCameraCustomView();
+        return this.topDownCameraCustomView;
     }
 
     @Override
@@ -205,13 +219,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
             world.evolve(tpf);
 
-            // Update chase camera
-            this.chaseCameraCustomView.updateCamera(cv -> {
-                Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
-                cv.getCameraNode().setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
-                Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
-                cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
-            });
+            updateDifferentCameras();
+
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -220,6 +229,27 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         this.refreshAircraftInfo();
         log.addLine(this.getAircraft());
         log.save();
+    }
+
+    private void updateDifferentCameras(){
+        // Update chase camera
+        this.chaseCameraCustomView.updateCamera(cv -> {
+            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
+            cv.getCameraNode().setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
+            Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
+            cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
+        });
+
+        // Update top down camera
+        this.topDownCameraCustomView.updateCamera((CustomDualViewCallback) cv -> {
+            cv.getCameraNode().setLocalTranslation(-80, 80, -100);
+            cv.getCameraNode().lookAt(new Vector3f(-80, 0, -100), Vector3f.UNIT_X);
+
+            cv.getSecondCamera().resize(cv.width, cv.height/2, false);
+            cv.getSecondCameraNode().setLocalTranslation(-30, 0, -100);
+            cv.getSecondCameraNode().lookAt(new Vector3f(0, 0, -100), Vector3f.UNIT_Y);
+        });
+
     }
 
     public void refreshAircraftInfo(){
