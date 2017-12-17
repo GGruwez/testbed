@@ -22,6 +22,7 @@ import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Box;
 
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -210,15 +211,31 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             initialFrame = false;
         }
         try {
+
             // Link new items
-            newSpatialQueue.forEach(i->rootNode.attachChild(i));
-            emptyNewSpatialQueue();
-            // Unlink old items
-            destructibleSpatialQueue.forEach(i->rootNode.detachChild(i));
-            emptyDestructibleSpatialQueue();
+            try {
+                while (!newSpatialQueue.isEmpty()) {
+                    synchronized(newSpatialQueue){
+                        if(!newSpatialQueue.isEmpty()) {
+                            rootNode.attachChild(newSpatialQueue.peek());
+                            newSpatialQueue.pop();
+                        }
+                    }
+                }
+                // Unlink old items
+                while (!destructibleSpatialQueue.isEmpty()) {
+                    synchronized(destructibleSpatialQueue) {
+                        if(!destructibleSpatialQueue.isEmpty()) {
+                            rootNode.detachChild(destructibleSpatialQueue.peek());
+                            destructibleSpatialQueue.pop();
+                        }
+                    }
+                }
 
-            world.evolve(tpf);
-
+                world.evolve(tpf);
+            }catch (ConcurrentModificationException cme){
+                System.out.println("Concurrent modification exception, completing later.");
+            }
             updateDifferentCameras();
 
         } catch (IOException ex) {
@@ -364,19 +381,27 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
 
     public void emptyNewSpatialQueue(){
-        this.newSpatialQueue.clear();
+        synchronized(newSpatialQueue){
+            this.newSpatialQueue.clear();
+        }
     }
 
     public void addToNewSpatialQueue(Spatial newItem){
-        this.newSpatialQueue.add(newItem);
+        synchronized(newSpatialQueue) {
+            this.newSpatialQueue.add(newItem);
+        }
     }
 
     public void emptyDestructibleSpatialQueue(){
-        this.destructibleSpatialQueue.clear();
+        synchronized(destructibleSpatialQueue){
+            this.destructibleSpatialQueue.clear();
+        }
     }
 
     public void addToDestructibleSpatialQueue(Spatial newItem){
-        this.destructibleSpatialQueue.add(newItem);
+        synchronized(destructibleSpatialQueue){
+            this.destructibleSpatialQueue.add(newItem);
+        }
     }
 
 }

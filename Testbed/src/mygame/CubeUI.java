@@ -17,7 +17,7 @@ class CubeUI extends JPanel {
     private JTextField zField = new JTextField();
     private JButton addCube = new JButton("Add cube");
 
-    public CubeUI(MainSwingCanvas canvasApplication) {
+    public CubeUI(MainSwingCanvas canvasApplication, Callback onClick) {
         super(new FlowLayout());
 
         this.canvasApplication = canvasApplication;
@@ -34,10 +34,10 @@ class CubeUI extends JPanel {
                 xField.setText("");
                 yField.setText("");
                 zField.setText("");
+                onClick.run();
             }
         });
         this.add(addCube);
-
     }
 
     public World getWorld() {
