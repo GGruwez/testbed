@@ -17,7 +17,7 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     private float engineMass = 0.5f;
     private float wingMass = 0.5f;
     private float tailMass = 0.5f;
-    private float maxThrust = 40;
+    private float maxThrust = 10;
     private float maxAOA = (float) Math.PI/5;
     private float wingLiftSlope = 1f;
     private float horStabLiftSlope = 1f;

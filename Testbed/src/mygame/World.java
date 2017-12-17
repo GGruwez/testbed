@@ -87,7 +87,7 @@ public class World {
         };
         simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, SIMULATION_PERIOD);
 
-        this.generateCubes(this.readFile("cubePositions.txt"));
+        //this.generateCubes(this.readFile("cubePositions.txt"));
     }
 
     public void setAircraft(Aircraft aircraft) {
