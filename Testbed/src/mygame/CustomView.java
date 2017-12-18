@@ -4,6 +4,8 @@ import com.jme3.app.LegacyApplication;
 import com.jme3.app.state.AppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.profile.AppStep;
@@ -12,9 +14,11 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.CameraNode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.JmeSystem;
@@ -33,7 +37,7 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
 
     private boolean keepUpdating = false;
 
-    private MainSwingCanvas mainCanvas;
+    protected MainSwingCanvas mainCanvas;
 
     private CameraNode camNode;
 
@@ -174,7 +178,45 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
         camViewport.setBackgroundColor(ColorRGBA.White);
         this.viewPort = camViewport;
 
+
+        attachPlaneCamViewport();
+
     };
+
+    protected void attachPlaneCamViewport(){
+        // Create black border material
+        Material mat = new Material(getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", new ColorRGBA(0.8f, 0.8f, 0.8f, 0));
+
+        // Create border
+        int cameraWidth = mainCanvas.getAircraft().getCamera().getWidth() + 2;
+        int cameraHeight = mainCanvas.getAircraft().getCamera().getHeight();
+        int horizontalOffset = -23;
+        // top
+        Geometry rectTop = new Geometry("rectTop", new Quad(cameraWidth, 1));
+        rectTop.setMaterial(mat);
+        guiNode.attachChild(rectTop);
+        guiNode.getChild("rectTop").setLocalTranslation(settings.getWidth()+horizontalOffset-cameraWidth, cameraHeight, 10);
+        // left
+        Geometry rectLeft = new Geometry("rectLeft", new Quad(1, cameraHeight));
+        rectLeft.setMaterial(mat);
+        guiNode.attachChild(rectLeft);
+        guiNode.getChild("rectLeft").setLocalTranslation(settings.getWidth()+horizontalOffset-cameraWidth, 0, 10);
+        // right
+        Geometry rectRight = new Geometry("rectRight", new Quad(1, cameraHeight));
+        rectRight.setMaterial(mat);
+        guiNode.attachChild(rectRight);
+        guiNode.getChild("rectRight").setLocalTranslation(settings.getWidth()+horizontalOffset, 0, 10);
+
+        // Plane camera viewport
+        ViewPort planeCamViewPort = renderManager.createMainView("planecam view", mainCanvas.getAircraft().getCamera());
+        planeCamViewPort.setClearFlags(true, true, true);
+        planeCamViewPort.attachScene(rootNode);
+        planeCamViewPort.setBackgroundColor(ColorRGBA.White);
+        // Render camera
+        mainCanvas.renderCamera = new RenderCamera(mainCanvas.getAircraft().getCamera(), settings.getWidth(), settings.getHeight(), mainCanvas.getAircraft());
+        mainCanvas.renderCamera.initialize(this.getStateManager(), this);
+    }
 
     public void simpleUpdate(float tpf) {
 

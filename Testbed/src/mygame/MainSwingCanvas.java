@@ -11,14 +11,11 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Box;
 
 import java.io.IOException;
@@ -29,7 +26,7 @@ import java.util.logging.Logger;
 
 public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
-    private RenderCamera sas;
+    protected RenderCamera renderCamera;
     private Aircraft aircraft;
     private World world;
     private BitmapText aircraftInfo;
@@ -128,8 +125,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         //rootNode.attachChild(goalCube);
         rootNode.attachChild(aircraft);
 
-        sas = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight(), aircraft);
-        sas.initialize(stateManager, this);
+        renderCamera = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight(), aircraft);
+        renderCamera.initialize(stateManager, this);
 
         world.setGoal(goalCube.getLocalTranslation().getX(),
                 goalCube.getLocalTranslation().getY(),
@@ -144,7 +141,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         // Change camera view to show both cube and aircraft in one shot
         cam.setLocation(new Vector3f(-100, 0, 0));
-        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
+        cam.lookAt(new Vector3f(0, 0, 0), Vector3f.ZERO);
 
 //        new CubeUI(world);
 
@@ -241,7 +238,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        sas.grabCamera();
+        renderCamera.grabCamera();
 
         this.refreshAircraftInfo();
         log.addLine(this.getAircraft());

@@ -134,23 +134,23 @@ public class Force {
 
         return this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), 
 
-                getAircraft().getPitch(), getAircraft().getRoll()).add(this.getAircraft().
-                getWingX().crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(), 
-                getAircraft().getPitch(), getAircraft().getRoll())));
+                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getAircraft().
+                //getWingX().crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(), 
+                //getAircraft().getPitch(), getAircraft().getRoll())));
     }
 
     public Vector getLeftWingVelocity(){
         return this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), 
-                getAircraft().getPitch(), getAircraft().getRoll()).add(this.getAircraft().
-                getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(), 
-                getAircraft().getPitch(), getAircraft().getRoll())));
+                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getAircraft().
+                //getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(), 
+               // getAircraft().getPitch(), getAircraft().getRoll())));
     }
 
     public Vector getStabilizerVelocity(){
         return this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), 
-                getAircraft().getPitch(), getAircraft().getRoll()).add(this.getAircraft().
-                getTailSize().crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(), 
-                getAircraft().getPitch(), getAircraft().getRoll())));
+                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getAircraft().
+                //getTailSize().crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(), 
+                //getAircraft().getPitch(), getAircraft().getRoll())));
 
     }
 

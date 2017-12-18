@@ -72,6 +72,9 @@ public class Main {
                         }
                         default: {
                             newCanvas = canvasApplication;
+                            // Render camera
+                            canvasApplication.renderCamera = new RenderCamera(canvasApplication.getAircraft().getCamera(), settings.getWidth(), settings.getHeight(), canvasApplication.getAircraft());
+                            canvasApplication.renderCamera.initialize(canvasApplication.getStateManager(), canvasApplication);
                         }
                     }
 
@@ -148,7 +151,7 @@ public class Main {
             JButton b2 = new JButton("save config");
             b2.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().writeFile("cubePositions");
+                    canvasApplication.getWorld().writeFile("cubePositions.txt");
                 }
             });
             buttonPanel.setLayout(new GridBagLayout());
