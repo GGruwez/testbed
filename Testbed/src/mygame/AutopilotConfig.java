@@ -17,26 +17,26 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     private float engineMass = 312f;
     private float wingMass = 50f;
     private float tailMass = 100f;
-    private float maxThrust = 10f;
+    private float maxThrust = 167f;
     private float maxAOA = (float) Math.PI/12;
-    private float wingLiftSlope = 1f;
-    private float horStabLiftSlope = 1f;
-    private float verStabLiftSlope = 0.1f;
+    private float wingLiftSlope = 1.97f;
+    private float horStabLiftSlope = 1.97f;
+    private float verStabLiftSlope = 1.53f;
     private float horAngleOfView = 120;
     private float verAngleOfView = 120;
     private int nbColumns = 200;
     private int nbRows = 200;
     	
-	private String droneID;
-    private float wheelY;
-    private float frontWheelZ;
-    private float rearWheelZ;
-    private float rearWheelX;
-    private float tyreSlope;
-    private float dampSlope;
-    private float tyreRadius;
-    private float rMax;     //maximal breaking power on each wheel
-    private float fcMax;  //maximal friction coefficient for rear wheels 
+	private String droneID = "PREDATOR";
+    private float wheelY = -1.52f; //coordinates
+    private float frontWheelZ = -2.44f; //coordinates
+    private float rearWheelZ = 0.3f; //coordinates
+    private float rearWheelX = 1.22f; //coordinates
+    private float tyreSlope = 1f;
+    private float dampSlope = 1f;
+    private float tyreRadius = 0.2f;
+    private float rMax = 100f;     //maximal breaking power on each wheel
+    private float fcMax = 0.01f;  //maximal friction coefficient for rear wheels 
     private float horizontalAngleOfView;
     private float verticalAngleOfView;
    
