@@ -87,7 +87,11 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
     }
 
     public void initialize() {
-        super.initialize();
+        try {
+            super.initialize();
+        }catch(IllegalArgumentException ex){
+            System.out.println(ex.getMessage());
+        }
         this.guiFont = this.loadGuiFont();
         this.guiNode.setQueueBucket(Bucket.Gui);
         this.guiNode.setCullHint(CullHint.Never);

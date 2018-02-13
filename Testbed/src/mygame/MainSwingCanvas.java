@@ -141,7 +141,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         // Change camera view to show both cube and aircraft in one shot
         cam.setLocation(new Vector3f(-100, 0, 0));
-        cam.lookAt(new Vector3f(0, 0, 30), Vector3f.ZERO);
+        cam.lookAt(new Vector3f(0, 0, 0), Vector3f.ZERO);
 
 //        new CubeUI(world);
 
