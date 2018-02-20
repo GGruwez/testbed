@@ -1,5 +1,6 @@
 package mygame;
 
+import com.jme3.material.Material;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,10 +8,16 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.math.Plane;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
+import com.jme3.scene.Node;
+import com.jme3.scene.shape.Quad;
 import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
 import interfaces.AutopilotInputs;
@@ -27,6 +34,7 @@ public class World {
     private boolean simulation;
     private boolean paused = true;
     private Vector goal;
+    private Geometry ground;
 
     private Camera chaseCam;
     private CameraNode chaseCamNode;
@@ -68,10 +76,13 @@ public class World {
         this.sideCamNode.setLocalTranslation(-50, 0, 0);
         this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
 
+        
+        
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-
+        
+        this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
         Timer simulationTimer = new Timer(true);
@@ -303,5 +314,17 @@ public class World {
         catch(IOException e) {}
        
        
+    }
+    
+    private void newGround() {
+        Quad groundQuad = new Quad(10000,10000);
+        Geometry myGround = new Geometry("ground",groundQuad);
+        Material mat = new Material(mainSwingCanvas.getAssetManager(),"Common/MatDefs/Misc/Unshaded.j3md");  
+        mat.setColor("Color", ColorRGBA.Green);
+        myGround.setMaterial(mat);
+        myGround.center();
+        myGround.rotate((float) Math.PI/2,0,0);
+        this.mainSwingCanvas.getRootNode().attachChild(myGround);
+        this.ground = myGround;
     }
 }
