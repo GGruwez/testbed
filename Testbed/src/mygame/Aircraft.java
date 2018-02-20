@@ -241,6 +241,10 @@ public class Aircraft extends Node {
     public void setVerStabInclination(float verStabInclination) {
         this.verStabInclination = verStabInclination;
     }
+    
+    public float getTyreRadius(){
+    	return this.getConfig().getTyreRadius();
+    }
 
     public float getElapsedTime() {
         return elapsedTime;
