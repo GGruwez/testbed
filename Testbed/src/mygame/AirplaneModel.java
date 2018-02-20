@@ -26,6 +26,10 @@ public class AirplaneModel extends Node{
 
     private AssetManager assetManager;
 
+    /**
+     * The airplane's center of mass coincides with the node's origin (0, 0, 0)
+     * @param manager
+     */
     public AirplaneModel(AssetManager manager){
         this.assetManager = manager;
 
@@ -79,7 +83,7 @@ public class AirplaneModel extends Node{
         frontWheel.setLocalTranslation(0, wheelY, frontWheelZ + planeTailMassOffset);
         attachChild(frontWheel);
 
-        ColorBox modelCenter = new ColorBox(wingWidth, 0.3f, 0.3f, this.assetManager, ColorRGBA.Green); // origin
+        ColorBox modelCenter = new ColorBox(wingWidth, 0.3f, 0.3f, this.assetManager, ColorRGBA.Orange); // origin
         attachChild(modelCenter);
 
     }

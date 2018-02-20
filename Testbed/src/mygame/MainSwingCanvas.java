@@ -66,9 +66,9 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
 
-        Box plane = new Box(1,1,2);
-        Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        AirplaneModel apm = new AirplaneModel(getAssetManager());
+//        getRootNode().attachChild(apm);
+        aircraft = new Aircraft("Plane", apm, 0, 0, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
 
         // Plane camera viewport
@@ -95,11 +95,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         sideCamViewPort.attachScene(rootNode);
         sideCamViewPort.setBackgroundColor(ColorRGBA.White);
         rootNode.attachChild(world.getSideCamNode());
-
-        // Aircraft material
-        Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        planeMaterial.setColor("Color", ColorRGBA.Gray);
-        aircraft.getAircraftGeometry().setMaterial(planeMaterial);
 
         // Move aircraft to starting position
 //         Quaternion pitchQuat = new Quaternion();
@@ -165,9 +160,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         createChaseCameraCustomView();
         createTopDownCameraCustomView();
-
-        AirplaneModel apm = new AirplaneModel(getAssetManager());
-        getRootNode().attachChild(apm);
 
         callbackAfterAppInit.run();
 
