@@ -166,6 +166,9 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         createChaseCameraCustomView();
         createTopDownCameraCustomView();
 
+        AirplaneModel apm = new AirplaneModel(getAssetManager());
+        getRootNode().attachChild(apm);
+
         callbackAfterAppInit.run();
 
     }
@@ -320,9 +323,13 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         inputManager.addMapping("PlaneNegStab",  new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("ReleaseMouse",  new KeyTrigger(KeyInput.KEY_R));
         inputManager.addMapping("Pause",  new KeyTrigger(KeyInput.KEY_P));
+        inputManager.addMapping("CameraStrafeLeft",  new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("CameraStrafeRight",  new KeyTrigger(KeyInput.KEY_L));
+        inputManager.addMapping("CameraForward",  new KeyTrigger(KeyInput.KEY_I));
+        inputManager.addMapping("CameraBackward",  new KeyTrigger(KeyInput.KEY_K));
         // Add the names to the action listener.
         inputManager.addListener(actionListener,"SwitchControl", "ReleaseMouse", "Pause");
-        inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab");
+        inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab", "CameraStrafeLeft", "CameraStrafeRight", "CameraForward", "CameraBackward");
 
     }
 
@@ -348,19 +355,52 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         mouseVisible = !mouseVisible;
     }
 
+    // TODO: derived from jmonkey source code, add credits
+    private void moveCamera(float value, boolean sideways){
+        Vector3f vel = new Vector3f();
+        Vector3f pos = cam.getLocation().clone();
+
+        if (sideways){
+            cam.getLeft(vel);
+        }else{
+            cam.getDirection(vel);
+        }
+        vel.multLocal(value * 10);
+        pos.addLocal(vel);
+
+        cam.setLocation(pos);
+    }
+
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
             Aircraft ac = MainSwingCanvas.this.getAircraft();
-            if(name == "PlaneLeft"){
-                ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
-                ac.setRightWingInclination(ac.getRightWingInclination() + 0.01f);
-            }else if(name == "PlaneRight"){
-                ac.setLeftWingInclination(ac.getLeftWingInclination() + 0.01f);
-                ac.setRightWingInclination(ac.getRightWingInclination() - 0.01f);
-            }else if(name == "PlanePosStab"){
-                ac.setHorStabInclination(ac.getHorStabInclination() + 0.001f);
-            }else if(name == "PlaneNegStab"){
-                ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);
+            switch (name) {
+                case "PlaneLeft":
+                    ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
+                    ac.setRightWingInclination(ac.getRightWingInclination() + 0.01f);
+                    break;
+                case "PlaneRight":
+                    ac.setLeftWingInclination(ac.getLeftWingInclination() + 0.01f);
+                    ac.setRightWingInclination(ac.getRightWingInclination() - 0.01f);
+                    break;
+                case "PlanePosStab":
+                    ac.setHorStabInclination(ac.getHorStabInclination() + 0.001f);
+                    break;
+                case "PlaneNegStab":
+                    ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);
+                    break;
+                case "CameraStrafeLeft":
+                    moveCamera(value, true);
+                    break;
+                case "CameraStrafeRight":
+                    moveCamera(-value, true);
+                    break;
+                case "CameraForward":
+                    moveCamera(value, false);
+                    break;
+                case "CameraBackward":
+                    moveCamera(-value, false);
+                    break;
             }
         }
     };
