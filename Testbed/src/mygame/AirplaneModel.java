@@ -42,6 +42,11 @@ public class AirplaneModel extends Node{
         float wingWidth = 7.4f; // FROM CONSTANTS
         float wingLength = 2; // Wing depth
 
+        float rearWheelX = 1.22f; // FROM CONSTANTS
+        float wheelY = -1.52f; // FROM CONSTANTS
+        float rearWheelZ = 0.3f; // FROM CONSTANTS
+        float frontWheelZ = -2.44f; // FROM CONSTANTS
+
         float planeTailMassOffset = planeLength - tailSize; // Difference between the front of the plane and the mass centre of the plane
 
         // Body
@@ -60,6 +65,22 @@ public class AirplaneModel extends Node{
         MetalBox rightWing = new MetalBox(wingWidth, wingHeight, wingLength, this.assetManager);
         rightWing.setLocalTranslation((wingWidth + planeWidth/2), 0, 0);
         attachChild(rightWing);
+
+        // Rear wheel 1
+        ColorBox rearWheel1 = new ColorBox(0.3f, 0.3f, 0.3f, this.assetManager, ColorRGBA.Black);
+        rearWheel1.setLocalTranslation(rearWheelX, wheelY, rearWheelZ + planeTailMassOffset);
+        attachChild(rearWheel1);
+        // Rear wheel 2
+        ColorBox rearWheel2 = new ColorBox(0.3f, 0.3f, 0.3f, this.assetManager, ColorRGBA.Black);
+        rearWheel2.setLocalTranslation(-rearWheelX, wheelY, rearWheelZ + planeTailMassOffset);
+        attachChild(rearWheel2);
+        // Front wheel
+        ColorBox frontWheel = new ColorBox(0.3f, 0.3f, 0.3f, this.assetManager, ColorRGBA.Black);
+        frontWheel.setLocalTranslation(0, wheelY, frontWheelZ + planeTailMassOffset);
+        attachChild(frontWheel);
+
+        ColorBox modelCenter = new ColorBox(wingWidth, 0.3f, 0.3f, this.assetManager, ColorRGBA.Green); // origin
+        attachChild(modelCenter);
 
     }
 

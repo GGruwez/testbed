@@ -116,52 +116,42 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
         return this.nbRows;
     }
     
-    @Override
     public String getDroneID() {
         return this.droneID;    
     }
     
-    @Override
     public float getWheelY() {
         return this.wheelY;    
     }
     
-    @Override
     public float getFrontWheelZ() {
         return this.frontWheelZ;    
     }
     
-    @Override
     public float getRearWheelZ() {
         return this.rearWheelZ;    
     }
     
-    @Override
     public float getRearWheelX() {
         return this.rearWheelX;    
     }
    
-    @Override
     public float getTyreSlope() {
         return this.tyreSlope;    
     }
     
-    @Override
     public float getDampSlope() {
         return this.dampSlope;    
     }
     
-    @Override
     public float getTyreRadius() {
         return this.tyreRadius;    
     }
     
-    @Override
     public float getrMax() {
         return this.rMax;    
     }
     
-    @Override
     public float getfcMax() {
         return this.fcMax;    
     }

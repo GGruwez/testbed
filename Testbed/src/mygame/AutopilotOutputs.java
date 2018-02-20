@@ -46,16 +46,14 @@ public class AutopilotOutputs implements p_en_o_cw_2017.AutopilotOutputs{
         return this.verStabInclination;
     }
     
-    @Override
     public float getFrontBrakeForce(){
     	return this.frontBrakeForce;
     }
     
-    @Override
     public float getLeftBrakeForce(){
     	return this.frontBrakeForce;
     }
-    @Override
+
     public float getRightBrakeForce(){
     	return this.frontBrakeForce;
     }
