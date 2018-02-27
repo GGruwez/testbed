@@ -35,7 +35,7 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     private float tyreSlope = 1f;
     private float dampSlope = 1f;
     private float tyreRadius = 0.2f;
-    private float rMax = 100f;     //maximal breaking power on each wheel
+    private float rMax = 100f;    //maximal breaking power on each wheel
     private float fcMax = 0.01f;  //maximal friction coefficient for rear wheels 
     private float horizontalAngleOfView;
     private float verticalAngleOfView;
