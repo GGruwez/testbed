@@ -20,12 +20,12 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.terrain.geomipmap.TerrainGrid;
-import com.jme3.terrain.geomipmap.TerrainGridTileLoader;
-import com.jme3.terrain.geomipmap.TerrainLodControl;
-import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.geomipmap.*;
+import com.jme3.terrain.geomipmap.grid.ImageTileLoader;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
 import com.jme3.terrain.heightmap.ImageBasedHeightMap;
+import com.jme3.terrain.heightmap.Namer;
 import com.jme3.texture.Texture;
 
 import java.io.IOException;
@@ -80,7 +80,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         AirplaneModel apm = new AirplaneModel(getAssetManager());
 //        getRootNode().attachChild(apm);
-        aircraft = new Aircraft("Plane", apm, 0, 0, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", apm, 0, 100, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
 
         // Plane camera viewport
@@ -120,7 +120,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         float d =0;
         double x =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
         double y =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
-        aircraft.setLocalTranslation((float) x,(float) y,d);
+//        aircraft.setLocalTranslation((float) x,(float) y,d);
 //        aircraft.setLocalRotation(totalQuat);
 
 
@@ -371,7 +371,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         }else{
             cam.getDirection(vel);
         }
-        vel.multLocal(value * 10);
+        vel.multLocal(value * 50); // 50 determines camera movement speed
         pos.addLocal(vel);
 
         cam.setLocation(pos);
@@ -474,15 +474,20 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         heightmap = new ImageBasedHeightMap(heightMapImage.getImage(), 1f);
         heightmap.load();
 
-        TerrainQuad terrain = new TerrainQuad("terrain", 65, 513, heightmap.getHeightMap());
+        TerrainGrid terrain = new TerrainGrid("terrain", 100, 257, new ImageTileLoader(assetManager, new Namer() {
+
+            public String getName(int x, int y) {
+                return "Textures/Terrain/splat/mountains512.png";
+            }
+        }));
         terrain.setMaterial(matRock);
-        terrain.setLocalScale(2f, 1f, 2f); // scale to make it less steep
-        List<Camera> cameras = new ArrayList<>();
-        cameras.add(getCamera());
-        TerrainLodControl control = new TerrainLodControl(terrain, cameras);
-        terrain.addControl(control);
         terrain.setLocalTranslation(0, 0, 0);
-        rootNode.attachChild(terrain);
+        terrain.setLocalScale(5f, 1f, 5f);
+        this.rootNode.attachChild(terrain);
+
+        TerrainLodControl control = new TerrainGridLodControl(terrain, getCamera());
+        control.setLodCalculator( new DistanceLodCalculator(100, 3f) );
+        terrain.addControl(control);
     }
 
 }
