@@ -182,6 +182,7 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
         camViewport.setBackgroundColor(ColorRGBA.White);
         this.viewPort = camViewport;
 
+        mainCanvas.addLodControlToTerrain(this.cam);
 
         attachPlaneCamViewport();
 

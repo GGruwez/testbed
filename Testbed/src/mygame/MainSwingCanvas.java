@@ -42,6 +42,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private Aircraft aircraft;
     private World world;
     private BitmapText aircraftInfo;
+    private TerrainGrid terrain;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
     private LinkedList<Spatial> newSpatialQueue = new LinkedList<Spatial>();
@@ -459,23 +460,12 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         grass.setWrap(Texture.WrapMode.Repeat);
         matRock.setTexture("Tex1", grass);
         matRock.setFloat("Tex1Scale", 65f);
-        // load dirt texture
-        Texture dirt = assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg");
-        dirt.setWrap(Texture.WrapMode.Repeat);
-        matRock.setTexture("Tex2", dirt);
-        matRock.setFloat("Tex2Scale", 32f);
-        // load rock texture
-        Texture rock = assetManager.loadTexture("Textures/Terrain/splat/road.jpg");
-        rock.setWrap(Texture.WrapMode.Repeat);
-        matRock.setTexture("Tex3", rock);
-        matRock.setFloat("Tex3Scale", 128f);
 
         AbstractHeightMap heightmap = null;
         heightmap = new ImageBasedHeightMap(heightMapImage.getImage(), 1f);
         heightmap.load();
 
-        TerrainGrid terrain = new TerrainGrid("terrain", 100, 257, new ImageTileLoader(assetManager, new Namer() {
-
+        this.terrain = new TerrainGrid("terrain", 512, 257, new ImageTileLoader(assetManager, new Namer() {
             public String getName(int x, int y) {
                 return "Textures/Terrain/splat/mountains512.png";
             }
@@ -485,9 +475,13 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         terrain.setLocalScale(5f, 1f, 5f);
         this.rootNode.attachChild(terrain);
 
-        TerrainLodControl control = new TerrainGridLodControl(terrain, getCamera());
-        control.setLodCalculator( new DistanceLodCalculator(100, 3f) );
-        terrain.addControl(control);
+        addLodControlToTerrain(getCamera());
+    }
+
+    public void addLodControlToTerrain(Camera cam){
+        TerrainLodControl control = new TerrainGridLodControl(terrain, cam); // TODO: multiple camera's
+        control.setLodCalculator( new DistanceLodCalculator(512, 3f) );
+        this.terrain.addControl(control);
     }
 
 }
