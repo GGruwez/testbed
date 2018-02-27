@@ -1,5 +1,7 @@
 package mygame;
 
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
 import com.jme3.font.BitmapText;
 import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
@@ -18,6 +20,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.terrain.geomipmap.TerrainGrid;
+import com.jme3.terrain.geomipmap.TerrainGridTileLoader;
 import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.terrain.heightmap.AbstractHeightMap;
@@ -454,7 +458,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
         grass.setWrap(Texture.WrapMode.Repeat);
         matRock.setTexture("Tex1", grass);
-        matRock.setFloat("Tex1Scale", 64f);
+        matRock.setFloat("Tex1Scale", 65f);
         // load dirt texture
         Texture dirt = assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg");
         dirt.setWrap(Texture.WrapMode.Repeat);
@@ -477,6 +481,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         cameras.add(getCamera());
         TerrainLodControl control = new TerrainLodControl(terrain, cameras);
         terrain.addControl(control);
+        terrain.setLocalTranslation(0, 0, 0);
         rootNode.attachChild(terrain);
     }
 
