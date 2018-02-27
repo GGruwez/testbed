@@ -11,16 +11,24 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.terrain.geomipmap.TerrainLodControl;
+import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.jme3.terrain.heightmap.AbstractHeightMap;
+import com.jme3.terrain.heightmap.ImageBasedHeightMap;
+import com.jme3.texture.Texture;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -160,6 +168,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         createChaseCameraCustomView();
         createTopDownCameraCustomView();
+
+        createTerrain();
 
         callbackAfterAppInit.run();
 
@@ -431,6 +441,43 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         synchronized(destructibleSpatialQueue){
             this.destructibleSpatialQueue.add(newItem);
         }
+    }
+
+    private void createTerrain(){
+        // Create material from Terrain Material Definition
+        Material matRock = new Material(assetManager, "Common/MatDefs/Terrain/Terrain.j3md");
+        // Load alpha map (for splat textures)
+        matRock.setTexture("Alpha", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
+        // load heightmap image (for the terrain heightmap)
+        Texture heightMapImage = assetManager.loadTexture("Textures/Terrain/splat/mountains512.png");
+        // load grass texture
+        Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
+        grass.setWrap(Texture.WrapMode.Repeat);
+        matRock.setTexture("Tex1", grass);
+        matRock.setFloat("Tex1Scale", 64f);
+        // load dirt texture
+        Texture dirt = assetManager.loadTexture("Textures/Terrain/splat/dirt.jpg");
+        dirt.setWrap(Texture.WrapMode.Repeat);
+        matRock.setTexture("Tex2", dirt);
+        matRock.setFloat("Tex2Scale", 32f);
+        // load rock texture
+        Texture rock = assetManager.loadTexture("Textures/Terrain/splat/road.jpg");
+        rock.setWrap(Texture.WrapMode.Repeat);
+        matRock.setTexture("Tex3", rock);
+        matRock.setFloat("Tex3Scale", 128f);
+
+        AbstractHeightMap heightmap = null;
+        heightmap = new ImageBasedHeightMap(heightMapImage.getImage(), 1f);
+        heightmap.load();
+
+        TerrainQuad terrain = new TerrainQuad("terrain", 65, 513, heightmap.getHeightMap());
+        terrain.setMaterial(matRock);
+        terrain.setLocalScale(2f, 1f, 2f); // scale to make it less steep
+        List<Camera> cameras = new ArrayList<>();
+        cameras.add(getCamera());
+        TerrainLodControl control = new TerrainLodControl(terrain, cameras);
+        terrain.addControl(control);
+        rootNode.attachChild(terrain);
     }
 
 }
