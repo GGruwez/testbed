@@ -134,7 +134,7 @@ public class World {
             this.chaseCam.resize(200, 200, false);
             this.topDownCam.resize(200, 200, false);
             this.sideCam.resize(200, 200, false);
-            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
+            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
