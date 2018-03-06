@@ -51,46 +51,46 @@ public class Cube extends Geometry {
         Mesh nZ = new Mesh();
         
         Vector3f [] vertices_pX = new Vector3f[4];
-        vertices_pX[0] = new Vector3f(x+0.5f, y-0.5f, z+0.5f);
-        vertices_pX[1] = new Vector3f(x+0.5f, y-0.5f, z-0.5f);
-        vertices_pX[2] = new Vector3f(x+0.5f, y+0.5f, z+0.5f);
-        vertices_pX[3] = new Vector3f(x+0.5f, y+0.5f, z-0.5f);
+        vertices_pX[0] = new Vector3f(x+2.5f, y-2.5f, z+2.5f);
+        vertices_pX[1] = new Vector3f(x+2.5f, y-2.5f, z-2.5f);
+        vertices_pX[2] = new Vector3f(x+2.5f, y+2.5f, z+2.5f);
+        vertices_pX[3] = new Vector3f(x+2.5f, y+2.5f, z-2.5f);
         
         Vector3f [] vertices_pY = new Vector3f[4];
-        vertices_pY[0] = new Vector3f(x+0.5f, y+0.5f, z-0.5f);
-        vertices_pY[1] = new Vector3f(x-0.5f, y+0.5f, z-0.5f);
-        vertices_pY[2] = new Vector3f(x+0.5f, y+0.5f, z+0.5f);
-        vertices_pY[3] = new Vector3f(x-0.5f, y+0.5f, z+0.5f);
+        vertices_pY[0] = new Vector3f(x+2.5f, y+2.5f, z-2.5f);
+        vertices_pY[1] = new Vector3f(x-2.5f, y+2.5f, z-2.5f);
+        vertices_pY[2] = new Vector3f(x+2.5f, y+2.5f, z+2.5f);
+        vertices_pY[3] = new Vector3f(x-2.5f, y+2.5f, z+2.5f);
         
         Vector3f [] vertices_pZ = new Vector3f[4];
-        vertices_pZ[0] = new Vector3f(x-0.5f, y-0.5f, z+0.5f);
-        vertices_pZ[1] = new Vector3f(x+0.5f, y-0.5f, z+0.5f);
-        vertices_pZ[2] = new Vector3f(x-0.5f, y+0.5f, z+0.5f);
-        vertices_pZ[3] = new Vector3f(x+0.5f, y+0.5f, z+0.5f);
+        vertices_pZ[0] = new Vector3f(x-2.5f, y-2.5f, z+2.5f);
+        vertices_pZ[1] = new Vector3f(x+2.5f, y-2.5f, z+2.5f);
+        vertices_pZ[2] = new Vector3f(x-2.5f, y+2.5f, z+2.5f);
+        vertices_pZ[3] = new Vector3f(x+2.5f, y+2.5f, z+2.5f);
         
         Vector3f [] vertices_nX = new Vector3f[4];
-        vertices_nX[0] = new Vector3f(x-0.5f, y-0.5f, z-0.5f);
-        vertices_nX[1] = new Vector3f(x-0.5f, y-0.5f, z+0.5f);
-        vertices_nX[2] = new Vector3f(x-0.5f, y+0.5f, z-0.5f);
-        vertices_nX[3] = new Vector3f(x-0.5f, y+0.5f, z+0.5f);
+        vertices_nX[0] = new Vector3f(x-2.5f, y-2.5f, z-2.5f);
+        vertices_nX[1] = new Vector3f(x-2.5f, y-2.5f, z+2.5f);
+        vertices_nX[2] = new Vector3f(x-2.5f, y+2.5f, z-2.5f);
+        vertices_nX[3] = new Vector3f(x-2.5f, y+2.5f, z+2.5f);
         
         Vector3f [] vertices_nY = new Vector3f[4];
-        vertices_nY[0] = new Vector3f(x+0.5f, y-0.5f, z+0.5f);
-        vertices_nY[1] = new Vector3f(x-0.5f, y-0.5f, z+0.5f);
-        vertices_nY[2] = new Vector3f(x+0.5f, y-0.5f, z-0.5f);
-        vertices_nY[3] = new Vector3f(x-0.5f, y-0.5f, z-0.5f);
+        vertices_nY[0] = new Vector3f(x+2.5f, y-2.5f, z+2.5f);
+        vertices_nY[1] = new Vector3f(x-2.5f, y-2.5f, z+2.5f);
+        vertices_nY[2] = new Vector3f(x+2.5f, y-2.5f, z-2.5f);
+        vertices_nY[3] = new Vector3f(x-2.5f, y-2.5f, z-2.5f);
         
         Vector3f [] vertices_nZ = new Vector3f[4];
-        vertices_nZ[0] = new Vector3f(x+0.5f, y-0.5f, z-0.5f);
-        vertices_nZ[1] = new Vector3f(x-0.5f, y-0.5f, z-0.5f);
-        vertices_nZ[2] = new Vector3f(x+0.5f, y+0.5f, z-0.5f);
-        vertices_nZ[3] = new Vector3f(x-0.5f, y+0.5f, z-0.5f);
+        vertices_nZ[0] = new Vector3f(x+2.5f, y-2.5f, z-2.5f);
+        vertices_nZ[1] = new Vector3f(x-2.5f, y-2.5f, z-2.5f);
+        vertices_nZ[2] = new Vector3f(x+2.5f, y+2.5f, z-2.5f);
+        vertices_nZ[3] = new Vector3f(x-2.5f, y+2.5f, z-2.5f);
         
         Vector2f [] texCoord = new Vector2f[4];
         texCoord[0] = new Vector2f(0,0);
-        texCoord[1] = new Vector2f(1,0);
-        texCoord[2] = new Vector2f(0,1);
-        texCoord[3] = new Vector2f(1,1);
+        texCoord[1] = new Vector2f(5,0);
+        texCoord[2] = new Vector2f(0,5);
+        texCoord[3] = new Vector2f(5,5);
         
         short[] indexes = {2, 0, 1, 1, 3, 2};
         
