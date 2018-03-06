@@ -1,5 +1,7 @@
 package mygame;
 
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
 import com.jme3.font.BitmapText;
 import com.jme3.input.CameraInput;
 import com.jme3.input.KeyInput;
@@ -11,16 +13,26 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.terrain.geomipmap.*;
+import com.jme3.terrain.geomipmap.grid.ImageTileLoader;
+import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
+import com.jme3.terrain.heightmap.AbstractHeightMap;
+import com.jme3.terrain.heightmap.ImageBasedHeightMap;
+import com.jme3.terrain.heightmap.Namer;
+import com.jme3.texture.Texture;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,6 +42,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private Aircraft aircraft;
     private World world;
     private BitmapText aircraftInfo;
+    private TerrainGrid terrain;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
     private LinkedList<Spatial> newSpatialQueue = new LinkedList<Spatial>();
@@ -69,6 +82,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
         aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -32f, 0, 0, 0, 0, 0);
+
         world.setAircraft(aircraft);
 
         // Plane camera viewport
@@ -97,11 +111,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         sideCamViewPort.setBackgroundColor(ColorRGBA.White);
         rootNode.attachChild(world.getSideCamNode());
 
-        // Aircraft material
-        Material planeMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        planeMaterial.setColor("Color", ColorRGBA.Gray);
-        aircraft.getAircraftGeometry().setMaterial(planeMaterial);
-
         // Move aircraft to starting position
 //         Quaternion pitchQuat = new Quaternion();
 //        pitchQuat.fromAngleAxis((float) 0, new Vector3f(1, 0, 0));
@@ -114,7 +123,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         float d =0;
         double x =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
         double y =0;//(-d-1) * Math.tan(Math.PI/3) + Math.random()*d * Math.tan(Math.PI/3)*2;
-        aircraft.setLocalTranslation((float) x,(float) y,d);
+//        aircraft.setLocalTranslation((float) x,(float) y,d);
 //        aircraft.setLocalRotation(totalQuat);
 
 
@@ -166,6 +175,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         createChaseCameraCustomView();
         createTopDownCameraCustomView();
+
+        createTerrain();
 
         callbackAfterAppInit.run();
     }
@@ -248,7 +259,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private void updateDifferentCameras(){
         // Update chase camera
         this.chaseCameraCustomView.updateCamera(cv -> {
-            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 6)).transform(0,0,0);
+            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
             cv.getCameraNode().setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
             cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
@@ -320,9 +331,13 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         inputManager.addMapping("PlaneNegStab",  new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("ReleaseMouse",  new KeyTrigger(KeyInput.KEY_R));
         inputManager.addMapping("Pause",  new KeyTrigger(KeyInput.KEY_P));
+        inputManager.addMapping("CameraStrafeLeft",  new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("CameraStrafeRight",  new KeyTrigger(KeyInput.KEY_L));
+        inputManager.addMapping("CameraForward",  new KeyTrigger(KeyInput.KEY_I));
+        inputManager.addMapping("CameraBackward",  new KeyTrigger(KeyInput.KEY_K));
         // Add the names to the action listener.
         inputManager.addListener(actionListener,"SwitchControl", "ReleaseMouse", "Pause");
-        inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab");
+        inputManager.addListener(analogListener,"PlaneLeft", "PlaneRight", "PlanePosStab", "PlaneNegStab", "CameraStrafeLeft", "CameraStrafeRight", "CameraForward", "CameraBackward");
 
     }
 
@@ -348,19 +363,52 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         mouseVisible = !mouseVisible;
     }
 
+    // TODO: derived from jmonkey source code, add credits
+    private void moveCamera(float value, boolean sideways){
+        Vector3f vel = new Vector3f();
+        Vector3f pos = cam.getLocation().clone();
+
+        if (sideways){
+            cam.getLeft(vel);
+        }else{
+            cam.getDirection(vel);
+        }
+        vel.multLocal(value * 50); // 50 determines camera movement speed
+        pos.addLocal(vel);
+
+        cam.setLocation(pos);
+    }
+
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
             Aircraft ac = MainSwingCanvas.this.getAircraft();
-            if(name == "PlaneLeft"){
-                ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
-                ac.setRightWingInclination(ac.getRightWingInclination() + 0.01f);
-            }else if(name == "PlaneRight"){
-                ac.setLeftWingInclination(ac.getLeftWingInclination() + 0.01f);
-                ac.setRightWingInclination(ac.getRightWingInclination() - 0.01f);
-            }else if(name == "PlanePosStab"){
-                ac.setHorStabInclination(ac.getHorStabInclination() + 0.001f);
-            }else if(name == "PlaneNegStab"){
-                ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);
+            switch (name) {
+                case "PlaneLeft":
+                    ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
+                    ac.setRightWingInclination(ac.getRightWingInclination() + 0.01f);
+                    break;
+                case "PlaneRight":
+                    ac.setLeftWingInclination(ac.getLeftWingInclination() + 0.01f);
+                    ac.setRightWingInclination(ac.getRightWingInclination() - 0.01f);
+                    break;
+                case "PlanePosStab":
+                    ac.setHorStabInclination(ac.getHorStabInclination() + 0.001f);
+                    break;
+                case "PlaneNegStab":
+                    ac.setHorStabInclination(ac.getHorStabInclination() - 0.001f);
+                    break;
+                case "CameraStrafeLeft":
+                    moveCamera(value, true);
+                    break;
+                case "CameraStrafeRight":
+                    moveCamera(-value, true);
+                    break;
+                case "CameraForward":
+                    moveCamera(value, false);
+                    break;
+                case "CameraBackward":
+                    moveCamera(-value, false);
+                    break;
             }
         }
     };
@@ -399,6 +447,42 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         synchronized(destructibleSpatialQueue){
             this.destructibleSpatialQueue.add(newItem);
         }
+    }
+
+    private void createTerrain(){
+        // Create material from Terrain Material Definition
+        Material matRock = new Material(assetManager, "Common/MatDefs/Terrain/Terrain.j3md");
+        // Load alpha map (for splat textures)
+        matRock.setTexture("Alpha", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
+        // load heightmap image (for the terrain heightmap)
+        Texture heightMapImage = assetManager.loadTexture("Textures/Terrain/splat/mountains512.png");
+        // load grass texture
+        Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.jpg");
+        grass.setWrap(Texture.WrapMode.Repeat);
+        matRock.setTexture("Tex1", grass);
+        matRock.setFloat("Tex1Scale", 65f);
+
+        AbstractHeightMap heightmap = null;
+        heightmap = new ImageBasedHeightMap(heightMapImage.getImage(), 1f);
+        heightmap.load();
+
+        this.terrain = new TerrainGrid("terrain", 512, 257, new ImageTileLoader(assetManager, new Namer() {
+            public String getName(int x, int y) {
+                return "Textures/Terrain/splat/mountains512.png";
+            }
+        }));
+        terrain.setMaterial(matRock);
+        terrain.setLocalTranslation(0, 0, 0);
+        terrain.setLocalScale(5f, 1f, 5f);
+        this.rootNode.attachChild(terrain);
+
+        addLodControlToTerrain(getCamera());
+    }
+
+    public void addLodControlToTerrain(Camera cam){
+        TerrainLodControl control = new TerrainGridLodControl(terrain, cam); // TODO: multiple camera's
+        control.setLodCalculator( new DistanceLodCalculator(512, 3f) );
+        this.terrain.addControl(control);
     }
 
 }

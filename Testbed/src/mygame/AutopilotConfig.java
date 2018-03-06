@@ -22,10 +22,25 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     private float wingLiftSlope = 10f;
     private float horStabLiftSlope = 5f;
     private float verStabLiftSlope = 5f;
+
     private float horAngleOfView = 120;
     private float verAngleOfView = 120;
-    private int nbColums = 200;
+    private int nbColumns = 200;
     private int nbRows = 200;
+    	
+	private String droneID = "PREDATOR";
+    private float wheelY = -1.52f; //coordinates
+    private float frontWheelZ = -2.44f; //coordinates
+    private float rearWheelZ = 0.3f; //coordinates
+    private float rearWheelX = 1.22f; //coordinates
+    private float tyreSlope = 1f;
+    private float dampSlope = 1f;
+    private float tyreRadius = 0.2f;
+    private float rMax = 100f;    //maximal breaking power on each wheel
+    private float fcMax = 0.01f;  //maximal friction coefficient for rear wheels 
+    private float horizontalAngleOfView;
+    private float verticalAngleOfView;
+   
 
     @Override
     public float getGravity() {
@@ -94,12 +109,52 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
 
     @Override
     public int getNbColumns() {
-        return this.nbColums;
+        return this.nbColumns;
     }
 
     @Override
     public int getNbRows() {
         return this.nbRows;
+    }
+    
+    public String getDroneID() {
+        return this.droneID;    
+    }
+    
+    public float getWheelY() {
+        return this.wheelY;    
+    }
+    
+    public float getFrontWheelZ() {
+        return this.frontWheelZ;    
+    }
+    
+    public float getRearWheelZ() {
+        return this.rearWheelZ;    
+    }
+    
+    public float getRearWheelX() {
+        return this.rearWheelX;    
+    }
+   
+    public float getTyreSlope() {
+        return this.tyreSlope;    
+    }
+    
+    public float getDampSlope() {
+        return this.dampSlope;    
+    }
+    
+    public float getTyreRadius() {
+        return this.tyreRadius;    
+    }
+    
+    public float getrMax() {
+        return this.rMax;    
+    }
+    
+    public float getfcMax() {
+        return this.fcMax;    
     }
     
 }
