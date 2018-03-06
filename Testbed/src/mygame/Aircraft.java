@@ -26,8 +26,8 @@ public class Aircraft extends Node {
     private Vector angularVelocity = Vector.NULL;
     private World world;
     private AutopilotConfig config = new AutopilotConfig();
-    private float leftWingInclination;
-    private float rightWingInclination;
+    private float leftWingInclination = 0.1994837f;
+    private float rightWingInclination = 0.1994837f;
     private float horStabInclination;
     private float verStabInclination;
     private float elapsedTime;
@@ -254,6 +254,7 @@ public class Aircraft extends Node {
     
     public void updateAirplane(float time){
         this.getForce().UpdateForce();
+        System.out.println("Total Y-force: " + (480*9.81-this.getForce().getTotalLift().transform(this.getHeading(), this.getPitch(), this.getRoll()).getY()));
         this.setElapsedTime(this.getElapsedTime()+time);
 
         setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(neglectValue));
