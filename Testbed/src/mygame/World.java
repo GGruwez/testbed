@@ -49,6 +49,9 @@ public class World {
     private HashMap<Cube,Vector> cubePositions;
     private Set<Cube> cubesInWorld;
     
+    private static int W = 10;
+    private static int L = 60;
+    
 
     public World(MainSwingCanvas app) {
         this.autopilot = AutopilotFactory.createAutopilot();
@@ -82,6 +85,7 @@ public class World {
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
         
+        this.addAirport(0, 0, 0);
         this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
@@ -326,5 +330,14 @@ public class World {
         myGround.rotate((float) Math.PI/2,0,0);
         this.mainSwingCanvas.getRootNode().attachChild(myGround);
         this.ground = myGround;
+    }
+    
+    public MainSwingCanvas getCanvas() {
+        return this.mainSwingCanvas;
+    }
+    
+    private void addAirport(float xPos, float yPos, int ID) {
+        Airport airport = new Airport(W,L,ID,xPos,yPos,this);
+        airport.build();
     }
 }
