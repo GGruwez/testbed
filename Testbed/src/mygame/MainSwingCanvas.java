@@ -68,7 +68,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         Box plane = new Box(1,1,2);
         Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -32f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
 
         // Plane camera viewport
@@ -83,6 +83,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         chaseCamViewPort.attachScene(rootNode);
         chaseCamViewPort.setBackgroundColor(ColorRGBA.White);
         rootNode.attachChild(world.getChaseCamNode());
+        
         // Top down camera viewport
         ViewPort topDownCamViewPort = renderManager.createMainView("top down cam view", world.getTopDownCam());
         topDownCamViewPort.setClearFlags(true, true, true);
@@ -167,7 +168,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         createTopDownCameraCustomView();
 
         callbackAfterAppInit.run();
-
     }
 
     private void createChaseCameraCustomView() {

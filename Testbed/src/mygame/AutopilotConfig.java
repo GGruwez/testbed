@@ -12,16 +12,16 @@ package mygame;
 public class AutopilotConfig implements interfaces.AutopilotConfig {
     
     private float gravity = 9.81f;
-    private float wingX = 1;
-    private float tailSize = 1;
-    private float engineMass = 0.5f;
-    private float wingMass = 0.5f;
-    private float tailMass = 0.5f;
-    private float maxThrust = 10;
-    private float maxAOA = (float) Math.PI/5;
-    private float wingLiftSlope = 1f;
-    private float horStabLiftSlope = 1f;
-    private float verStabLiftSlope = 0.1f;
+    private float wingX = 4.2f;
+    private float tailSize = 4.2f;
+    private float engineMass = 180f;
+    private float wingMass = 100f;
+    private float tailMass = 100f;
+    private float maxThrust = 2000;
+    private float maxAOA = (float) Math.PI/12;
+    private float wingLiftSlope = 10f;
+    private float horStabLiftSlope = 5f;
+    private float verStabLiftSlope = 5f;
     private float horAngleOfView = 120;
     private float verAngleOfView = 120;
     private int nbColums = 200;
