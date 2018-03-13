@@ -1,5 +1,6 @@
 package mygame;
 
+import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -84,8 +85,8 @@ public class World {
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        this.addAirport(0, 0, 0);
-        this.newGround();
+        //this.addAirport(0, 0, 0);
+        //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
         Timer simulationTimer = new Timer(true);
@@ -128,6 +129,13 @@ public class World {
     
     public void evolve(float dt) throws IOException {
         if (this.isSimulating() && !this.isPaused()) {
+            //check collision with ground
+            //CollisionResults results = new CollisionResults();
+            ////getAircraft().collideWith(ground.getModelBound(), results);
+            //System.out.println("size: " + String.valueOf(results.size()));
+            //if (results.size() > 0) {
+            ////    this.mainSwingCanvas.crashAircraft();
+            //}
             // Update visual position of aircraft
             this.getAircraft().updateVisualCoordinates();
             this.getAircraft().updateVisualRotation();
@@ -221,6 +229,8 @@ public class World {
         }           
     }
     
+    
+    
     public void generateRandomCubes(int n) {
         this.usedColors = new ColorRGBA[n];
         for(int i=1; i<n+1; i++) {
@@ -234,7 +244,7 @@ public class World {
         }
     }
     
-    public void generateCubes(Vector[] positions) {
+    public void setPath(Vector[] positions) {
         for(int i=0; i<positions.length; i++) {
             Vector currentPos = positions[i];
             ColorRGBA color = ColorRGBA.randomColor();
@@ -319,7 +329,7 @@ public class World {
        
     }
     
-    private void newGround() {
+    public void newGround() {
         Quad groundQuad = new Quad(10000,10000);
         Geometry myGround = new Geometry("ground",groundQuad);
         Material mat = new Material(mainSwingCanvas.getAssetManager(),"Common/MatDefs/Misc/Unshaded.j3md");  
@@ -339,4 +349,6 @@ public class World {
         Airport airport = new Airport(W,L,ID,xPos,yPos,this);
         airport.build();
     }
+    
+    
 }
