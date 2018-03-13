@@ -62,7 +62,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         world = new World(this);
 
 
-        Box b = new Box(1, 1, 1);
+        Box b = new RegularBox(1, 1, 1);
         Geometry goalCube = new Geometry("Box", b);
         Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         mat.setBoolean("UseMaterialColors",true);
@@ -72,9 +72,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
 
-        AirplaneModel apm = new AirplaneModel(getAssetManager());
 //        getRootNode().attachChild(apm);
-        aircraft = new Aircraft("Plane", apm, 0, 100, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", assetManager, 0, 100, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         world.newGround();
         // Plane camera viewport

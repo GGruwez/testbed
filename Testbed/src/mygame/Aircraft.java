@@ -1,13 +1,18 @@
 package mygame;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.scene.shape.Box;
 import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
 
@@ -55,11 +60,11 @@ public class Aircraft extends Node {
      * @param horStabInclination
      * @param verStabInclination
      */
-    public Aircraft(String name, Node model, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity,
-            float thrust, float leftWingInclination,float rightWingInclination,
-            float horStabInclination, float verStabInclination) {
+    public Aircraft(String name, AssetManager assetManager, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity,
+                    float thrust, float leftWingInclination, float rightWingInclination,
+                    float horStabInclination, float verStabInclination) {
 
-        this.aircraftGeometry = model;
+        this.aircraftGeometry = new AirplaneModel(assetManager);;
         
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
@@ -69,8 +74,8 @@ public class Aircraft extends Node {
         this.aircraftCameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
         this.attachChild(this.aircraftGeometry);
         this.attachChild(this.aircraftCameraNode);
-        this.aircraftCameraNode.setLocalTranslation(Vector3f.ZERO);
-        this.aircraftCameraNode.lookAt(new Vector3f(0,0,-1), Vector3f.UNIT_Y); // Front of the plane is in -z direction
+        this.aircraftCameraNode.setLocalTranslation(0, 0, -AirplaneModel.PLANE_TAIL_MASS_OFFSET);
+        this.aircraftCameraNode.lookAt(new Vector3f(0,0,-10), Vector3f.UNIT_Y); // Front of the plane is in -z direction
         
         // Fysica
         this.setCalcCoordinates(new Vector(x, y, z));
@@ -254,7 +259,7 @@ public class Aircraft extends Node {
     
     public void updateAirplane(float time){
         this.getForce().UpdateForce();
-        System.out.println("Total Y-force: " + (480*9.81-this.getForce().getTotalLift().transform(this.getHeading(), this.getPitch(), this.getRoll()).getY()));
+        //System.out.println("Total Y-force: " + (480*9.81-this.getForce().getTotalLift().transform(this.getHeading(), this.getPitch(), this.getRoll()).getY()));
         this.setElapsedTime(this.getElapsedTime()+time);
 
         setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(neglectValue));
@@ -296,9 +301,11 @@ public class Aircraft extends Node {
     	//System.out.println("Back left normal:"+this.getForce().getLeftRearWheelNormalForce());
     	//System.out.println("Back right normal:"+this.getForce().getRightRearWheelNormalForce());
 
-    	System.out.println("Y coordinates wheels: "+ (this.getCalcCoordinates().getY()-this.getConfig().getWheelY()));
-    	System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+    	//System.out.println("Y coordinates wheels: "+ (this.getCalcCoordinates().getY()-this.getConfig().getWheelY()));
+    	//System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+        //System.out.println("Normal Force: "+ this.getForce().getTotalWheelNormalForce());
 
+    	
     }
 
     public float getGravityConstant(){
