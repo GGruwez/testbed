@@ -45,9 +45,9 @@ public class Airport extends Geometry{
     }
     
     public void build() {
-        Box gate = new Box(W,2,W);
-        Box landingStrip0 = new Box(L,0.2f,2*W);
-        Box landingStrip1 = new Box(L,0.2f,2*W);
+        Box gate = new RegularBox(W,2,W);
+        Box landingStrip0 = new RegularBox(L,0.2f,2*W);
+        Box landingStrip1 = new RegularBox(L,0.2f,2*W);
         Geometry gateG = new Geometry("gate", gate);
         Material mat1 = new Material(world.getCanvas().getAssetManager(),"Common/MatDefs/Misc/Unshaded.j3md");  
         mat1.setColor("Color", ColorRGBA.Black);
