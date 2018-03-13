@@ -22,6 +22,7 @@ import com.jme3.terrain.geomipmap.grid.ImageTileLoader;
 import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.Namer;
 import com.jme3.texture.Texture;
+import mygame.visualcomponents.RegularBox;
 
 import java.io.IOException;
 import java.util.ConcurrentModificationException;
