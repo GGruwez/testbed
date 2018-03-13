@@ -52,11 +52,13 @@ public class World {
     
     private static int W = 10;
     private static int L = 350;
+    private ArrayList<Airport> airports;
     
     private boolean first = true;
     
 
     public World(MainSwingCanvas app) {
+        this.airports = new ArrayList<>();
         this.autopilot = AutopilotFactory.createAutopilot();
 
         // Chase camera
@@ -87,7 +89,7 @@ public class World {
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        //this.addAirport(0, 0, 0);
+        this.addAirport(0,-110);
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
@@ -134,9 +136,16 @@ public class World {
             //check collision with ground
             CollisionResults results = new CollisionResults();
             aircraft.getAircraftGeometry().collideWith(this.mainSwingCanvas.getTerrain().getWorldBound(), results);
-            System.out.println("size: " + String.valueOf(results.size()));
-            if (results.size() > 0 && !first) {
-                this.mainSwingCanvas.crashAircraft();
+            boolean collidesWithAirport = false;
+            CollisionResults temp = new CollisionResults();
+            for (Airport airport:airports) {
+                aircraft.collideWith(airport.getBatchNode().getWorldBound(), temp);
+                if (temp.size()>0) collidesWithAirport = true;
+            }
+            if (results.size() > 0 && !first && !collidesWithAirport) {
+                System.out.println(results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
+                this.endSimulation(); //TODO: support multiple airplanes
+            
             }
             // Update visual position of aircraft
             this.getAircraft().updateVisualCoordinates();
@@ -348,8 +357,9 @@ public class World {
         return this.mainSwingCanvas;
     }
     
-    private void addAirport(float xPos, float yPos, int ID) {
-        Airport airport = new Airport(W,L,ID,xPos,yPos,this);
+    private void addAirport(float xPos, float zPos) {
+        Airport airport = new Airport(W,L,airports.size(),xPos,zPos,this);
+        airports.add(airport);
         airport.build();
     }
     
