@@ -254,7 +254,7 @@ public class Aircraft extends Node {
     
     public void updateAirplane(float time){
         this.getForce().UpdateForce();
-        System.out.println("Total Y-force: " + (480*9.81-this.getForce().getTotalLift().transform(this.getHeading(), this.getPitch(), this.getRoll()).getY()));
+        //System.out.println("Total Y-force: " + (480*9.81-this.getForce().getTotalLift().transform(this.getHeading(), this.getPitch(), this.getRoll()).getY()));
         this.setElapsedTime(this.getElapsedTime()+time);
 
         setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(neglectValue));
@@ -296,9 +296,11 @@ public class Aircraft extends Node {
     	//System.out.println("Back left normal:"+this.getForce().getLeftRearWheelNormalForce());
     	//System.out.println("Back right normal:"+this.getForce().getRightRearWheelNormalForce());
 
-    	System.out.println("Y coordinates wheels: "+ (this.getCalcCoordinates().getY()-this.getConfig().getWheelY()));
-    	System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+    	//System.out.println("Y coordinates wheels: "+ (this.getCalcCoordinates().getY()-this.getConfig().getWheelY()));
+    	//System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+        //System.out.println("Normal Force: "+ this.getForce().getTotalWheelNormalForce());
 
+    	
     }
 
     public float getGravityConstant(){
