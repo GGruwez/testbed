@@ -491,13 +491,13 @@ public class Force {
     
     public void setLeftRearWheelFrictionForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getZ()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getfcMax()/2);
+    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getZ()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax()/2);
     	}
     }
     
     public void setRightRearWheelFrictionForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getZ()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getfcMax()/2);
+    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getZ()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax()/2);
     	}
     }
     
