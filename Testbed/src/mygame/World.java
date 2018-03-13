@@ -50,7 +50,7 @@ public class World {
     private Set<Cube> cubesInWorld;
     
     private static int W = 10;
-    private static int L = 60;
+    private static int L = 350;
     
 
     public World(MainSwingCanvas app) {
@@ -84,7 +84,6 @@ public class World {
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        
         this.addAirport(0, 0, 0);
         this.newGround();
         // Simulated evolve
