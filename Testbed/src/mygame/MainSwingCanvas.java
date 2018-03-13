@@ -76,7 +76,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 //        getRootNode().attachChild(apm);
         aircraft = new Aircraft("Plane", assetManager, 0, 10, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
-        world.newGround();
+        //world.newGround();
         // Plane camera viewport
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
         planeCamViewPort.setClearFlags(true, true, true);
@@ -475,5 +475,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         control.setLodCalculator( new DistanceLodCalculator(512, 3f) );
         this.terrain.addControl(control);
     }
+    
+    public TerrainGrid getTerrain() {return this.terrain;}
 
 }

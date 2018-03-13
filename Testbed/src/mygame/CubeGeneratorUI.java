@@ -1,8 +1,7 @@
 
 package mygame;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
 import java.util.ConcurrentModificationException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,9 +14,15 @@ class CubeGeneratorUI extends JPanel{
     private JButton b = new JButton("generate amount of cubes");
     
     CubeGeneratorUI(MainSwingCanvas canvasApplication, Callback onClick) {
-        super(new FlowLayout());
+        super(new GridBagLayout());
 
         this.canvasApplication = canvasApplication;
+
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
 
         text.setPreferredSize(new Dimension(60,20));
         this.add(text);
@@ -26,7 +31,8 @@ class CubeGeneratorUI extends JPanel{
             text.setText("");
             onClick.run();
         });
-        this.add(b);
+        gridBagConstraints.gridx = 1;
+        this.add(b, gridBagConstraints);
     }
 
     private World getWorld() {
