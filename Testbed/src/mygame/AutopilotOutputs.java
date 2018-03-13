@@ -11,14 +11,14 @@ package mygame;
  */
 public class AutopilotOutputs implements p_en_o_cw_2017.AutopilotOutputs{
     
-    private float thrust;
-    private float leftWingInclination;
-    private float rightWingInclination;
-    private float horStabInclination;
-    private float verStabInclination;
-    private float frontBreakForce;
-    private float leftBreakForce;
-    private float rightBreakForce;
+    public float thrust;
+    public float leftWingInclination;
+    public float rightWingInclination;
+    public float horStabInclination;
+    public float verStabInclination;
+    public Vector frontBreakForce;
+    public Vector leftBreakForce;
+    public Vector rightBreakForce;
 
 
     @Override
@@ -46,15 +46,15 @@ public class AutopilotOutputs implements p_en_o_cw_2017.AutopilotOutputs{
         return this.verStabInclination;
     }
     
-    public float getFrontBreakForce(){
+    public Vector getFrontBreakForce(){
     	return this.frontBreakForce;
     }
     
-    public float getLeftBreakForce(){
+    public Vector getLeftBreakForce(){
     	return this.frontBreakForce;
     }
 
-    public float getRightBreakForce(){
+    public Vector getRightBreakForce(){
     	return this.frontBreakForce;
     }
 }

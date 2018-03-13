@@ -74,7 +74,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         goalCube.setLocalTranslation(0, 0, 0);
 
 //        getRootNode().attachChild(apm);
-        aircraft = new Aircraft("Plane", assetManager, 0, 3, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", assetManager, 0, 10, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         world.newGround();
         // Plane camera viewport

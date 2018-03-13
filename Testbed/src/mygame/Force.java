@@ -59,6 +59,9 @@ public class Force {
     
 
     private final float FORCE_NEGLECT  = 0.00001f;
+    
+    
+
 
     Force(float thrust,Aircraft plane){
         this.setAircraft(plane);
@@ -84,6 +87,9 @@ public class Force {
         this.setRightRearWheelNormalForce();
         this.setLeftRearWheelFrictionForce();
         this.setRightRearWheelFrictionForce();
+        this.setFrontBreakForce();
+        this.setRightBreakForce();
+        this.setLeftBreakForce();
         System.out.println("Normal Force: "+ this.getTotalWheelNormalForce());
         System.out.println("FrontD:" + this.getFrontWheelD());
         System.out.println("ChangeFD" + this.getFrontWheelDChange());
@@ -346,7 +352,7 @@ public class Force {
     }
     
     public float getLeftRearWheelD(){
-    	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
+    	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=5){
 
     	Vector LRWheelDrone = new Vector(-this.getAircraft().getConfig().getRearWheelX(), this.getAircraft().getConfig().getWheelY(), this.getAircraft().getConfig().getRearWheelZ());
     	Vector LRWheelWorld = LRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
@@ -361,7 +367,7 @@ public class Force {
     }
     
     public float getRightRearWheelD(){
-    	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
+    	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=5){
 
     		Vector RRWheelDrone = new Vector(this.getAircraft().getConfig().getRearWheelX(), this.getAircraft().getConfig().getWheelY(), this.getAircraft().getConfig().getRearWheelZ());
     		Vector RRWheelWorld = RRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
@@ -377,7 +383,7 @@ public class Force {
     
     public float getFrontWheelD(){
     	
-    	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
+    	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=5){
     		Vector FrontWheelDrone = new Vector(0,this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY(),this.getAircraft().getConfig().getFrontWheelZ());
     		Vector FrontWheelWorld = FrontWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
     		
@@ -454,20 +460,20 @@ public class Force {
     
     public void setLeftBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftBreakForce = AutopilotOutput.getLeftBreakForce();
+    		this.leftBreakForce = this.getAircraft().getAutopilotOutputs().getLeftBreakForce();
     	}
     }
     
     public void setRightBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.rightBreakForce = AutopilotOutput.getRightBreakForce();
+    		this.rightBreakForce = this.getAircraft().getAutopilotOutputs().getRightBreakForce();
     	}
     }
    
     
     public void setFrontBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.frontBreakForce = AutopilotOutput.getFrontBreakForce();
+    		this.frontBreakForce = this.getAircraft().getAutopilotOutputs().getFrontBreakForce();
     	}
     }
     
@@ -491,13 +497,13 @@ public class Force {
     
     public void setLeftRearWheelFrictionForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getZ()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax()/2);
+    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getX()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax()/2);
     	}
     }
     
     public void setRightRearWheelFrictionForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getZ()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax()/2);
+    		this.leftRearWheelFrictionForce = new Vector(0,0,-this.getAircraft().getVelocity().getX()*this.getTotalWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax()/2);
     	}
     }
     

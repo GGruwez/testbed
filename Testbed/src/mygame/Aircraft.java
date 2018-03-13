@@ -43,6 +43,12 @@ public class Aircraft extends Node {
     private Spatial aircraftGeometry;
     private Camera aircraftCamera;
     private CameraNode aircraftCameraNode;
+    
+    private float thrust;
+   
+    private Vector frontBreakForce;
+    private Vector leftBreakForce;
+    private Vector rightBreakForce;
 
     /**
      *
@@ -411,5 +417,47 @@ public class Aircraft extends Node {
         };
     }
 
+    public AutopilotOutputs getAutopilotOutputs(){
+        return new AutopilotOutputs() {
+        	  @Override
+        	    public float getThrust() {
+        	        return this.thrust;
+        	    }
+
+        	    @Override
+        	    public float getLeftWingInclination() {
+        	        return this.leftWingInclination;
+        	    }
+
+        	    @Override
+        	    public float getRightWingInclination() {
+        	        return this.rightWingInclination;
+        	    }
+
+        	    @Override
+        	    public float getHorStabInclination() {
+        	        return this.horStabInclination;
+        	    }
+
+        	    @Override
+        	    public float getVerStabInclination() {
+        	        return this.verStabInclination;
+        	    }
+        	    
+        	    public Vector getFrontBreakForce(){
+        	    	return this.frontBreakForce;
+        	    }
+        	    
+        	    public Vector getLeftBreakForce(){
+        	    	return this.frontBreakForce;
+        	    }
+
+        	    public Vector getRightBreakForce(){
+        	    	return this.frontBreakForce;
+        	    }
+        };
+    }
+
+    
 }
 
