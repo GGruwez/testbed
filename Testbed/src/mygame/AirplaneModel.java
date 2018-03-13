@@ -1,36 +1,9 @@
 package mygame;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Cylinder;
-
-class MetalBox extends ColorBox{
-    public MetalBox(float x, float y, float z, AssetManager assetManager){
-        super(x, y, z, assetManager, ColorRGBA.DarkGray);
-    }
-}
-
-class ColorBox extends Geometry{
-    public ColorBox(float x, float y, float z, AssetManager assetManager, ColorRGBA color){
-        super("ColorBox", new RegularBox(x, y, z));
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        this.setMaterial(mat);
-    }
-}
-
-class ColorCylinder extends Geometry{
-    public ColorCylinder(float radius, float height, boolean closed, AssetManager assetManager, ColorRGBA color){
-        super("ColorCylinder", new Cylinder(20, 20, radius, height, closed));
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        this.setMaterial(mat);
-    }
-}
+import mygame.visualcomponents.*;
 
 public class AirplaneModel extends Node{
 
