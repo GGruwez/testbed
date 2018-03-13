@@ -18,16 +18,21 @@ class CubeUI extends JPanel {
     private JButton addCube = new JButton("Add cube");
 
     public CubeUI(MainSwingCanvas canvasApplication, Callback onClick) {
-        super(new FlowLayout());
+        super(new GridBagLayout());
 
         this.canvasApplication = canvasApplication;
 
-        xField.setPreferredSize(new Dimension(60, 20));
-        this.add(this.xField);
-        yField.setPreferredSize(new Dimension(60, 20));
-        this.add(this.yField);
-        zField.setPreferredSize(new Dimension(60, 20));
-        this.add(this.zField);
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.25;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+
+        this.add(this.xField, gridBagConstraints);
+        gridBagConstraints.gridx = 1;
+        this.add(this.yField, gridBagConstraints);
+        gridBagConstraints.gridx = 2;
+        this.add(this.zField, gridBagConstraints);
         addCube.addActionListener( e -> {
             if(getWorld() != null) {
                 getWorld().generateCube(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), Float.parseFloat(zField.getText()), ColorRGBA.Green);
@@ -37,7 +42,8 @@ class CubeUI extends JPanel {
                 onClick.run();
             }
         });
-        this.add(addCube);
+        gridBagConstraints.gridx = 3;
+        this.add(addCube, gridBagConstraints);
     }
 
     public World getWorld() {
