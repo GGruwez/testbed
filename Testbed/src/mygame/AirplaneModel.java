@@ -1,26 +1,9 @@
 package mygame;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
-
-class MetalBox extends ColorBox{
-    public MetalBox(float x, float y, float z, AssetManager assetManager){
-        super(x, y, z, assetManager, ColorRGBA.DarkGray);
-    }
-}
-
-class ColorBox extends Geometry{
-    public ColorBox(float x, float y, float z, AssetManager assetManager, ColorRGBA color){
-        super("ColorBox", new RegularBox(x, y, z));
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        this.setMaterial(mat);
-    }
-}
+import mygame.visualcomponents.*;
 
 public class AirplaneModel extends Node{
 
@@ -73,15 +56,18 @@ public class AirplaneModel extends Node{
         attachChild(rightWing);
 
         // Rear wheel 1
-        ColorBox rearWheel1 = new ColorBox(0.3f, 0.3f, 0.3f, this.assetManager, ColorRGBA.Black);
+        ColorCylinder rearWheel1 = new ColorCylinder(0.3f, 0.3f, true, this.assetManager, ColorRGBA.Black);
+        rearWheel1.rotate(0, (float)Math.PI/2, 0);
         rearWheel1.setLocalTranslation(REAR_WHEEL_X, WHEEL_Y, REAR_WHEEL_Z);
         attachChild(rearWheel1);
         // Rear wheel 2
-        ColorBox rearWheel2 = new ColorBox(0.3f, 0.3f, 0.3f, this.assetManager, ColorRGBA.Black);
+        ColorCylinder rearWheel2 = new ColorCylinder(0.3f, 0.3f, true, this.assetManager, ColorRGBA.Black);
+        rearWheel2.rotate(0, (float)Math.PI/2, 0);
         rearWheel2.setLocalTranslation(-REAR_WHEEL_X, WHEEL_Y, REAR_WHEEL_Z);
         attachChild(rearWheel2);
         // Front wheel
-        ColorBox frontWheel = new ColorBox(0.3f, 0.3f, 0.3f, this.assetManager, ColorRGBA.Black);
+        ColorCylinder frontWheel = new ColorCylinder(0.3f, 0.3f, true, this.assetManager, ColorRGBA.Black);
+        frontWheel.rotate(0, (float)Math.PI/2, 0);
         frontWheel.setLocalTranslation(0, WHEEL_Y, FRONT_WHEEL_Z);
         attachChild(frontWheel);
 

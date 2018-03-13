@@ -22,6 +22,7 @@ import com.jme3.terrain.geomipmap.grid.ImageTileLoader;
 import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.Namer;
 import com.jme3.texture.Texture;
+import mygame.visualcomponents.RegularBox;
 
 import java.io.IOException;
 import java.util.ConcurrentModificationException;
@@ -73,7 +74,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         goalCube.setLocalTranslation(0, 0, 0);
 
 //        getRootNode().attachChild(apm);
-        aircraft = new Aircraft("Plane", assetManager, 0, 100, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        aircraft = new Aircraft("Plane", assetManager, 0, 3, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         //world.newGround();
         // Plane camera viewport

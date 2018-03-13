@@ -1,4 +1,4 @@
-package mygame;
+package mygame.visualcomponents;
 
 import com.jme3.scene.shape.Box;
 
@@ -13,7 +13,7 @@ import com.jme3.scene.shape.Box;
  */
 public class RegularBox extends Box {
 
-    RegularBox(float x, float y, float z){
+    public RegularBox(float x, float y, float z){
         super(x/2, y/2, z/2);
     }
 
