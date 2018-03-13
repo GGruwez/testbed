@@ -53,7 +53,7 @@ public class Aircraft extends Node {
     /**
      *
      * @param name
-     * @param model
+     * @param assetManager
      * @param x
      * @param y
      * @param z
@@ -421,40 +421,43 @@ public class Aircraft extends Node {
         return new AutopilotOutputs() {
         	  @Override
         	    public float getThrust() {
-        	        return this.thrust;
+        	        return Aircraft.this.thrust;
         	    }
 
         	    @Override
         	    public float getLeftWingInclination() {
-        	        return this.leftWingInclination;
+        	        return Aircraft.this.leftWingInclination;
         	    }
 
         	    @Override
         	    public float getRightWingInclination() {
-        	        return this.rightWingInclination;
+        	        return Aircraft.this.rightWingInclination;
         	    }
 
         	    @Override
         	    public float getHorStabInclination() {
-        	        return this.horStabInclination;
+        	        return Aircraft.this.horStabInclination;
         	    }
 
         	    @Override
         	    public float getVerStabInclination() {
-        	        return this.verStabInclination;
-        	    }
-        	    
-        	    public Vector getFrontBreakForce(){
-        	    	return this.frontBreakForce;
-        	    }
-        	    
-        	    public Vector getLeftBreakForce(){
-        	    	return this.frontBreakForce;
+        	        return Aircraft.this.verStabInclination;
         	    }
 
-        	    public Vector getRightBreakForce(){
-        	    	return this.frontBreakForce;
-        	    }
+            @Override
+            public float getFrontBrakeForce() {
+                return 0; // TODO: implement
+            }
+
+            @Override
+            public float getLeftBrakeForce() {
+                return 0; // TODO: implement
+            }
+
+            @Override
+            public float getRightBrakeForce() {
+                return 0; // TODO: implement
+            }
         };
     }
 

@@ -460,20 +460,23 @@ public class Force {
     
     public void setLeftBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftBreakForce = this.getAircraft().getAutopilotOutputs().getLeftBreakForce();
+            // TODO: implement
+//    		this.leftBreakForce = this.getAircraft().getAutopilotOutputs().getLeftBrakeForce();
     	}
     }
     
     public void setRightBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.rightBreakForce = this.getAircraft().getAutopilotOutputs().getRightBreakForce();
+            // TODO: implement
+//    		this.rightBreakForce = this.getAircraft().getAutopilotOutputs().getRightBrakeForce();
     	}
     }
    
     
     public void setFrontBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.frontBreakForce = this.getAircraft().getAutopilotOutputs().getFrontBreakForce();
+    	    // TODO: implement
+//    		this.frontBreakForce = this.getAircraft().getAutopilotOutputs().getFrontBrakeForce();
     	}
     }
     
