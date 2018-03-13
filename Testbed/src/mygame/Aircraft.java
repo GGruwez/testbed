@@ -279,7 +279,6 @@ public class Aircraft extends Node {
 
 
 //        System.out.println("time" + time);
-//        System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
 //        System.out.println("Coordinates: " + getCalcCoordinates().getX() + " " + getCalcCoordinates().getY() + " " + getCalcCoordinates().getZ());
 //        System.out.println("Angular velocity: " + getAngularVelocity().getX() + " " + getAngularVelocity().getY() + " " + getAngularVelocity().getZ());
 //        System.out.println("Moment: " + getForce().getTotalMoment().getX() + " " + getForce().getTotalMoment().getY() + " " + getForce().getTotalMoment().getZ());
@@ -294,6 +293,12 @@ public class Aircraft extends Node {
 //        this.getForce().getLeftWingLift().transform(heading, pitch, roll).printVector("leftlift");
 //       System.out.println("incl: "+ this.getLeftWingInclination());
 //       System.out.println("Left wing: " + this.getLeftWingInclination());
+    	//System.out.println("Back left normal:"+this.getForce().getLeftRearWheelNormalForce());
+    	//System.out.println("Back right normal:"+this.getForce().getRightRearWheelNormalForce());
+
+    	System.out.println("Y coordinates wheels: "+ (this.getCalcCoordinates().getY()-this.getConfig().getWheelY()));
+    	System.out.println("Velocity: " + getVelocity().getX() + " " + getVelocity().getY() + " " + getVelocity().getZ());
+
     }
 
     public float getGravityConstant(){

@@ -447,7 +447,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         // Load alpha map (for splat textures)
         matRock.setTexture("Alpha", assetManager.loadTexture("Textures/Terrain/splat/alphamap.png"));
         // load grass texture
-        Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grass.png");
+        Texture grass = assetManager.loadTexture("Textures/Terrain/splat/grid.png");
         grass.setWrap(Texture.WrapMode.Repeat);
         matRock.setTexture("Tex1", grass);
         matRock.setFloat("Tex1Scale", 65f);
@@ -459,7 +459,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         }));
         terrain.setMaterial(matRock);
         terrain.setLocalTranslation(0, 0, 0);
-        terrain.setLocalScale(50f, 1f, 50f);
+        terrain.setLocalScale(500f, 1f, 500f);
         this.rootNode.attachChild(terrain);
 
         addLodControlToTerrain(getCamera());
