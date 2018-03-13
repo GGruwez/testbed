@@ -30,9 +30,9 @@ public class Force {
     private Vector rightRearWheelNormalForce = Vector.NULL;
     private Vector frontWheelNormalForce = Vector.NULL;
     
-    private Vector leftRearWheelBreakForce = Vector.NULL;
-    private Vector rightRearWheelBreakForce = Vector.NULL;
-    private Vector frontWheelBreakForce = Vector.NULL;
+    private Vector leftBreakForce = Vector.NULL;
+    private Vector rightBreakForce = Vector.NULL;
+    private Vector frontBreakForce = Vector.NULL;
     
     private Vector frontWheelFrictionForce = Vector.NULL;
     private Vector leftRearWheelFrictionForce = Vector.NULL;
@@ -452,35 +452,35 @@ public class Force {
     	}
     
     
-    public void setLeftRearWheelBreakForce(){
+    public void setLeftBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftRearWheelBreakForce = new Vector(0,0,0);
+    		this.leftBreakForce = AutopilotOutput.getLeftBreakForce();
     	}
     }
     
-    public void setRightRearWheelBreakForce(){
+    public void setRightBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    	this.leftRearWheelBreakForce = new Vector(0,0,0);
+    		this.rightBreakForce = AutopilotOutput.getRightBreakForce();
     	}
     }
    
     
-    public void setFrontWheelBreakForce(){
+    public void setFrontBreakForce(){
     	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=7){
-    		this.leftRearWheelBreakForce = new Vector(0,0,0);
+    		this.frontBreakForce = AutopilotOutput.getFrontBreakForce();
     	}
     }
     
     public Vector getRightRearWheelBreakForce(){
-    	return this.rightRearWheelBreakForce;
+    	return this.rightBreakForce;
     }
     
     public Vector getLeftRearWheelBreakForce(){
-    	return this.leftRearWheelBreakForce;
+    	return this.leftBreakForce;
     }
     
     public Vector getFrontWheelBreakForce(){
-    	return this.frontWheelBreakForce;
+    	return this.frontBreakForce;
     }
     
     /*public void setFrontWheelFrictionForce(){
