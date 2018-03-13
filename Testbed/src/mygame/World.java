@@ -53,6 +53,8 @@ public class World {
     private static int W = 10;
     private static int L = 350;
     
+    private boolean first = true;
+    
 
     public World(MainSwingCanvas app) {
         this.autopilot = AutopilotFactory.createAutopilot();
@@ -130,12 +132,12 @@ public class World {
     public void evolve(float dt) throws IOException {
         if (this.isSimulating() && !this.isPaused()) {
             //check collision with ground
-            //CollisionResults results = new CollisionResults();
-            ////getAircraft().collideWith(ground.getModelBound(), results);
-            //System.out.println("size: " + String.valueOf(results.size()));
-            //if (results.size() > 0) {
-            ////    this.mainSwingCanvas.crashAircraft();
-            //}
+            CollisionResults results = new CollisionResults();
+            aircraft.getAircraftGeometry().collideWith(this.mainSwingCanvas.getTerrain().getWorldBound(), results);
+            System.out.println("size: " + String.valueOf(results.size()));
+            if (results.size() > 0 && !first) {
+                this.mainSwingCanvas.crashAircraft();
+            }
             // Update visual position of aircraft
             this.getAircraft().updateVisualCoordinates();
             this.getAircraft().updateVisualRotation();
@@ -149,6 +151,7 @@ public class World {
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
+            first = false;
         }
 
         Cube cubeToRemove = null;
