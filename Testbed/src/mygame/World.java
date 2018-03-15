@@ -1,7 +1,7 @@
 package mygame;
 
 import com.jme3.collision.CollisionResults;
-import com.jme3.material.Material;
+
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,8 +13,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Quad;
 import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
 import interfaces.AutopilotInputs;
@@ -26,7 +24,7 @@ public class World {
 
     private static long SIMULATION_PERIOD = 10; // Simulation period in milliseconds, determines how fast autopilot calculations happen
 
-    private ArrayList<Aircraft> aircrafts = new ArrayList<>();
+    private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
     private Aircraft selectedAircraft;
     private Autopilot autopilot;
     private boolean simulation;
@@ -106,10 +104,10 @@ public class World {
     }
 
     public void addAircraft(Aircraft aircraft) {
-        if(this.aircrafts.size() == 0){
+        if(this.collectionOfAircraft.size() == 0){
             this.setSelectedAircraft(aircraft);
         }
-        this.aircrafts.add(aircraft);
+        this.collectionOfAircraft.add(aircraft);
         aircraft.setWorld(this);
     }
 
@@ -120,12 +118,17 @@ public class World {
     public Aircraft getSelectedAircraft() {
         return this.selectedAircraft;
     }
+
+    private ArrayList<Aircraft> getCollectionOfAircraft(){
+        return this.collectionOfAircraft;
+    }
     
     public Autopilot getAutopilot() {
         return this.autopilot;
     }
 
     private void evolveAutopilot(float dt){
+        // TODO: evolve every aircraft
         if (this.isSimulating() && !this.isPaused()) {
             AutopilotInputs autopilotInputs = this.getSelectedAircraft().getAutopilotInputs();
             AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
@@ -244,8 +247,6 @@ public class World {
             generateCube(x,y,z,color);
         }           
     }
-    
-    
     
     public void generateRandomCubes(int n) {
         this.usedColors = new ColorRGBA[n];
