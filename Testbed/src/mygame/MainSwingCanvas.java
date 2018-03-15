@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
     protected RenderCamera renderCamera;
-    private Aircraft aircraft;
     private World world;
     private BitmapText aircraftInfo;
     private TerrainGrid terrain;
@@ -74,7 +73,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         goalCube.setLocalTranslation(0, 0, 0);
 
 //        getRootNode().attachChild(apm);
-        aircraft = new Aircraft("Plane", assetManager, 0, 10, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 10, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
         world.setAircraft(aircraft);
         //world.newGround();
         // Plane camera viewport
@@ -273,29 +272,29 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
     public void refreshAircraftInfo(){
         String aircraftInfoText = "Aircraft Info:\r\n";
-        aircraftInfoText += "Position: " + this.aircraft.getCalcCoordinates().toString();
+        aircraftInfoText += "Position: " + this.getAircraft().getCalcCoordinates().toString();
         aircraftInfoText += "\r\n";
-        aircraftInfoText += "Velocity: " + this.aircraft.getVelocity().toString();
+        aircraftInfoText += "Velocity: " + this.getAircraft().getVelocity().toString();
         aircraftInfoText += "\r\n";
-        aircraftInfoText += "Acceleration: " + this.aircraft.getAcceleration().toString();
+        aircraftInfoText += "Acceleration: " + this.getAircraft().getAcceleration().toString();
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Pitch: %.2f", this.aircraft.getPitch());
+        aircraftInfoText += String.format("Pitch: %.2f", this.getAircraft().getPitch());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Roll: %.2f", this.aircraft.getRoll());
+        aircraftInfoText += String.format("Roll: %.2f", this.getAircraft().getRoll());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Heading: %.2f", this.aircraft.getHeading());
+        aircraftInfoText += String.format("Heading: %.2f", this.getAircraft().getHeading());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("leftWingInclination: %.2f", this.aircraft.getLeftWingInclination());
+        aircraftInfoText += String.format("leftWingInclination: %.2f", this.getAircraft().getLeftWingInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("rightWingInclination: %.2f", this.aircraft.getRightWingInclination());
+        aircraftInfoText += String.format("rightWingInclination: %.2f", this.getAircraft().getRightWingInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("horStabInclination: %.2f", this.aircraft.getHorStabInclination());
+        aircraftInfoText += String.format("horStabInclination: %.2f", this.getAircraft().getHorStabInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("verStabInclination: %.2f", this.aircraft.getVerStabInclination());
+        aircraftInfoText += String.format("verStabInclination: %.2f", this.getAircraft().getVerStabInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Elapsed time: %.2f", this.aircraft.getElapsedTime());
+        aircraftInfoText += String.format("Elapsed time: %.2f", this.getAircraft().getElapsedTime());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Manual control [q]: %b", this.aircraft.isManualControlEnabled());
+        aircraftInfoText += String.format("Manual control [q]: %b", this.getAircraft().isManualControlEnabled());
         aircraftInfoText += "\r\n";
         aircraftInfoText += String.format("Mouse released [r]: %b", this.isMouseVisible());
         aircraftInfoText += "\r\n";
@@ -305,7 +304,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
 
     public Aircraft getAircraft(){
-        return this.aircraft;
+        return this.getWorld().getAircraft();
     }
 
     public World getWorld(){return this.world;}
@@ -426,7 +425,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
     
     public void crashAircraft() {
-        this.getRootNode().detachChild(this.aircraft);
+        this.getRootNode().detachChild(this.getAircraft());
         this.stop();
     }
 
