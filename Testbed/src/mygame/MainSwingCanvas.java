@@ -74,7 +74,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
 //        getRootNode().attachChild(apm);
         Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 10, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
-        world.setAircraft(aircraft);
+        world.addAircraft(aircraft);
         //world.newGround();
         // Plane camera viewport
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
@@ -304,7 +304,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
 
     public Aircraft getAircraft(){
-        return this.getWorld().getAircraft();
+        return this.getWorld().getSelectedAircraft();
     }
 
     public World getWorld(){return this.world;}
