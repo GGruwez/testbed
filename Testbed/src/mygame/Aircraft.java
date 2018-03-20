@@ -71,7 +71,7 @@ public class Aircraft extends Node {
                     float horStabInclination, float verStabInclination) {
 
         this.aircraftGeometry = new AirplaneModel(assetManager, this);
-        
+
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
@@ -219,6 +219,18 @@ public class Aircraft extends Node {
 	return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
     }
 
+    public Vector getFrontWheel(){
+    	return new Vector(0,this.getConfig().getWheelY(),this.getConfig().getFrontWheelZ());
+    }
+    
+    public Vector getRightRearWheel(){
+    	return new Vector(this.getConfig().getRearWheelX(),this.getConfig().getWheelY(),this.getConfig().getRearWheelZ());
+    }
+    
+    public Vector getLeftRearWheel(){
+    	return new Vector(-this.getConfig().getRearWheelX(),this.getConfig().getWheelY(),this.getConfig().getRearWheelZ());
+    }
+    
     public float getLeftWingInclination() {
         return leftWingInclination;
     }
@@ -358,6 +370,8 @@ public class Aircraft extends Node {
             return;
         }
         this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.getForce().setBreakForces(autopilotOutputs.getFrontBrakeForce(), autopilotOutputs.getLeftBrakeForce(), 
+                autopilotOutputs.getRightBrakeForce());
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination());

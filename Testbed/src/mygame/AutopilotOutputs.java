@@ -16,7 +16,9 @@ public class AutopilotOutputs implements p_en_o_cw_2017.AutopilotOutputs{
     public float rightWingInclination;
     public float horStabInclination;
     public float verStabInclination;
-
+    public float frontBrakeForce;
+    public float leftBrakeForce;
+    public float rightBrakeForce;
 
     @Override
     public float getThrust() {
@@ -41,5 +43,20 @@ public class AutopilotOutputs implements p_en_o_cw_2017.AutopilotOutputs{
     @Override
     public float getVerStabInclination() {
         return this.verStabInclination;
+    }
+    
+    @Override
+    public float getFrontBrakeForce() {
+        return this.frontBrakeForce;
+    }
+
+    @Override
+    public float getLeftBrakeForce() {
+        return this.leftBrakeForce;
+    }
+
+    @Override
+    public float getRightBrakeForce() {
+        return this.rightBrakeForce;
     }
 }

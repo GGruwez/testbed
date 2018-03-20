@@ -33,14 +33,14 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     public static float frontWheelZ = -1.5f; //coordinates
     public static float rearWheelZ = 1f; //coordinates
     public static float rearWheelX = 1.22f; //coordinates
-    public static float tyreSlope = 950f;
-    public static float dampSlope = 15000f;
+    public static float tyreSlope = 50000f;
+    public static float dampSlope = 5000f;
     public static float tyreRadius = 0.2f;
     public static float rMax = 100f;    //maximal breaking power on each wheel
     public static float fcMax = 0.01f;  //maximal friction coefficient for rear wheels
     public static float horizontalAngleOfView;
     public static float verticalAngleOfView;
-   
+
 
     @Override
     public float getGravity() {
@@ -148,15 +148,14 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     public float getTyreRadius() {
         return this.tyreRadius;    
     }
-
-    
-    public float getRMax() {
-        return this.rMax;
-    }
-
     
     public float getFcMax() {
-        return this.fcMax;
+        return this.fcMax; 
+    }
+
+    @Override
+    public float getRMax() {
+        return this.rMax;
     }
     
 }
