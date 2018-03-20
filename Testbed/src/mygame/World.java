@@ -144,9 +144,11 @@ public class World {
             }
             if (results.size() > 0 && !first && !collidesWithAirport) {
                 System.out.println(results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
+              
                 this.endSimulation(); //TODO: support multiple airplanes
             
             }
+            if (hasToCrash(aircraft)) this.endSimulation();
             // Update visual position of aircraft
             this.getAircraft().updateVisualCoordinates();
             this.getAircraft().updateVisualRotation();
@@ -163,6 +165,8 @@ public class World {
             first = false;
         }
 
+        
+        
         Cube cubeToRemove = null;
         for(Cube cube:this.getCubesInWorld()) {
             Vector cubePos = this.getCubePositions().get(cube);
@@ -175,6 +179,13 @@ public class World {
         this.getCubesInWorld().remove(cubeToRemove);
 
     }
+    
+    private boolean hasToCrash(Aircraft aircraft) {
+            float wingY = (float) (aircraft.getCalcCoordinates().getY()-Math.sin(aircraft.getRoll())*AirplaneModel.WING_LENGTH);
+            float tailY = (float) (aircraft.getCalcCoordinates().getY()-Math.sin(aircraft.getPitch())*AirplaneModel.TAIL_SIZE);
+            if (wingY<0) System.out.println("value: " + aircraft.getCalcCoordinates().getY());
+            return (wingY<0 || tailY<0);
+        }
     
     public void startSimulation() {
         this.simulation = true;
@@ -362,6 +373,7 @@ public class World {
         airports.add(airport);
         airport.build();
     }
+
     
     
 }

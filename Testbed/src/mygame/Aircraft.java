@@ -70,7 +70,7 @@ public class Aircraft extends Node {
                     float thrust, float leftWingInclination, float rightWingInclination,
                     float horStabInclination, float verStabInclination) {
 
-        this.aircraftGeometry = new AirplaneModel(assetManager);;
+        this.aircraftGeometry = new AirplaneModel(assetManager);
         
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
