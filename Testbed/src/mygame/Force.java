@@ -63,7 +63,7 @@ public class Force {
     
 
 
-    Force(float thrust,Aircraft plane){
+    Force(Aircraft plane){
         this.setAircraft(plane);
         this.setAttackAngles(this.getAircraft().getLeftWingInclination(), 
                 this.getAircraft().getRightWingInclination(), 
@@ -71,7 +71,6 @@ public class Force {
                 this.getAircraft().getVerStabInclination());
         this.setGravityForces(this.getAircraft().getTailMass(), this.getAircraft().getWingMass(), this.getAircraft().getEngineMass());
         this.setLiftForce();
-        this.setThrust(thrust);	
     }
 
     public void UpdateForce(){
