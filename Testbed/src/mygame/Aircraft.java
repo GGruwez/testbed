@@ -40,7 +40,7 @@ public class Aircraft extends Node {
     private float neglectValue = 0.00001f;
     private byte[] image = new byte[0];
     
-    private Spatial aircraftGeometry;
+    private AirplaneModel aircraftGeometry;
     private Camera aircraftCamera;
     private CameraNode aircraftCameraNode;
     
@@ -70,8 +70,8 @@ public class Aircraft extends Node {
                     float thrust, float leftWingInclination, float rightWingInclination,
                     float horStabInclination, float verStabInclination) {
 
-        this.aircraftGeometry = new AirplaneModel(assetManager);
-        
+        this.aircraftGeometry = new AirplaneModel(assetManager, this);
+
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
@@ -80,7 +80,7 @@ public class Aircraft extends Node {
         this.aircraftCameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
         this.attachChild(this.aircraftGeometry);
         this.attachChild(this.aircraftCameraNode);
-        this.aircraftCameraNode.setLocalTranslation(0, 0, -AirplaneModel.PLANE_TAIL_MASS_OFFSET);
+        this.aircraftCameraNode.setLocalTranslation(0, 0, -aircraftGeometry.getPlaneTailMassOffset());
         this.aircraftCameraNode.lookAt(new Vector3f(0,0,-10), Vector3f.UNIT_Y); // Front of the plane is in -z direction
         
         // Fysica
