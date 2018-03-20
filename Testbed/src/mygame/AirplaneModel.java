@@ -10,7 +10,6 @@ public class AirplaneModel extends Node{
     private AssetManager assetManager;
     private Aircraft aircraft;
 
-    // TODO: use constants from autopilot config
     public static float PLANE_HEIGHT = 1;
     public static float PLANE_WIDTH = 2;
 

@@ -146,7 +146,7 @@ public class Aircraft extends Node {
     }
     
     public void setPitch(float pitch){
-    	this.pitch = (float) pitch;
+    	this.pitch = pitch;
     }
     
     public float getRoll(){
@@ -154,7 +154,7 @@ public class Aircraft extends Node {
     }
     
     public void setRoll(float roll){
-    	this.roll = (float) roll;
+    	this.roll = roll;
     }
     
     public float getHeading(){
@@ -162,7 +162,7 @@ public class Aircraft extends Node {
     }
     
     public void setHeading(float heading){
-    	this.heading = (float) heading;
+    	this.heading = heading;
     }
     
     public Vector getAngularVelocity(){
@@ -326,7 +326,7 @@ public class Aircraft extends Node {
     
     public void setManualControl(boolean control){
         this.manualControl = control;
-        if(control == true){
+        if(control){
             this.getForce().setThrust(0);
             this.setLeftWingInclination(0);
             this.setRightWingInclination(0);
