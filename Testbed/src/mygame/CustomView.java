@@ -5,9 +5,7 @@ import com.jme3.app.state.AppState;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.profile.AppStep;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -194,8 +192,8 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
         mat.setColor("Color", new ColorRGBA(0.8f, 0.8f, 0.8f, 0));
 
         // Create border
-        int cameraWidth = mainCanvas.getAircraft().getCamera().getWidth() + 2;
-        int cameraHeight = mainCanvas.getAircraft().getCamera().getHeight();
+        int cameraWidth = mainCanvas.getSelectedAircraft().getCamera().getWidth() + 2;
+        int cameraHeight = mainCanvas.getSelectedAircraft().getCamera().getHeight();
         int horizontalOffset = -23;
         // top
         Geometry rectTop = new Geometry("rectTop", new Quad(cameraWidth, 1));
@@ -214,12 +212,12 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
         guiNode.getChild("rectRight").setLocalTranslation(settings.getWidth()+horizontalOffset, 0, 10);
 
         // Plane camera viewport
-        ViewPort planeCamViewPort = renderManager.createMainView("planecam view", mainCanvas.getAircraft().getCamera());
+        ViewPort planeCamViewPort = renderManager.createMainView("planecam view", mainCanvas.getSelectedAircraft().getCamera());
         planeCamViewPort.setClearFlags(true, true, true);
         planeCamViewPort.attachScene(rootNode);
         planeCamViewPort.setBackgroundColor(ColorRGBA.White);
         // Render camera
-        mainCanvas.renderCamera = new RenderCamera(mainCanvas.getAircraft().getCamera(), settings.getWidth(), settings.getHeight(), mainCanvas.getAircraft());
+        mainCanvas.renderCamera = new RenderCamera(mainCanvas.getSelectedAircraft().getCamera(), settings.getWidth(), settings.getHeight(), mainCanvas.getSelectedAircraft());
         mainCanvas.renderCamera.initialize(this.getStateManager(), this);
     }
 

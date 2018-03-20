@@ -219,6 +219,18 @@ public class Aircraft extends Node {
 	return this.getTailSize().constantProduct(-this.getTailMass()/this.getEngineMass());
     }
 
+    public Vector getFrontWheel(){
+    	return new Vector(0,this.getConfig().getWheelY(),this.getConfig().getFrontWheelZ());
+    }
+    
+    public Vector getRightRearWheel(){
+    	return new Vector(this.getConfig().getRearWheelX(),this.getConfig().getWheelY(),this.getConfig().getRearWheelZ());
+    }
+    
+    public Vector getLeftRearWheel(){
+    	return new Vector(-this.getConfig().getRearWheelX(),this.getConfig().getWheelY(),this.getConfig().getRearWheelZ());
+    }
+    
     public float getLeftWingInclination() {
         return leftWingInclination;
     }

@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
     protected RenderCamera renderCamera;
-    private Aircraft aircraft;
     private World world;
     private BitmapText aircraftInfo;
     private TerrainGrid terrain;
@@ -73,35 +72,16 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
 
-//        getRootNode().attachChild(apm);
-        aircraft = new Aircraft("Plane", assetManager, 0, 10, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
-        world.setAircraft(aircraft);
-        //world.newGround();
-        // Plane camera viewport
-        ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());
-        planeCamViewPort.setClearFlags(true, true, true);
-        planeCamViewPort.attachScene(rootNode);
-        planeCamViewPort.setBackgroundColor(ColorRGBA.White);
+        Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 10, 0, 0, 0, -20f, 0, 0, 0, 0, 0);
+        world.addAircraft(aircraft);
+        rootNode.attachChild(aircraft);
 
-        // Plane chase camera viewport
-        ViewPort chaseCamViewPort = renderManager.createMainView("chasecam view", world.getChaseCam());
-        chaseCamViewPort.setClearFlags(true, true, true);
-        chaseCamViewPort.attachScene(rootNode);
-        chaseCamViewPort.setBackgroundColor(ColorRGBA.White);
-        rootNode.attachChild(world.getChaseCamNode());
-        
-        // Top down camera viewport
-        ViewPort topDownCamViewPort = renderManager.createMainView("top down cam view", world.getTopDownCam());
-        topDownCamViewPort.setClearFlags(true, true, true);
-        topDownCamViewPort.attachScene(rootNode);
-        topDownCamViewPort.setBackgroundColor(ColorRGBA.White);
-        rootNode.attachChild(world.getTopDownCamNode());
-        // Side camera viewport
-        ViewPort sideCamViewPort = renderManager.createMainView("top down cam view", world.getSideCam());
-        sideCamViewPort.setClearFlags(true, true, true);
-        sideCamViewPort.attachScene(rootNode);
-        sideCamViewPort.setBackgroundColor(ColorRGBA.White);
-        rootNode.attachChild(world.getSideCamNode());
+
+        // TODO: maybe remove these viewports (Attention: plane camera viewport has to be available someway to support image recognition)
+        createPlaneCameraViewport();
+        createChaseCameraViewport();
+        createTopDownCameraViewport();
+        createSideCameraViewport();
 
         // Move aircraft to starting position
 //         Quaternion pitchQuat = new Quaternion();
@@ -118,15 +98,10 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 //        aircraft.setLocalTranslation((float) x,(float) y,d);
 //        aircraft.setLocalRotation(totalQuat);
 
-
-
-
         // Set viewport background color to white
         this.viewPort.setBackgroundColor(ColorRGBA.White);
 
-        //rootNode.attachChild(goalCube);
-        rootNode.attachChild(aircraft);
-
+        // TODO: support for multiple aircraft
         renderCamera = new RenderCamera(aircraft.getCamera(), settings.getWidth(), settings.getHeight(), aircraft);
         renderCamera.initialize(stateManager, this);
 
@@ -171,6 +146,41 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         createTerrain();
 
         callbackAfterAppInit.run();
+    }
+
+    private void createPlaneCameraViewport(){
+        // Plane camera viewport
+        ViewPort planeCamViewPort = renderManager.createMainView("planecam view", this.getSelectedAircraft().getCamera());
+        planeCamViewPort.setClearFlags(true, true, true);
+        planeCamViewPort.attachScene(rootNode);
+        planeCamViewPort.setBackgroundColor(ColorRGBA.White);
+    }
+
+    private void createChaseCameraViewport(){
+        // Plane chase camera viewport
+        ViewPort chaseCamViewPort = renderManager.createMainView("chasecam view", this.getWorld().getChaseCam());
+        chaseCamViewPort.setClearFlags(true, true, true);
+        chaseCamViewPort.attachScene(rootNode);
+        chaseCamViewPort.setBackgroundColor(ColorRGBA.White);
+        rootNode.attachChild(this.getWorld().getChaseCamNode());
+    }
+
+    private void createTopDownCameraViewport(){
+        // Top down camera viewport
+        ViewPort topDownCamViewPort = renderManager.createMainView("top down cam view", this.getWorld().getTopDownCam());
+        topDownCamViewPort.setClearFlags(true, true, true);
+        topDownCamViewPort.attachScene(rootNode);
+        topDownCamViewPort.setBackgroundColor(ColorRGBA.White);
+        rootNode.attachChild(this.getWorld().getTopDownCamNode());
+    }
+
+    private void createSideCameraViewport(){
+        // Side camera viewport
+        ViewPort sideCamViewPort = renderManager.createMainView("top down cam view", this.getWorld().getSideCam());
+        sideCamViewPort.setClearFlags(true, true, true);
+        sideCamViewPort.attachScene(rootNode);
+        sideCamViewPort.setBackgroundColor(ColorRGBA.White);
+        rootNode.attachChild(this.getWorld().getSideCamNode());
     }
 
     private void createChaseCameraCustomView() {
@@ -244,56 +254,58 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         renderCamera.grabCamera();
 
         this.refreshAircraftInfo();
-        log.addLine(this.getAircraft());
+        log.addLine(this.getSelectedAircraft());
         log.save();
     }
 
     private void updateDifferentCameras(){
         // Update chase camera
         this.chaseCameraCustomView.updateCamera(cv -> {
-            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
+            Vector newChaseCamPosition = this.getSelectedAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
             cv.getCameraNode().setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
-            Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
+            Vector aircraftCoordinates = this.getSelectedAircraft().getCalcCoordinates();
             cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         });
 
         // Update top down camera
         this.topDownCameraCustomView.updateCamera((CustomDualViewCallback) cv -> {
-            cv.getCameraNode().setLocalTranslation(-80, 80, -100);
-            cv.getCameraNode().lookAt(new Vector3f(-80, 0, -100), Vector3f.UNIT_X);
+            // TODO: check if this is consistent with the assignment
+            Vector aircraftCoordinates = this.getSelectedAircraft().getCalcCoordinates();
+            cv.getCameraNode().setLocalTranslation(aircraftCoordinates.getX()-80, aircraftCoordinates.getY() + 80, aircraftCoordinates.getZ());
+            cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX()-80, aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_X);
 
             cv.getSecondCamera().resize(cv.width, cv.height/2, false);
-            cv.getSecondCameraNode().setLocalTranslation(-30, 0, -100);
-            cv.getSecondCameraNode().lookAt(new Vector3f(0, 0, -100), Vector3f.UNIT_Y);
+            cv.getSecondCameraNode().setLocalTranslation(aircraftCoordinates.getX()-30, aircraftCoordinates.getY(), aircraftCoordinates.getZ());
+            cv.getSecondCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
         });
 
     }
 
     public void refreshAircraftInfo(){
         String aircraftInfoText = "Aircraft Info:\r\n";
-        aircraftInfoText += "Position: " + this.aircraft.getCalcCoordinates().toString();
+        aircraftInfoText += "Position: " + this.getSelectedAircraft().getCalcCoordinates().toString();
         aircraftInfoText += "\r\n";
-        aircraftInfoText += "Velocity: " + this.aircraft.getVelocity().toString();
+        aircraftInfoText += "Velocity: " + this.getSelectedAircraft().getVelocity().toString();
         aircraftInfoText += "\r\n";
-        aircraftInfoText += "Acceleration: " + this.aircraft.getAcceleration().toString();
+        aircraftInfoText += "Acceleration: " + this.getSelectedAircraft().getAcceleration().toString();
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Pitch: %.2f", this.aircraft.getPitch());
+        aircraftInfoText += String.format("Pitch: %.2f", this.getSelectedAircraft().getPitch());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Roll: %.2f", this.aircraft.getRoll());
+        aircraftInfoText += String.format("Roll: %.2f", this.getSelectedAircraft().getRoll());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Heading: %.2f", this.aircraft.getHeading());
+        aircraftInfoText += String.format("Heading: %.2f", this.getSelectedAircraft().getHeading());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("leftWingInclination: %.2f", this.aircraft.getLeftWingInclination());
+        aircraftInfoText += String.format("leftWingInclination: %.2f", this.getSelectedAircraft().getLeftWingInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("rightWingInclination: %.2f", this.aircraft.getRightWingInclination());
+        aircraftInfoText += String.format("rightWingInclination: %.2f", this.getSelectedAircraft().getRightWingInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("horStabInclination: %.2f", this.aircraft.getHorStabInclination());
+        aircraftInfoText += String.format("horStabInclination: %.2f", this.getSelectedAircraft().getHorStabInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("verStabInclination: %.2f", this.aircraft.getVerStabInclination());
+        aircraftInfoText += String.format("verStabInclination: %.2f", this.getSelectedAircraft().getVerStabInclination());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Elapsed time: %.2f", this.aircraft.getElapsedTime());
+        aircraftInfoText += String.format("Elapsed time: %.2f", this.getSelectedAircraft().getElapsedTime());
         aircraftInfoText += "\r\n";
-        aircraftInfoText += String.format("Manual control [q]: %b", this.aircraft.isManualControlEnabled());
+        aircraftInfoText += String.format("Manual control [q]: %b", this.getSelectedAircraft().isManualControlEnabled());
         aircraftInfoText += "\r\n";
         aircraftInfoText += String.format("Mouse released [r]: %b", this.isMouseVisible());
         aircraftInfoText += "\r\n";
@@ -302,8 +314,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         aircraftInfo.setText(aircraftInfoText);
     }
 
-    public Aircraft getAircraft(){
-        return this.aircraft;
+    public Aircraft getSelectedAircraft(){
+        return this.getWorld().getSelectedAircraft();
     }
 
     public World getWorld(){return this.world;}
@@ -336,7 +348,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String name, boolean keyPressed, float tpf) {
             if (name.equals("SwitchControl") && !keyPressed) {
-                MainSwingCanvas.this.getAircraft().toggleManualControl();
+                MainSwingCanvas.this.getSelectedAircraft().toggleManualControl();
             }else if(name.equals("ReleaseMouse") && !keyPressed){
                 releaseMouse();
             }else if(name.equals("Pause") && !keyPressed){
@@ -373,7 +385,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float value, float tpf) {
-            Aircraft ac = MainSwingCanvas.this.getAircraft();
+            Aircraft ac = MainSwingCanvas.this.getSelectedAircraft();
             switch (name) {
                 case "PlaneLeft":
                     ac.setLeftWingInclination(ac.getLeftWingInclination() - 0.01f);
@@ -424,7 +436,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
     
     public void crashAircraft() {
-        this.getRootNode().detachChild(this.aircraft);
+        this.getRootNode().detachChild(this.getSelectedAircraft());
         this.stop();
     }
 
