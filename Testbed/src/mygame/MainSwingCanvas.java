@@ -78,12 +78,17 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         mat.setColor("Ambient", ColorRGBA.Red);
         goalCube.setMaterial(mat);
         goalCube.setLocalTranslation(0, 0, 0);
+        
+        AirplaneModel apm = new AirplaneModel(getAssetManager());
+ //        getRootNode().attachChild(apm);
+         aircraft = new Aircraft("Plane", apm, 0, 2f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+         world.setAircraft(aircraft);
 
-        Box plane = new Box(1,1,2);
-        Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
-        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -32f, 0, 0, 0, 0, 0);
-
-        world.setAircraft(aircraft);
+//        Box plane = new Box(1,1,2);
+//        Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
+//        aircraft = new Aircraft("Plane", planemodel, 0, 0, 0, 0, 0, -32f, 0, 0, 0, 0, 0);
+//
+//        world.setAircraft(aircraft);
 
         // Plane camera viewport
         ViewPort planeCamViewPort = renderManager.createMainView("planecam view", aircraft.getCamera());

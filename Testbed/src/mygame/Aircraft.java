@@ -340,6 +340,8 @@ public class Aircraft extends Node {
             return;
         }
         this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.getForce().setBreakForces(autopilotOutputs.getFrontBrakeForce(), autopilotOutputs.getLeftBrakeForce(), 
+                autopilotOutputs.getRightBrakeForce());
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination());
