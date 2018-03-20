@@ -28,7 +28,8 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     private int nbColumns = 200;
     private int nbRows = 200;
     	
-	private String droneID = "PREDATOR";
+    //MOETEN ALTIJD 7 KARAKTERS ZIJN
+    private String droneID = "PREDATOR";
     private float wheelY = -1.52f; //coordinates
     private float frontWheelZ = -1.5f; //coordinates
     private float rearWheelZ = 1f; //coordinates
