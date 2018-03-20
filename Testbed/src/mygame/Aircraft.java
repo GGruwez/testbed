@@ -70,7 +70,7 @@ public class Aircraft extends Node {
                     float thrust, float leftWingInclination, float rightWingInclination,
                     float horStabInclination, float verStabInclination) {
 
-        this.aircraftGeometry = new AirplaneModel(assetManager);;
+        this.aircraftGeometry = new AirplaneModel(assetManager);
         
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
@@ -370,6 +370,8 @@ public class Aircraft extends Node {
             return;
         }
         this.getForce().setThrust(autopilotOutputs.getThrust());
+        this.getForce().setBreakForces(autopilotOutputs.getFrontBrakeForce(), autopilotOutputs.getLeftBrakeForce(), 
+                autopilotOutputs.getRightBrakeForce());
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
         this.setHorStabInclination(autopilotOutputs.getHorStabInclination());

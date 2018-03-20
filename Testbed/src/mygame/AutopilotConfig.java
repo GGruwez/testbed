@@ -148,15 +148,14 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     public float getTyreRadius() {
         return this.tyreRadius;    
     }
-
-    
-    public float getRMax() {
-        return this.rMax;
-    }
-
     
     public float getFcMax() {
-        return this.fcMax;
+        return this.fcMax; 
+    }
+
+    @Override
+    public float getRMax() {
+        return this.rMax;
     }
     
 }
