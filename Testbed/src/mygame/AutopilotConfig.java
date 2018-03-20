@@ -11,35 +11,35 @@ package mygame;
  */
 public class AutopilotConfig implements interfaces.AutopilotConfig {
     
-    private float gravity = 9.81f;
-    private float wingX = 4.2f;
-    private float tailSize = 4.2f;
-    private float engineMass = 180f;
-    private float wingMass = 100f;
-    private float tailMass = 100f;
-    private float maxThrust = 2000;
-    private float maxAOA = (float) Math.PI/12;
-    private float wingLiftSlope = 10f;
-    private float horStabLiftSlope = 5f;
-    private float verStabLiftSlope = 5f;
+    public static float gravity = 9.81f;
+    public static float wingX = 4.2f;
+    public static float tailSize = 4.2f;
+    public static float engineMass = 180f;
+    public static float wingMass = 100f;
+    public static float tailMass = 100f;
+    public static float maxThrust = 2000;
+    public static float maxAOA = (float) Math.PI/12;
+    public static float wingLiftSlope = 10f;
+    public static float horStabLiftSlope = 5f;
+    public static float verStabLiftSlope = 5f;
 
-    private float horAngleOfView = 120;
-    private float verAngleOfView = 120;
-    private int nbColumns = 200;
-    private int nbRows = 200;
+    public static float horAngleOfView = 120;
+    public static float verAngleOfView = 120;
+    public static int nbColumns = 200;
+    public static int nbRows = 200;
     	
-	private String droneID = "PREDATOR";
-    private float wheelY = -1.52f; //coordinates
-    private float frontWheelZ = -1.5f; //coordinates
-    private float rearWheelZ = 1f; //coordinates
-    private float rearWheelX = 1.22f; //coordinates
-    private float tyreSlope = 950f;
-    private float dampSlope = 15000f;
-    private float tyreRadius = 0.2f;
-    private float rMax = 100f;    //maximal breaking power on each wheel
-    private float fcMax = 0.01f;  //maximal friction coefficient for rear wheels 
-    private float horizontalAngleOfView;
-    private float verticalAngleOfView;
+	public static String droneID = "PREDATOR";
+    public static float wheelY = -1.52f; //coordinates
+    public static float frontWheelZ = -1.5f; //coordinates
+    public static float rearWheelZ = 1f; //coordinates
+    public static float rearWheelX = 1.22f; //coordinates
+    public static float tyreSlope = 950f;
+    public static float dampSlope = 15000f;
+    public static float tyreRadius = 0.2f;
+    public static float rMax = 100f;    //maximal breaking power on each wheel
+    public static float fcMax = 0.01f;  //maximal friction coefficient for rear wheels
+    public static float horizontalAngleOfView;
+    public static float verticalAngleOfView;
    
 
     @Override

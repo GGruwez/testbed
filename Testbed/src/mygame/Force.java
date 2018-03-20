@@ -332,7 +332,7 @@ public class Force {
 
     public Vector getEnginePlace(){
         return getAircraft().getTailSize().
-                constantProduct(-getAircraft().getTailMass()/getAircraft().getEngineMass());
+                constantProduct(-getAircraft().getTailMass()/getAircraft().getEngineMass()); // TODO: this is duplicate code (Aircraft.getEnginePlace)
     }
 
     /////////////////////////////////// WHEELS /////////////////////////////////
