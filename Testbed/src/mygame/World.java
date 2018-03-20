@@ -1,6 +1,7 @@
 package mygame;
 
-import com.jme3.material.Material;
+import com.jme3.collision.CollisionResults;
+
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,16 +9,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.control.CameraControl;
-import com.jme3.math.Plane;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.Node;
-import com.jme3.scene.shape.Quad;
 import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
 import interfaces.AutopilotInputs;
@@ -29,12 +24,12 @@ public class World {
 
     private static long SIMULATION_PERIOD = 10; // Simulation period in milliseconds, determines how fast autopilot calculations happen
 
-    private Aircraft aircraft;
+    private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
+    private Aircraft selectedAircraft;
     private Autopilot autopilot;
     private boolean simulation;
     private boolean paused = true;
     private Vector goal;
-    private Geometry ground;
 
     private Camera chaseCam;
     private CameraNode chaseCamNode;
@@ -49,8 +44,15 @@ public class World {
     private HashMap<Cube,Vector> cubePositions;
     private Set<Cube> cubesInWorld;
     
+    private static int W = 10;
+    private static int L = 350;
+    private ArrayList<Airport> airports;
+    
+    private boolean first = true;
+    
 
     public World(MainSwingCanvas app) {
+        this.airports = new ArrayList<>();
         this.autopilot = AutopilotFactory.createAutopilot();
 
         // Chase camera
@@ -81,8 +83,8 @@ public class World {
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        
-        this.newGround();
+        this.addAirport(0,-110);
+        //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
         Timer simulationTimer = new Timer(true);
@@ -101,13 +103,24 @@ public class World {
         //this.generateCubes(this.readFile("cubePositions.txt"));
     }
 
-    public void setAircraft(Aircraft aircraft) {
-        this.aircraft = aircraft;
-        getAircraft().setWorld(this);
+    public void addAircraft(Aircraft aircraft) {
+        if(this.collectionOfAircraft.size() == 0){
+            this.setSelectedAircraft(aircraft);
+        }
+        this.collectionOfAircraft.add(aircraft);
+        aircraft.setWorld(this);
+    }
+
+    public void setSelectedAircraft(Aircraft aircraft){
+        this.selectedAircraft = aircraft;
     }
     
-    public Aircraft getAircraft() {
-        return this.aircraft;
+    public Aircraft getSelectedAircraft() {
+        return this.selectedAircraft;
+    }
+
+    private ArrayList<Aircraft> getCollectionOfAircraft(){
+        return this.collectionOfAircraft;
     }
     
     public Autopilot getAutopilot() {
@@ -115,35 +128,56 @@ public class World {
     }
 
     private void evolveAutopilot(float dt){
+        // TODO: evolve every aircraft
         if (this.isSimulating() && !this.isPaused()) {
-            AutopilotInputs autopilotInputs = this.getAircraft().getAutopilotInputs();
+            AutopilotInputs autopilotInputs = this.getSelectedAircraft().getAutopilotInputs();
             AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
-            this.getAircraft().readAutopilotOutputs(autopilotOutputs);
-            this.getAircraft().updateAirplane(dt);
+            this.getSelectedAircraft().readAutopilotOutputs(autopilotOutputs);
+            this.getSelectedAircraft().updateAirplane(dt);
         }
     }
     
     public void evolve(float dt) throws IOException {
+        // TODO: evolve every aircraft
         if (this.isSimulating() && !this.isPaused()) {
+            //check collision with ground
+            CollisionResults results = new CollisionResults();
+            getSelectedAircraft().getAircraftGeometry().collideWith(this.mainSwingCanvas.getTerrain().getWorldBound(), results);
+            boolean collidesWithAirport = false;
+            CollisionResults temp = new CollisionResults();
+            for (Airport airport:airports) {
+                getSelectedAircraft().collideWith(airport.getBatchNode().getWorldBound(), temp);
+                if (temp.size()>0) collidesWithAirport = true;
+            }
+            if (results.size() > 0 && !first && !collidesWithAirport) {
+                System.out.println(results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
+              
+                this.endSimulation(); //TODO: support multiple airplanes
+            
+            }
+            if (hasToCrash(getSelectedAircraft())) this.endSimulation();
             // Update visual position of aircraft
-            this.getAircraft().updateVisualCoordinates();
-            this.getAircraft().updateVisualRotation();
+            this.getSelectedAircraft().updateVisualCoordinates();
+            this.getSelectedAircraft().updateVisualRotation();
             // Aircraft's calc coordinates and actual visual position coordinates are now the same
 
             // Camera's
             this.chaseCam.resize(200, 200, false);
             this.topDownCam.resize(200, 200, false);
             this.sideCam.resize(200, 200, false);
-            Vector newChaseCamPosition = this.getAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
+            Vector newChaseCamPosition = this.getSelectedAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
             this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
-            Vector aircraftCoordinates = this.getAircraft().getCalcCoordinates();
+            Vector aircraftCoordinates = this.getSelectedAircraft().getCalcCoordinates();
             this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
+            first = false;
         }
 
+        
+        
         Cube cubeToRemove = null;
         for(Cube cube:this.getCubesInWorld()) {
             Vector cubePos = this.getCubePositions().get(cube);
-            if(this.getAircraft().getCalcCoordinates().calculateDistance(cubePos)<=4) {
+            if(this.getSelectedAircraft().getCalcCoordinates().calculateDistance(cubePos)<=4) {
                 cubeToRemove = cube;
                 this.getCubePositions().remove(cube);
                 cube.destroy();
@@ -153,9 +187,16 @@ public class World {
 
     }
     
+    private boolean hasToCrash(Aircraft aircraft) {
+            float wingY = (float) (aircraft.getCalcCoordinates().getY()-Math.sin(aircraft.getRoll())*AirplaneModel.WING_LENGTH);
+            float tailY = (float) (aircraft.getCalcCoordinates().getY()-Math.sin(aircraft.getPitch())*AirplaneModel.TAIL_SIZE);
+            if (wingY<0) System.out.println("value: " + aircraft.getCalcCoordinates().getY());
+            return (wingY<0 || tailY<0);
+        }
+    
     public void startSimulation() {
         this.simulation = true;
-        this.getAutopilot().simulationStarted(this.getAircraft().getConfig(), this.getAircraft().getAutopilotInputs());
+        this.getAutopilot().simulationStarted(this.getSelectedAircraft().getConfig(), this.getSelectedAircraft().getAutopilotInputs());
     }
     
     public void endSimulation() {
@@ -231,7 +272,7 @@ public class World {
         }
     }
     
-    public void generateCubes(Vector[] positions) {
+    public void setPath(Vector[] positions) {
         for(int i=0; i<positions.length; i++) {
             Vector currentPos = positions[i];
             ColorRGBA color = ColorRGBA.randomColor();
@@ -316,15 +357,16 @@ public class World {
        
     }
     
-    private void newGround() {
-        Quad groundQuad = new Quad(10000,10000);
-        Geometry myGround = new Geometry("ground",groundQuad);
-        Material mat = new Material(mainSwingCanvas.getAssetManager(),"Common/MatDefs/Misc/Unshaded.j3md");  
-        mat.setColor("Color", ColorRGBA.Green);
-        myGround.setMaterial(mat);
-        myGround.center();
-        myGround.rotate((float) Math.PI/2,0,0);
-        this.mainSwingCanvas.getRootNode().attachChild(myGround);
-        this.ground = myGround;
+    public MainSwingCanvas getCanvas() {
+        return this.mainSwingCanvas;
     }
+    
+    private void addAirport(float xPos, float zPos) {
+        Airport airport = new Airport(W,L,airports.size(),xPos,zPos,this);
+        airports.add(airport);
+        airport.build();
+    }
+
+    
+    
 }

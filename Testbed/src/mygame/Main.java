@@ -73,7 +73,7 @@ public class Main {
                         default: {
                             newCanvas = canvasApplication;
                             // Render camera
-                            canvasApplication.renderCamera = new RenderCamera(canvasApplication.getAircraft().getCamera(), settings.getWidth(), settings.getHeight(), canvasApplication.getAircraft());
+                            canvasApplication.renderCamera = new RenderCamera(canvasApplication.getSelectedAircraft().getCamera(), settings.getWidth(), settings.getHeight(), canvasApplication.getSelectedAircraft());
                             canvasApplication.renderCamera.initialize(canvasApplication.getStateManager(), canvasApplication);
                         }
                     }
@@ -116,7 +116,9 @@ public class Main {
             JPanel panel = new JPanel(new BorderLayout());
             panel.add(tabbedPane);
             window.add(panel);
-            JPanel buttonPanel = new JPanel();
+
+
+            JPanel buttonPanel = new JPanel(new GridBagLayout());
             JButton playButton = new JButton("start");
             playButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
@@ -127,57 +129,63 @@ public class Main {
                     }
                 }
             });
-            JButton pauzeButton = new JButton("stop");
-            pauzeButton.addActionListener(new ActionListener() {
+            JButton stopButton = new JButton("stop");
+            stopButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     World world = canvasApplication.getWorld();
                     if (!world.isPaused()) world.pauseSimulation();
                 }
             });
-            JButton b = new JButton("generate cylinder");
-            b.addActionListener(new ActionListener() {
+            JButton generateCylinderButton = new JButton("generate cylinder");
+            generateCylinderButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     canvasApplication.getWorld().generateCylinder();
                     onButtonClick.run();
                 }
             });
-            JButton b1 = new JButton("read from file");
-            b1.addActionListener(new ActionListener() {
+            JButton readFromFileButton = new JButton("read from file");
+            readFromFileButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().generateCubes(canvasApplication.getWorld().readFile("cubePositions.txt"));
+                    canvasApplication.getWorld().setPath(canvasApplication.getWorld().readFile("cubePositions.txt"));
                     onButtonClick.run();
                 }
             });
-            JButton b2 = new JButton("save config");
-            b2.addActionListener(new ActionListener() {
+            JButton saveConfigButton = new JButton("save config");
+            saveConfigButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     canvasApplication.getWorld().writeFile("cubePositions.txt");
                 }
             });
-            buttonPanel.setLayout(new GridBagLayout());
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.fill = GridBagConstraints.NONE;
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
-            gbc.gridy = 0;
-            buttonPanel.add(playButton, gbc);
+            gridBagConstraints.gridy = 0;
+            JPanel startStopButtonPanel = new JPanel(new GridBagLayout());
+            GridBagConstraints startStopButtonPanelGridBagConstraints = new GridBagConstraints();
+            startStopButtonPanelGridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            startStopButtonPanelGridBagConstraints.weightx = 0.5;
+            startStopButtonPanelGridBagConstraints.gridx = 0;
+            startStopButtonPanelGridBagConstraints.gridy = 0;
+            startStopButtonPanel.add(playButton, startStopButtonPanelGridBagConstraints);
+            startStopButtonPanelGridBagConstraints.gridx = 1;
+            startStopButtonPanel.add(stopButton, startStopButtonPanelGridBagConstraints);
+            buttonPanel.add(startStopButtonPanel, gridBagConstraints);
 
-            gbc.gridy = 1;
-            buttonPanel.add(pauzeButton, gbc);
+            gridBagConstraints.gridy = 1;
+            buttonPanel.add(generateCylinderButton, gridBagConstraints);
 
-            gbc.gridy = 2;
-            buttonPanel.add(b, gbc);
+            gridBagConstraints.gridy = 2;
+            buttonPanel.add(readFromFileButton, gridBagConstraints);
 
-            gbc.gridy = 3;
-            buttonPanel.add(b1, gbc);
+            gridBagConstraints.gridy = 3;
+            buttonPanel.add(saveConfigButton, gridBagConstraints);
 
-            gbc.gridy = 4;
-            buttonPanel.add(b2, gbc);
+            gridBagConstraints.gridy = 4;
+            buttonPanel.add(new CubeUI(canvasApplication, onButtonClick), gridBagConstraints);
 
-            gbc.gridy = 5;
-            buttonPanel.add(new CubeUI(canvasApplication, onButtonClick), gbc);
+            gridBagConstraints.gridy = 5;
+            buttonPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gridBagConstraints);
 
-            gbc.gridy = 6;
-            buttonPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gbc);
             window.add(buttonPanel);
             window.pack();
             window.setVisible(true);

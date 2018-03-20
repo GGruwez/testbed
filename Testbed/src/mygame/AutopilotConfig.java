@@ -30,8 +30,8 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     	
 	private String droneID = "PREDATOR";
     private float wheelY = -1.52f; //coordinates
-    private float frontWheelZ = -2.44f; //coordinates
-    private float rearWheelZ = 0.3f; //coordinates
+    private float frontWheelZ = -1.5f; //coordinates
+    private float rearWheelZ = 1f; //coordinates
     private float rearWheelX = 1.22f; //coordinates
     private float tyreSlope = 50000f;
     private float dampSlope = 5000f;
@@ -150,7 +150,7 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     }
     
     public float getFcMax() {
-        return this.fcMax;    
+        return this.fcMax; 
     }
 
     @Override

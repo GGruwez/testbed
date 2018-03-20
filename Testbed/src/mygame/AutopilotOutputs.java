@@ -11,15 +11,14 @@ package mygame;
  */
 public class AutopilotOutputs implements p_en_o_cw_2017.AutopilotOutputs{
     
-    private float thrust;
-    private float leftWingInclination;
-    private float rightWingInclination;
-    private float horStabInclination;
-    private float verStabInclination;
-    private float frontBrakeForce;
-    private float leftBrakeForce;
-    private float rightBrakeForce;
-
+    public float thrust;
+    public float leftWingInclination;
+    public float rightWingInclination;
+    public float horStabInclination;
+    public float verStabInclination;
+    public float frontBrakeForce;
+    public float leftBrakeForce;
+    public float rightBrakeForce;
 
     @Override
     public float getThrust() {
@@ -46,15 +45,18 @@ public class AutopilotOutputs implements p_en_o_cw_2017.AutopilotOutputs{
         return this.verStabInclination;
     }
     
-    public float getFrontBrakeForce(){
-    	return this.frontBrakeForce;
-    }
-    
-    public float getLeftBrakeForce(){
-    	return this.frontBrakeForce;
+    @Override
+    public float getFrontBrakeForce() {
+        return this.frontBrakeForce;
     }
 
-    public float getRightBrakeForce(){
-    	return this.frontBrakeForce;
+    @Override
+    public float getLeftBrakeForce() {
+        return this.leftBrakeForce;
+    }
+
+    @Override
+    public float getRightBrakeForce() {
+        return this.rightBrakeForce;
     }
 }
