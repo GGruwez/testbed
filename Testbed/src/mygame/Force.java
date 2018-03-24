@@ -98,6 +98,11 @@ public class Force {
     }
     
     public void setNormalForces() {
+
+    	this.setFrontWheelD();
+    	this.setRightRearD();
+    	this.setLeftRearD();
+    	
         this.setFrontWheelNormalForce();
         this.setLeftRearWheelNormalForce();
         this.setRightRearWheelNormalForce();
@@ -435,10 +440,6 @@ public class Force {
     }
     
     public void setTotalNormalForce(){
-    	
-    	this.setFrontWheelD();
-    	this.setRightRearD();
-    	this.setLeftRearD();
     	
     	this.setFrontWheelNormalForce();
     	this.setLeftRearWheelNormalForce();
