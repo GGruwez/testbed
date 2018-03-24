@@ -1,13 +1,18 @@
 package mygame;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
+import com.jme3.scene.shape.Box;
 import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
 
@@ -35,11 +40,18 @@ public class Aircraft extends Node {
     private float neglectValue = 0.00001f;
     private byte[] image = new byte[0];
     
-    private AirplaneModel aircraftGeometry;
+    private Spatial aircraftGeometry;
     private Camera aircraftCamera;
     private CameraNode aircraftCameraNode;
+    
+    private float thrust;
+   
+    private Vector frontBreakForce;
+    private Vector leftBreakForce;
+    private Vector rightBreakForce;
 
     /**
+     *
      * @param name
      * @param assetManager
      * @param x
@@ -48,11 +60,18 @@ public class Aircraft extends Node {
      * @param xVelocity
      * @param yVelocity
      * @param zVelocity
+     * @param thrust
+     * @param leftWingInclination
+     * @param rightWingInclination
+     * @param horStabInclination
+     * @param verStabInclination
      */
-    public Aircraft(String name, AssetManager assetManager, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity) {
+    public Aircraft(String name, AssetManager assetManager, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity,
+                    float thrust, float leftWingInclination, float rightWingInclination,
+                    float horStabInclination, float verStabInclination) {
 
-        this.aircraftGeometry = new AirplaneModel(assetManager, this);
-
+        this.aircraftGeometry = new AirplaneModel(assetManager);
+        
         // Plane camera
         this.aircraftCamera = new Camera(200, 200);
         this.aircraftCamera.setFrustumPerspective(120,1,1,1000);
@@ -61,14 +80,13 @@ public class Aircraft extends Node {
         this.aircraftCameraNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
         this.attachChild(this.aircraftGeometry);
         this.attachChild(this.aircraftCameraNode);
-        this.aircraftCameraNode.setLocalTranslation(0, 0, -aircraftGeometry.getPlaneTailMassOffset());
+        this.aircraftCameraNode.setLocalTranslation(0, 0, -AirplaneModel.PLANE_TAIL_MASS_OFFSET);
         this.aircraftCameraNode.lookAt(new Vector3f(0,0,-10), Vector3f.UNIT_Y); // Front of the plane is in -z direction
         
         // Fysica
         this.setCalcCoordinates(new Vector(x, y, z));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
-        this.forces = new Force(this);
-
+        this.forces = new Force(0,this);
     }
 
     public Spatial getAircraftGeometry(){
@@ -146,7 +164,7 @@ public class Aircraft extends Node {
     }
     
     public void setPitch(float pitch){
-    	this.pitch = pitch;
+    	this.pitch = (float) pitch;
     }
     
     public float getRoll(){
@@ -154,7 +172,7 @@ public class Aircraft extends Node {
     }
     
     public void setRoll(float roll){
-    	this.roll = roll;
+    	this.roll = (float) roll;
     }
     
     public float getHeading(){
@@ -162,7 +180,7 @@ public class Aircraft extends Node {
     }
     
     public void setHeading(float heading){
-    	this.heading = heading;
+    	this.heading = (float) heading;
     }
     
     public Vector getAngularVelocity(){
@@ -326,7 +344,7 @@ public class Aircraft extends Node {
     
     public void setManualControl(boolean control){
         this.manualControl = control;
-        if(control){
+        if(control == true){
             this.getForce().setThrust(0);
             this.setLeftWingInclination(0);
             this.setRightWingInclination(0);
@@ -412,6 +430,51 @@ public class Aircraft extends Node {
             }
         };
     }
+
+    public AutopilotOutputs getAutopilotOutputs(){
+        return new AutopilotOutputs() {
+        	  @Override
+        	    public float getThrust() {
+        	        return Aircraft.this.thrust;
+        	    }
+
+        	    @Override
+        	    public float getLeftWingInclination() {
+        	        return Aircraft.this.leftWingInclination;
+        	    }
+
+        	    @Override
+        	    public float getRightWingInclination() {
+        	        return Aircraft.this.rightWingInclination;
+        	    }
+
+        	    @Override
+        	    public float getHorStabInclination() {
+        	        return Aircraft.this.horStabInclination;
+        	    }
+
+        	    @Override
+        	    public float getVerStabInclination() {
+        	        return Aircraft.this.verStabInclination;
+        	    }
+
+            @Override
+            public float getFrontBrakeForce() {
+                return 0; // TODO: implement
+            }
+
+            @Override
+            public float getLeftBrakeForce() {
+                return 0; // TODO: implement
+            }
+
+            @Override
+            public float getRightBrakeForce() {
+                return 0; // TODO: implement
+            }
+        };
+    }
+
     
 }
 
