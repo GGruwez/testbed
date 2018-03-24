@@ -73,7 +73,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         goalCube.setLocalTranslation(0, 0, 0);
         
  //        getRootNode().attachChild(apm);
-         Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 2f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+         Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 10f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
          world.addAircraft(aircraft);
          rootNode.attachChild(aircraft);
 
