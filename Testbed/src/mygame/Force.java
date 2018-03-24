@@ -84,6 +84,11 @@ public class Force {
         this.setLiftForce();
         this.setNormalForces();
         this.setFrictionForces();
+        System.out.println("Front wheel Normal force: " + this.frontWheelNormalForce);
+        System.out.println("Right wheel Normal force: " + this.rightRearWheelNormalForce);
+        System.out.println("Left wheel Normal force: " + this.leftRearWheelNormalForce);
+        System.out.println("Front wheel D: " + this.currentDFront);
+        System.out.println("-----------------------------------");
     }
     
     public void setFrictionForces() {
@@ -351,95 +356,90 @@ public class Force {
     }
     
     public float getLeftRearWheelD(){
-    	if ((this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY())<=5){
-
-    	Vector LRWheelWorld = this.getAircraft().getLeftRearWheel().transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
-    	
-    	currentDLR = LRWheelWorld.getY() - this.getAircraft().getConfig().getTyreRadius() ;
-    	
-    	}
-    	else {
-    		currentDLR = 0;
-    	}
-    	return currentDLR;
+    	return this.currentDLR;
     }
     
     
     public float getFrontWheelD(){
-   
-    	Vector LRWheelDrone = new Vector(-this.getAircraft().getConfig().getRearWheelX(), this.getAircraft().getConfig().getWheelY(), this.getAircraft().getConfig().getRearWheelZ());
-    	Vector LRWheelWorld = LRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
-        Vector WheelPlace = getAircraft().getCalcCoordinates().add(LRWheelWorld);
-        previousDLR = - WheelPlace.getY() + getAircraft().getTyreRadius();
-        if (previousDLR < 0) {
-            this.previousDLR = 0;
-        }
-    	return this.previousDLR;
+    	return this.currentDFront;
     }
     
     public float getRightRearWheelD(){
-        Vector RRWheelDrone = new Vector(this.getAircraft().getConfig().getRearWheelX(), this.getAircraft().getConfig().getWheelY(), this.getAircraft().getConfig().getRearWheelZ());
-    	Vector RRWheelWorld = RRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
-        Vector WheelPlace = getAircraft().getCalcCoordinates().add(RRWheelWorld);
-        previousDRR = - WheelPlace.getY() + getAircraft().getTyreRadius();
-        if (previousDRR < 0) {
-            this.previousDRR = 0;
-        }
-    	return this.previousDRR;
+        return this.currentDRR;
     }
     
+    private void setFrontWheelD() {
+    	         //Vector FWheelDrone = new Vector(0, this.getAircraft().getConfig().getWheelY(), this.getAircraft().getConfig().getFrontWheelZ());
+    	     	 Vector FWheelDrone = this.getAircraft().getFrontWheel();
+    	Vector FWheelWorld = FWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
+    	         Vector WheelPlace = getAircraft().getCalcCoordinates().add(FWheelWorld);
+    	         previousDFront = currentDFront; 
+    	         currentDFront = - WheelPlace.getY() +  getAircraft().getTyreRadius();
+    	         if (currentDFront < 0) {
+    	             this.currentDFront = 0;
+    	         }
+    	     }
+    	 
+    private void setRightRearD() {
+    	         //Vector RRWheelDrone = new Vector(this.getAircraft().getConfig().getRearWheelX(), this.getAircraft().getConfig().getWheelY(), this.getAircraft().getConfig().getRearWheelZ());
+    	Vector RRWheelDrone = this.getAircraft().getRightRearWheel();     	 
+    	Vector RRWheelWorld = RRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
+    	         Vector WheelPlace = getAircraft().getCalcCoordinates().add(RRWheelWorld);
+    	         previousDRR = currentDRR;
+    	         currentDRR = - WheelPlace.getY() +  getAircraft().getTyreRadius();
+    	         if (currentDRR < 0) {
+    	             this.currentDRR = 0;
+    	         }
+    	     }
+    	 
+    private void setLeftRearD() {
+    	         //Vector LRWheelDrone = new Vector(-this.getAircraft().getConfig().getRearWheelX(), this.getAircraft().getConfig().getWheelY(), this.getAircraft().getConfig().getRearWheelZ());
+    	Vector LRWheelDrone = this.getAircraft().getLeftRearWheel();     	 
+    	Vector LRWheelWorld = LRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
+    	         Vector WheelPlace = getAircraft().getCalcCoordinates().add(LRWheelWorld);
+    	         previousDLR = currentDLR;
+    	         currentDLR = - WheelPlace.getY() +  getAircraft().getTyreRadius();
+    	         if (currentDLR < 0) {
+    	             this.currentDLR = 0;
+    	         }
+    	     }
     
     
     public void setLeftRearWheelNormalForce(){
     	float tyreSlope = this.getAircraft().getConfig().getTyreSlope();
     	float dampSlope = this.getAircraft().getConfig().getDampSlope();
     	
-    	/*if ((this.getSelectedAircraft().getCalcCoordinates().getY()-this.getSelectedAircraft().getConfig().getWheelY())<3){
-    		this.leftRearWheelNormalForce = new Vector(0,0,0);
-    	}*/
     	
     	this.leftRearWheelNormalForce = new Vector(0,Math.abs(tyreSlope*getLeftRearWheelD()+dampSlope*getLeftRearWheelDChange()),0);
 
-    	/*if ((this.getTotalWheelNormalForce().getY() > this.getTotalGravityForce().getY()) && (this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY() <= 5 )){
-    		this.rightRearWheelNormalForce = new Vector(0, Math.abs(this.getTotalGravityForce().getY() - this.getTotalLift().getY()/3),0);
-    		System.out.println("iffff");
-    	}*/
+    	
     }
 
     public void setRightRearWheelNormalForce(){
     	float tyreSlope = this.getAircraft().getConfig().getTyreSlope();
     	float dampSlope = this.getAircraft().getConfig().getDampSlope();
     	
-    	/*if ((this.getSelectedAircraft().getCalcCoordinates().getY()-this.getSelectedAircraft().getConfig().getWheelY())<=3){
-    		this.rightRearWheelNormalForce = new Vector(0,0,0);
-    	}*/
     	
     	this.rightRearWheelNormalForce = new Vector(0,Math.abs(tyreSlope*getRightRearWheelD()+dampSlope*getRightRearWheelDChange()),0);
     	
-    	/*if ((this.getTotalWheelNormalForce().getY() > this.getTotalGravityForce().getY()) && (this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY() <= 5 )){
-    		this.rightRearWheelNormalForce = new Vector(0, Math.abs(this.getTotalGravityForce().getY() - this.getTotalLift().getY()/3),0);
-    	}*/
     }
     
     public void setFrontWheelNormalForce(){
     	float tyreSlope = this.getAircraft().getConfig().getTyreSlope();
     	float dampSlope = this.getAircraft().getConfig().getDampSlope();
     	
-    	//System.out.println("FrontD:" + this.getFrontWheelD());
-    	//System.out.println("FrontDChange:" + this.getFrontWheelDChange());
-    	/*if ((this.getSelectedAircraft().getCalcCoordinates().getY()-this.getSelectedAircraft().getConfig().getWheelY())<=3){
-    		this.frontWheelNormalForce = new Vector(0,0,0);
-    	}*/
     	
     	this.frontWheelNormalForce = new Vector(0,Math.abs(tyreSlope*this.getFrontWheelD()+dampSlope*getFrontWheelDChange()),0);
 
-    	/*if ((this.getTotalWheelNormalForce().getY() > this.getTotalGravityForce().getY()) && (this.getAircraft().getCalcCoordinates().getY()-this.getAircraft().getConfig().getWheelY() <= 5 )){
-    		this.frontWheelNormalForce = new Vector(0, Math.abs(this.getTotalGravityForce().getY() - this.getTotalLift().getY()/3),0);
-    	}*/
     	System.out.println("----------------------");
     }
     
     public void setTotalNormalForce(){
+    	
+    	this.setFrontWheelD();
+    	this.setRightRearD();
+    	this.setLeftRearD();
+    	
     	this.setFrontWheelNormalForce();
     	this.setLeftRearWheelNormalForce();
     	this.setRightRearWheelNormalForce();
