@@ -117,6 +117,38 @@ public class Vector {
 		return new Vector(X,Y,Z);
 				
 	}
+
+	public Vector rotate(Vector axisUnitVector, float thetaRadians){
+
+		// https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
+
+		float Ux = axisUnitVector.getX();
+		float Uy = axisUnitVector.getY();
+		float Uz = axisUnitVector.getZ();
+
+		Vector Rcol1 = new Vector(
+				(float) ( Math.cos(thetaRadians) + Math.pow(Ux, 2)*(1-Math.cos(thetaRadians)) ),
+				(float) ( Uy*Ux*(1-Math.cos(thetaRadians)) + Uz*Math.sin(thetaRadians) ),
+				(float) ( Uz*Ux*(1-Math.cos(thetaRadians)) - Uy*Math.sin(thetaRadians) )
+		);
+		Vector Rcol2 = new Vector(
+				(float) ( Ux*Uy*(1-Math.cos(thetaRadians)) - Uz*Math.sin(thetaRadians) ),
+				(float) ( Math.cos(thetaRadians) + Math.pow(Uy, 2)*(1-Math.cos(thetaRadians)) ),
+				(float) ( Uz*Uy*(1-Math.cos(thetaRadians)) + Ux*Math.sin(thetaRadians) )
+		);
+		Vector Rcol3 = new Vector(
+				(float) ( Ux*Uz*(1-Math.cos(thetaRadians)) + Uy*Math.sin(thetaRadians) ),
+				(float) ( Uy*Uz*(1-Math.cos(thetaRadians)) - Ux*Math.sin(thetaRadians)),
+				(float) ( Math.cos(thetaRadians) + Math.pow(Uz, 2)*(1-Math.cos(thetaRadians)) )
+		);
+
+		return new Vector(
+				this.dotProduct(Rcol1),
+				this.dotProduct(Rcol2),
+				this.dotProduct(Rcol3)
+		);
+
+	}
 	
 	public void printVector(String name){
 		System.out.println(name + this.getX() + " " + this.getY() + " " + this.getZ());
