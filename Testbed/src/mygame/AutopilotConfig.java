@@ -30,11 +30,11 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     	
 	private String droneID = "PREDATOR";
     private float wheelY = -1.52f; //coordinates
-    private float frontWheelZ = -1.5f; //coordinates
+    private float frontWheelZ = -3f; //coordinates
     private float rearWheelZ = 1f; //coordinates
     private float rearWheelX = 1.22f; //coordinates
-    private float tyreSlope = 50000f;
-    private float dampSlope = 5000f;
+    private float tyreSlope = 20000f;
+    private float dampSlope = 1000f;
     private float tyreRadius = 0.2f;
     private float rMax = 100f;    //maximal breaking power on each wheel
     private float fcMax = 0.01f;  //maximal friction coefficient for rear wheels 
