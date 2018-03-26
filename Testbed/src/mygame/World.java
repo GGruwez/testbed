@@ -141,21 +141,21 @@ public class World {
         // TODO: evolve every aircraft
         if (this.isSimulating() && !this.isPaused()) {
             //check collision with ground
-            CollisionResults results = new CollisionResults();
-            getSelectedAircraft().getAircraftGeometry().collideWith(this.mainSwingCanvas.getTerrain().getWorldBound(), results);
-            boolean collidesWithAirport = false;
-            CollisionResults temp = new CollisionResults();
-            for (Airport airport:airports) {
-                getSelectedAircraft().collideWith(airport.getBatchNode().getWorldBound(), temp);
-                if (temp.size()>0) collidesWithAirport = true;
-            }
-            if (results.size() > 0 && !first && !collidesWithAirport) {
-                System.out.println(results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
-              
-                this.endSimulation(); //TODO: support multiple airplanes
-            
-            }
-            if (hasToCrash(getSelectedAircraft())) this.endSimulation();
+//            CollisionResults results = new CollisionResults();
+//            getSelectedAircraft().getAircraftGeometry().collideWith(this.mainSwingCanvas.getTerrain().getWorldBound(), results);
+//            boolean collidesWithAirport = false;
+//            CollisionResults temp = new CollisionResults();
+//            for (Airport airport:airports) {
+//                getSelectedAircraft().collideWith(airport.getBatchNode().getWorldBound(), temp);
+//                if (temp.size()>0) collidesWithAirport = true;
+//            }
+//            if (results.size() > 0 && !first && !collidesWithAirport) {
+//                System.out.println("Danio: "+ results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
+//              
+//                this.endSimulation(); //TODO: support multiple airplanes
+//            
+//            }
+//            if (hasToCrash(getSelectedAircraft())) this.endSimulation();
             // Update visual position of aircraft
             this.getSelectedAircraft().updateVisualCoordinates();
             this.getSelectedAircraft().updateVisualRotation();

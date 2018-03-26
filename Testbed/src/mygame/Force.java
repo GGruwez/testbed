@@ -542,7 +542,6 @@ public class Force {
     	
     // in drone assenstelsel
     public Vector getTotalForce(){
-        getTotalLift().printVector("total lift force: ");
             return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce()).
                     add(getTotalWheelNormalForce()).add(getTotalFrictionForce()).add(getTotalBreakForce());
     }
