@@ -134,16 +134,10 @@ public class Force {
     }
 
     public void setThrust(float thrust){
-<<<<<<< HEAD
         if (thrust > getAircraft().getConfig().getMaxThrust())
             thrust = getAircraft().getConfig().getMaxThrust();
         else if (thrust < 0)
             thrust = 0;
-=======
-        if (thrust > getAircraft().getConfig().getMaxThrust()) {
-            thrust = getAircraft().getConfig().getMaxThrust();
-        }
->>>>>>> 481978aeb475bceef2c1ffb060f94a6be41475e6
         this.thrustForce = new Vector(0,0,-thrust);
     }
 
@@ -176,20 +170,24 @@ public class Force {
     }
 
     public Vector getLeftWingAirSpeed(){
-        return getLeftWingVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getWingX().constantProduct(-1)));
+        return getLeftWingVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(),
+                this.getAircraft().getPitch(), this.getAircraft().getRoll()).crossProduct(getAircraft().getWingX().constantProduct(-1)));
     }
 
     public Vector getRightWingAirSpeed(){
-        return getRightWingVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getWingX()
+        return getRightWingVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(),
+                this.getAircraft().getPitch(), this.getAircraft().getRoll()).crossProduct(getAircraft().getWingX()
     ));
     }
 
     public Vector getHorizontalStabilizerAirSpeed(){
-        return getStabilizerVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getTailSize()));
+        return getStabilizerVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(),
+                this.getAircraft().getPitch(), this.getAircraft().getRoll()).crossProduct(getAircraft().getTailSize()));
     }
 
     public Vector getVerticalStabilizerAirSpeed(){
-        return getStabilizerVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getTailSize()));
+        return getStabilizerVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(),
+                this.getAircraft().getPitch(), this.getAircraft().getRoll()).crossProduct(getAircraft().getTailSize()));
     }
 
     public Vector getRightWingVelocity(){
@@ -563,35 +561,6 @@ public class Force {
         Vector rearLeft = getAircraft().getLeftRearWheel().crossProduct(getLeftRearWheelNormalForce().add(getLeftRearWheelFrictionForce()).add(getLeftRearWheelBreakForce()));
         Vector rearRight = getAircraft().getRightRearWheel().crossProduct(getRightRearWheelNormalForce().add(getRightRearWheelFrictionForce()).add(getRightRearWheelBreakForce()));
 
- 
-<<<<<<< HEAD
-//
-//        System.out.println("WringR: "+ wingR);
-//        System.out.println("WringL: "+ wingL);
-//        System.out.println("Tail: "+ tail);
-//        System.out.println("Engine:" + engine);
-//        System.out.println("frontWheel:" + frontWheel);
-//        System.out.println("rearLeft:" + rearLeft);
-//        System.out.println("rearRight:" + rearRight);
-          getVerticalStabilizerLift().printVector("verstab");
-          System.out.println("----------------------------");
-        
-
-
-
-        
-        
-=======
-
-        System.out.println("WringR: "+ wingR);
-        System.out.println("WringL: "+ wingL);
-        System.out.println("Tail: "+ tail);
-        System.out.println("Engine:" + engine);
-        System.out.println("frontWheel:" + frontWheel);
-        System.out.println("rearLeft:" + rearLeft);
-        System.out.println("rearRight:" + rearRight);
-        System.out.println("----------------------------");
->>>>>>> 481978aeb475bceef2c1ffb060f94a6be41475e6
         Vector totalMoment =  wingR.add(wingL).add(tail).add(engine).add(frontWheel).add(rearLeft).add(rearRight);
 
         return totalMoment;
