@@ -45,10 +45,6 @@ public class Aircraft extends Node {
     private CameraNode aircraftCameraNode;
     
     private float thrust;
-   
-    private Vector frontBreakForce;
-    private Vector leftBreakForce;
-    private Vector rightBreakForce;
 
     /**
      *
@@ -370,7 +366,7 @@ public class Aircraft extends Node {
             return;
         }
         this.getForce().setThrust(autopilotOutputs.getThrust());
-        this.getForce().setBreakForces(autopilotOutputs.getFrontBrakeForce(), autopilotOutputs.getLeftBrakeForce(), 
+        this.getForce().setBrakeForces(autopilotOutputs.getFrontBrakeForce(), autopilotOutputs.getLeftBrakeForce(), 
                 autopilotOutputs.getRightBrakeForce());
         this.setLeftWingInclination(autopilotOutputs.getLeftWingInclination());
         this.setRightWingInclination(autopilotOutputs.getRightWingInclination());
@@ -427,50 +423,6 @@ public class Aircraft extends Node {
             @Override
             public float getElapsedTime() {
                 return Aircraft.this.getElapsedTime();
-            }
-        };
-    }
-
-    public AutopilotOutputs getAutopilotOutputs(){
-        return new AutopilotOutputs() {
-        	  @Override
-        	    public float getThrust() {
-        	        return Aircraft.this.thrust;
-        	    }
-
-        	    @Override
-        	    public float getLeftWingInclination() {
-        	        return Aircraft.this.leftWingInclination;
-        	    }
-
-        	    @Override
-        	    public float getRightWingInclination() {
-        	        return Aircraft.this.rightWingInclination;
-        	    }
-
-        	    @Override
-        	    public float getHorStabInclination() {
-        	        return Aircraft.this.horStabInclination;
-        	    }
-
-        	    @Override
-        	    public float getVerStabInclination() {
-        	        return Aircraft.this.verStabInclination;
-        	    }
-
-            @Override
-            public float getFrontBrakeForce() {
-                return 0; // TODO: implement
-            }
-
-            @Override
-            public float getLeftBrakeForce() {
-                return 0; // TODO: implement
-            }
-
-            @Override
-            public float getRightBrakeForce() {
-                return 0; // TODO: implement
             }
         };
     }
