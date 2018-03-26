@@ -56,7 +56,7 @@ public class Airport extends Node{
         Box landingStrip1 = new RegularBox(2*W,0.2f,L);
         Geometry gateG = new Geometry("gate", gate);
         Material mat1 = new Material(world.getCanvas().getAssetManager(),"Common/MatDefs/Misc/Unshaded.j3md");  
-        mat1.setColor("Color", ColorRGBA.Black);
+        mat1.setColor("Color", ColorRGBA.Black.mult(0.15f));
         gateG.setMaterial(mat1);
         Geometry gateG1 = gateG.clone();
         
@@ -64,7 +64,7 @@ public class Airport extends Node{
         Geometry strip1G = new Geometry("strip1",landingStrip1);
         Material mat2 = new Material(world.getCanvas().getAssetManager(),"Common/MatDefs/Misc/Unshaded.j3md");  
 
-        mat2.setColor("Color", ColorRGBA.Gray);
+        mat2.setColor("Color", ColorRGBA.Gray.mult(0.15f));
         strip0G.setMaterial(mat2);
         strip1G.setMaterial(mat2);
         gateG.setLocalTranslation(x- W/2, 0, z );

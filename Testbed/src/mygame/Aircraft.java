@@ -178,7 +178,12 @@ public class Aircraft extends Node {
     }
     
     public void setHeading(float heading){
-    	this.heading = (float) heading;
+        if (heading < -Math.PI)
+            this.heading = (float) (2 *Math.PI +heading);
+        else if (heading > Math.PI)
+            this.heading = (float) (heading -2*Math.PI);
+        else
+    	this.heading = heading;
     }
     
     public Vector getAngularVelocity(){

@@ -35,7 +35,7 @@ class CubeUI extends JPanel {
         this.add(this.zField, gridBagConstraints);
         addCube.addActionListener( e -> {
             if(getWorld() != null) {
-                getWorld().generateCube(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), Float.parseFloat(zField.getText()), ColorRGBA.Green);
+                getWorld().generateCube(Float.parseFloat(xField.getText()), Float.parseFloat(yField.getText()), Float.parseFloat(zField.getText()), ColorRGBA.Red);
                 xField.setText("");
                 yField.setText("");
                 zField.setText("");
