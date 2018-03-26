@@ -8,6 +8,7 @@ import mygame.visualcomponents.*;
 public class AirplaneModel extends Node{
 
     private AssetManager assetManager;
+    private AutopilotConfig config = new AutopilotConfig();
 
     // TODO: use constants from autopilot config
     public static float PLANE_LENGTH = 8; // CALCULATED FROM CONSTANTS
@@ -23,10 +24,10 @@ public class AirplaneModel extends Node{
     public static float WING_WIDTH = 7.4f; // FROM CONSTANTS
     public static float WING_LENGTH = 2; // Wing depth
 
-    public static float REAR_WHEEL_X = 1.22f; // FROM CONSTANTS
-    public static float WHEEL_Y = -1.52f; // FROM CONSTANTS
-    public static float REAR_WHEEL_Z = 1f; // FROM CONSTANTS
-    public static float FRONT_WHEEL_Z = -1.5f; // FROM CONSTANTS
+    public static float REAR_WHEEL_X = 1.24f; // FROM CONSTANTS
+    public static float WHEEL_Y =-1.12f; // FROM CONSTANTS
+    public static float REAR_WHEEL_Z = .96f; // FROM CONSTANTS
+    public static float FRONT_WHEEL_Z =-2.08f; // FROM CONSTANTS
 
     public static float PLANE_TAIL_MASS_OFFSET = PLANE_LENGTH - TAIL_SIZE; // Difference between the front of the plane and the mass centre of the plane
 

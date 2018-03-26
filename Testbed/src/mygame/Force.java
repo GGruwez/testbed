@@ -141,6 +141,10 @@ public class Force {
     }
 
     public void setThrust(float thrust){
+        if (thrust > getAircraft().getConfig().getMaxThrust())
+            thrust = getAircraft().getConfig().getMaxThrust();
+        else if (thrust < 0)
+            thrust = 0;
         this.thrustForce = new Vector(0,0,-thrust);
     }
 
@@ -173,19 +177,20 @@ public class Force {
     }
 
     public Vector getLeftWingAirSpeed(){
-        return getLeftWingVelocity().subtract(getWindSpeed());
+        return getLeftWingVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getWingX().constantProduct(-1)));
     }
 
     public Vector getRightWingAirSpeed(){
-        return getRightWingVelocity().subtract(getWindSpeed());
+        return getRightWingVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getWingX()
+    ));
     }
 
     public Vector getHorizontalStabilizerAirSpeed(){
-        return getStabilizerVelocity().subtract(getWindSpeed());
+        return getStabilizerVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getTailSize()));
     }
 
     public Vector getVerticalStabilizerAirSpeed(){
-        return getStabilizerVelocity().subtract(getWindSpeed());
+        return getStabilizerVelocity().subtract(getWindSpeed()).add(getAircraft().getAngularVelocity().crossProduct(getAircraft().getTailSize()));
     }
 
     public Vector getRightWingVelocity(){
@@ -561,15 +566,17 @@ public class Force {
         Vector rearRight = getAircraft().getRightRearWheel().crossProduct(getRightRearWheelNormalForce().add(getRightRearWheelFrictionForce()).add(getRightRearWheelBreakForce()));
 
  
-
-        System.out.println("WringR: "+ wingR);
-        System.out.println("WringL: "+ wingL);
-        System.out.println("Tail: "+ tail);
-        System.out.println("Engine:" + engine);
-        System.out.println("frontWheel:" + frontWheel);
-        System.out.println("rearLeft:" + rearLeft);
-        System.out.println("rearRight:" + rearRight);
-        System.out.println("----------------------------");
+//
+//        System.out.println("WringR: "+ wingR);
+//        System.out.println("WringL: "+ wingL);
+//        System.out.println("Tail: "+ tail);
+//        System.out.println("Engine:" + engine);
+//        System.out.println("frontWheel:" + frontWheel);
+//        System.out.println("rearLeft:" + rearLeft);
+//        System.out.println("rearRight:" + rearRight);
+          getVerticalStabilizerLift().printVector("verstab");
+          System.out.println("----------------------------");
+        
 
 
 

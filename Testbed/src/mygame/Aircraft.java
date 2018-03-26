@@ -18,6 +18,8 @@ import interfaces.AutopilotOutputs;
 
 public class Aircraft extends Node {
     
+    
+    private AutopilotConfig config = new AutopilotConfig();
     private Vector calcCoordinates = Vector.NULL;
     private Vector velocity = Vector.NULL;
     private Vector acceleration = Vector.NULL;
@@ -25,12 +27,12 @@ public class Aircraft extends Node {
     private float pitch;
     private float roll = 0f;
     private float heading = 0;
-    private Vector wingX = new Vector(1, 0, 0);
-    private Vector tailSize = new Vector(0, 0, 1);
+    private Vector wingX = new Vector(config.getWingX(), 0, 0);
+    private Vector tailSize = new Vector(0, 0, config.getTailSize());
     private Vector angularAcceleration = Vector.NULL;
     private Vector angularVelocity = Vector.NULL;
     private World world;
-    private AutopilotConfig config = new AutopilotConfig();
+    
     private float leftWingInclination = 0.1994837f;
     private float rightWingInclination = 0.1994837f;
     private float horStabInclination;

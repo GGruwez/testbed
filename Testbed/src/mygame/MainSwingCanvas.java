@@ -74,7 +74,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         
  //        getRootNode().attachChild(apm);
 
-         Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 1.52f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+         Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 1.12f + 0.2f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
          world.addAircraft(aircraft);
          rootNode.attachChild(aircraft);
