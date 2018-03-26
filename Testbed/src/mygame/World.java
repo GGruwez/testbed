@@ -252,21 +252,27 @@ public class World {
             float z = (float)i/(float)(n-1)*(-90)-10;
             float x = (float) Math.random()*20-10;
             float y = (float) Math.random()*10;
-            ColorRGBA color = ColorRGBA.randomColor();
-            while (colorIsUsed(color)) color = ColorRGBA.randomColor();
+            ColorRGBA color = generateRandomSuitableColor();
             this.getUsedColors()[i] = color;
             generateCube(x,y,z,color);
         }           
     }
-    
+
+    protected ColorRGBA generateRandomSuitableColor() {
+        ColorRGBA color = ColorRGBA.randomColor();
+        // TODO: only allow suitable colors
+
+        while (colorIsUsed(color)) color = ColorRGBA.randomColor();
+        return color;
+    }
+
     public void generateRandomCubes(int n) {
         this.usedColors = new ColorRGBA[n];
         for(int i=1; i<n+1; i++) {
             float z = i*-40;
             float x = (float) Math.random()*10;
             float y = (float) Math.random()*(10-x);
-            ColorRGBA color = ColorRGBA.randomColor();
-            while (colorIsUsed(color)) color = ColorRGBA.randomColor();
+            ColorRGBA color = generateRandomSuitableColor();
             this.getUsedColors()[i-1] = color;
             generateCube(x,y,z,color);
         }
@@ -275,8 +281,7 @@ public class World {
     public void setPath(Vector[] positions) {
         for(int i=0; i<positions.length; i++) {
             Vector currentPos = positions[i];
-            ColorRGBA color = ColorRGBA.randomColor();
-            while (colorIsUsed(color)) color = ColorRGBA.randomColor();
+            ColorRGBA color = generateRandomSuitableColor();
             this.getUsedColors()[i] = color;
             generateCube(currentPos.getX(),currentPos.getY(),currentPos.getZ(),color);
         }
