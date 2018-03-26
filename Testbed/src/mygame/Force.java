@@ -83,12 +83,11 @@ public class Force {
         this.setLiftForce();
         this.setNormalForces();
         this.setFrictionForces();
-        //System.out.println("Gravity:"+ this.getTotalGravityForce());
-        System.out.println("Front wheel Normal force: " + this.frontWheelNormalForce);
-        System.out.println("Right wheel Normal force: " + this.rightRearWheelNormalForce);
-        System.out.println("Left wheel Normal force: " + this.leftRearWheelNormalForce);
-        //System.out.println("Front wheel D: " + this.currentDFront);
-        System.out.println("-----------------------------------");
+//        System.out.println("Front wheel Normal force: " + this.frontWheelNormalForce);
+//        System.out.println("Right wheel Normal force: " + this.rightRearWheelNormalForce);
+//        System.out.println("Left wheel Normal force: " + this.leftRearWheelNormalForce);
+//        //System.out.println("Front wheel D: " + this.currentDFront);
+//        System.out.println("-----------------------------------");
     }
     
     public void setFrictionForces() {
@@ -140,6 +139,9 @@ public class Force {
     }
 
     public void setThrust(float thrust){
+        if (thrust > getAircraft().getConfig().getMaxThrust()) {
+            thrust = getAircraft().getConfig().getMaxThrust();
+        }
         this.thrustForce = new Vector(0,0,-thrust);
     }
 
@@ -190,25 +192,23 @@ public class Force {
     public Vector getRightWingVelocity(){
 
         return this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), 
-
-                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getSelectedAircraft().
-                //getWingX().crossProduct(this.getSelectedAircraft().getAngularVelocity().inverseTransform(getSelectedAircraft().getHeading(),
-                //getSelectedAircraft().getPitch(), getSelectedAircraft().getRoll())));
+                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getAircraft().
+                //getWingX().crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(),
+                //getAircraft().getPitch(), getAircraft().getRoll())));
     }
 
     public Vector getLeftWingVelocity(){
         return this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), 
-                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getSelectedAircraft().
-                //getWingX().constantProduct(-1).crossProduct(this.getSelectedAircraft().getAngularVelocity().inverseTransform(getSelectedAircraft().getHeading(),
-               // getSelectedAircraft().getPitch(), getSelectedAircraft().getRoll())));
+                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getAircraft().
+                //getWingX().constantProduct(-1).crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(),
+                //getAircraft().getPitch(), getAircraft().getRoll())));
     }
 
     public Vector getStabilizerVelocity(){
         return this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), 
-                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getSelectedAircraft().
-                //getTailSize().crossProduct(this.getSelectedAircraft().getAngularVelocity().inverseTransform(getSelectedAircraft().getHeading(),
-                //getSelectedAircraft().getPitch(), getSelectedAircraft().getRoll())));
-
+                getAircraft().getPitch(), getAircraft().getRoll());//.add(this.getAircraft().
+                //getTailSize().crossProduct(this.getAircraft().getAngularVelocity().inverseTransform(getAircraft().getHeading(),
+                //getAircraft().getPitch(), getAircraft().getRoll())));
     }
 
     public Vector getRightWingProjectedAirspeed(){
@@ -371,7 +371,7 @@ public class Force {
     	     	 Vector FWheelDrone = this.getAircraft().getFrontWheel();
     	Vector FWheelWorld = FWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
     	         Vector WheelPlace = getAircraft().getCalcCoordinates().add(FWheelWorld);
-    	         System.out.println("WheelPlaceFront: "+ WheelPlace);
+    	         //System.out.println("WheelPlaceFront: "+ WheelPlace);
     	         previousDFront = currentDFront; 
     	         currentDFront = - WheelPlace.getY() +  getAircraft().getTyreRadius();
     	         if (currentDFront < 0) {
@@ -384,7 +384,7 @@ public class Force {
     	Vector RRWheelDrone = this.getAircraft().getRightRearWheel();     	 
     	Vector RRWheelWorld = RRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
     	         Vector WheelPlace = getAircraft().getCalcCoordinates().add(RRWheelWorld);
-    	         System.out.println("WheelPlaceRightRear: "+ WheelPlace);
+    	         //System.out.println("WheelPlaceRightRear: "+ WheelPlace);
     	         previousDRR = currentDRR;
     	         currentDRR = - WheelPlace.getY() +  getAircraft().getTyreRadius();
     	         if (currentDRR < 0) {
@@ -398,7 +398,7 @@ public class Force {
     	Vector LRWheelWorld = LRWheelDrone.transform(this.getAircraft().getHeading(), this.getAircraft().getPitch(), this.getAircraft().getRoll());
     	
     	         Vector WheelPlace = getAircraft().getCalcCoordinates().add(LRWheelWorld);
-    	         System.out.println("WheelPlaceLeftRear: "+ WheelPlace);
+    	         //System.out.println("WheelPlaceLeftRear: "+ WheelPlace);
     	         previousDLR = currentDLR;
     	         currentDLR = - WheelPlace.getY() +  getAircraft().getTyreRadius();
     	         if (currentDLR < 0) {
@@ -541,6 +541,7 @@ public class Force {
     	
     // in drone assenstelsel
     public Vector getTotalForce(){
+        getTotalLift().printVector("total lift force: ");
             return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce()).
                     add(getTotalWheelNormalForce()).add(getTotalFrictionForce()).add(getTotalBreakForce());
     }
@@ -559,17 +560,17 @@ public class Force {
         Vector rearLeft = getAircraft().getLeftRearWheel().crossProduct(getLeftRearWheelBreakForce().add(getLeftRearWheelFrictionForce()).add(getLeftRearWheelNormalForce()));
         Vector rearRight = getAircraft().getRightRearWheel().crossProduct(getRightRearWheelBreakForce().add(getRightRearWheelFrictionForce()).add(getRightRearWheelNormalForce()));
 
-        //Vector rearRight = getAircraft().getRightRearWheel().crossProduct(getLeftRearWheelNormalForce().add(getRightRearWheelNormalForce()).add(getRightRearWheelBreakForce()));
-        System.out.println("FrontWheel tov aicraft:"+getAircraft().getFrontWheel());
-        System.out.println("FrontForce: " + getFrontWheelBreakForce().add(getFrontWheelNormalForce()));
-        System.out.println("Front moment: "+ frontWheel);
-        //System.out.println("Left moment: "+ rearLeft);
-        //System.out.println("Right moment: "+ rearRight);
+//        //Vector rearRight = getAircraft().getRightRearWheel().crossProduct(getLeftRearWheelNormalForce().add(getRightRearWheelNormalForce()).add(getRightRearWheelBreakForce()));
+//        System.out.println("FrontWheel tov aicraft:"+getAircraft().getFrontWheel());
+//        System.out.println("FrontForce: " + getFrontWheelBreakForce().add(getFrontWheelNormalForce()));
+//        System.out.println("Front moment: "+ frontWheel);
+//        //System.out.println("Left moment: "+ rearLeft);
+//        //System.out.println("Right moment: "+ rearRight);
 
         
         
         Vector totalMoment =  wingR.add(wingL).add(tail).add(engine).add(frontWheel).add(rearLeft).add(rearRight);
-        System.out.println("Total moment: "+ totalMoment);
+//        System.out.println("Total moment: "+ totalMoment);
         return totalMoment;
     }
 

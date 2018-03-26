@@ -19,6 +19,21 @@ public class AutopilotOutputsReader {
             public float getRightWingInclination() { return rightWingInclination; }
             public float getHorStabInclination() { return horStabInclination; }
             public float getVerStabInclination() { return verStabInclination; }
+
+            @Override
+            public float getFrontBrakeForce() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public float getLeftBrakeForce() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public float getRightBrakeForce() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
     }
 }
