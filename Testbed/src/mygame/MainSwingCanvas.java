@@ -85,11 +85,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 //
 //        world.setAircraft(aircraft);
 
-        // TODO: maybe remove these viewports (Attention: plane camera viewport has to be available someway to support image recognition)
+        // Attention: plane camera viewport has to be available someway to support image recognition
         createPlaneCameraViewport();
-        createChaseCameraViewport();
-        createTopDownCameraViewport();
-        createSideCameraViewport();
 
         // Move aircraft to starting position
 //         Quaternion pitchQuat = new Quaternion();
@@ -162,33 +159,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         planeCamViewPort.setClearFlags(true, true, true);
         planeCamViewPort.attachScene(rootNode);
         planeCamViewPort.setBackgroundColor(ColorRGBA.White);
-    }
-
-    private void createChaseCameraViewport(){
-        // Plane chase camera viewport
-        ViewPort chaseCamViewPort = renderManager.createMainView("chasecam view", this.getWorld().getChaseCam());
-        chaseCamViewPort.setClearFlags(true, true, true);
-        chaseCamViewPort.attachScene(rootNode);
-        chaseCamViewPort.setBackgroundColor(ColorRGBA.White);
-        rootNode.attachChild(this.getWorld().getChaseCamNode());
-    }
-
-    private void createTopDownCameraViewport(){
-        // Top down camera viewport
-        ViewPort topDownCamViewPort = renderManager.createMainView("top down cam view", this.getWorld().getTopDownCam());
-        topDownCamViewPort.setClearFlags(true, true, true);
-        topDownCamViewPort.attachScene(rootNode);
-        topDownCamViewPort.setBackgroundColor(ColorRGBA.White);
-        rootNode.attachChild(this.getWorld().getTopDownCamNode());
-    }
-
-    private void createSideCameraViewport(){
-        // Side camera viewport
-        ViewPort sideCamViewPort = renderManager.createMainView("top down cam view", this.getWorld().getSideCam());
-        sideCamViewPort.setClearFlags(true, true, true);
-        sideCamViewPort.attachScene(rootNode);
-        sideCamViewPort.setBackgroundColor(ColorRGBA.White);
-        rootNode.attachChild(this.getWorld().getSideCamNode());
     }
 
     private void createChaseCameraCustomView() {
