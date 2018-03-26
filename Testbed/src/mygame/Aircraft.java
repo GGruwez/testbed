@@ -293,6 +293,14 @@ public class Aircraft extends Node {
     	setRoll(getRoll() + getAngularVelocity().inverseTransform(getHeading(), getPitch(), getRoll()).getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
 
+        getForce().getRightRearWheelNormalForce().printVector("Right wheel normal force: ");
+        getForce().getLeftRearWheelNormalForce().printVector("Left wheel normal force: ");
+        getForce().getFrontWheelNormalForce().printVector("Front wheel normal force: ");
+        System.out.println("Front wheel D: " + getForce().getFrontWheelD());
+        System.out.println("Right wheel D: " + getForce().getRightRearWheelD());
+        System.out.println("Left wheel D: " + getForce().getLeftRearWheelD());
+        System.out.println("Yvelocity: " + getVelocity().getY());
+        System.out.println("Yposition: " + getCalcCoordinates().getY());
         //Vector totalM = getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia());
         //totalM.printVector("totalm ");
         //getAngularVelocity().printVector("angleacc");
