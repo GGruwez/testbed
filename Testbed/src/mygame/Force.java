@@ -536,7 +536,7 @@ public class Force {
     	
     // in drone assenstelsel
     public Vector getTotalForce(){
-        getTotalLift().printVector("total lift force: ");
+        getTotalLift().printVector("Total lift force: ");
             return this.getTotalLift().add(this.getTotalGravityForce()).add(this.getThrustForce()).
                     add(getTotalWheelNormalForce()).add(getTotalFrictionForce()).add(getTotalBreakForce());
     }
@@ -555,18 +555,8 @@ public class Force {
         Vector rearLeft = getAircraft().getLeftRearWheel().crossProduct(getLeftRearWheelNormalForce().add(getLeftRearWheelFrictionForce()).add(getLeftRearWheelBreakForce()));
         Vector rearRight = getAircraft().getRightRearWheel().crossProduct(getRightRearWheelNormalForce().add(getRightRearWheelFrictionForce()).add(getRightRearWheelBreakForce()));
 
- 
 
-        System.out.println("WringR: "+ wingR);
-        System.out.println("WringL: "+ wingL);
-        System.out.println("Tail: "+ tail);
-        System.out.println("Engine:" + engine);
-        System.out.println("frontWheel:" + frontWheel);
-        System.out.println("rearLeft:" + rearLeft);
-        System.out.println("rearRight:" + rearRight);
-        System.out.println("----------------------------");
         Vector totalMoment =  wingR.add(wingL).add(tail).add(engine).add(frontWheel).add(rearLeft).add(rearRight);
-
         return totalMoment;
     }
 
