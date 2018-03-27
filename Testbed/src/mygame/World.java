@@ -177,7 +177,7 @@ public class World {
         Cube cubeToRemove = null;
         for(Cube cube:this.getCubesInWorld()) {
             Vector cubePos = this.getCubePositions().get(cube);
-            if(this.getSelectedAircraft().getCalcCoordinates().calculateDistance(cubePos)<=4) {
+            if(this.getSelectedAircraft().getCalcCoordinates().calculateDistance(cubePos)<=8) {
                 cubeToRemove = cube;
                 this.getCubePositions().remove(cube);
                 cube.destroy();

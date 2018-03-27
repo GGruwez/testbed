@@ -146,7 +146,7 @@ public class Main {
             JButton readFromFileButton = new JButton("read from file");
             readFromFileButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().setPath(canvasApplication.getWorld().readFile("cubePositions.txt"));
+                    canvasApplication.getWorld().setPath(canvasApplication.getWorld().readFile("path.txt"));
                     onButtonClick.run();
                 }
             });
