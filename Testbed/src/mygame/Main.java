@@ -186,6 +186,13 @@ public class Main {
             gridBagConstraints.gridy = 5;
             buttonPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gridBagConstraints);
 
+            gridBagConstraints.gridy = 6;
+            JLabel infoLabel = new JLabel();
+            buttonPanel.add(infoLabel, gridBagConstraints);
+            canvasApplication.addUpdateListener(() -> {
+                infoLabel.setText("<html>" + canvasApplication.getAircraftInfo().replace("\r\n", "<br>") + "</html>");
+            });
+
             window.add(buttonPanel);
             window.pack();
             window.setVisible(true);

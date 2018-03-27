@@ -25,8 +25,10 @@ import com.jme3.texture.Texture;
 import mygame.visualcomponents.RegularBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,6 +46,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     public CustomView chaseCameraCustomView;
     public CustomDualView topDownCameraCustomView;
     private boolean keepUpdating = true;
+    private List<Runnable> updateListeners = new ArrayList<Runnable>();
 
     private boolean mouseVisible = false;
 
@@ -115,12 +118,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
                 goalCube.getLocalTranslation().getZ());
         world.startSimulation();
 
-        aircraftInfo = new BitmapText(guiFont, false);
-        aircraftInfo.setSize(guiFont.getCharSet().getRenderedSize()*3/4);
-        aircraftInfo.setColor(ColorRGBA.Blue);
-        aircraftInfo.setLocalTranslation(0, settings.getHeight(), 0);
-        guiNode.attachChild(aircraftInfo);
-
         // Change camera view to show both cube and aircraft in one shot
         cam.setLocation(new Vector3f(-100, 0, 0));
         cam.lookAt(new Vector3f(0, 0, 0), Vector3f.ZERO);
@@ -185,6 +182,10 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         if(this.keepUpdating) super.update();
     }
 
+    public void addUpdateListener(Runnable listener){
+        this.updateListeners.add(listener);
+    }
+
     private boolean initialFrame = true;
     @Override
     public void simpleUpdate(float tpf) {
@@ -231,9 +232,12 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         }
         renderCamera.grabCamera();
 
-        this.refreshAircraftInfo();
         log.addLine(this.getSelectedAircraft());
         log.save();
+
+        for(Runnable ul: updateListeners){
+            ul.run();
+        }
     }
 
     private void updateDifferentCameras(){
@@ -263,7 +267,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
     }
 
-    public void refreshAircraftInfo(){
+    public String getAircraftInfo(){
         String aircraftInfoText = "Aircraft Info:\r\n";
         aircraftInfoText += "Position: " + this.getSelectedAircraft().getCalcCoordinates().toString();
         aircraftInfoText += "\r\n";
@@ -293,7 +297,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         aircraftInfoText += "\r\n";
         aircraftInfoText += String.format("Paused [p]: %b", this.world.isPaused());
         aircraftInfoText += "\r\n";
-        aircraftInfo.setText(aircraftInfoText);
+        return aircraftInfoText;
     }
 
     public Aircraft getSelectedAircraft(){

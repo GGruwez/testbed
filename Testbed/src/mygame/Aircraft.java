@@ -162,7 +162,7 @@ public class Aircraft extends Node {
     }
     
     public void setPitch(float pitch){
-    	this.pitch = (float) pitch;
+    	this.pitch = pitch;
     }
     
     public float getRoll(){
