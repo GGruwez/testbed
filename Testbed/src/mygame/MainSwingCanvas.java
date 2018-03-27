@@ -239,7 +239,11 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private void updateDifferentCameras(){
         // Update chase camera
         this.chaseCameraCustomView.updateCamera(cv -> {
-            Vector newChaseCamPosition = this.getSelectedAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
+            Vector newChaseCamPosition = this.getSelectedAircraft().getCalcCoordinates()
+                    .inverseTransform(this.getSelectedAircraft().getHeading(), this.getSelectedAircraft().getPitch(),this.getSelectedAircraft().getRoll())
+                    .add(new Vector(0, 0, 20))
+                    .transform(this.getSelectedAircraft().getHeading(), this.getSelectedAircraft().getPitch(),this.getSelectedAircraft().getRoll());
+
             cv.getCameraNode().setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
             Vector aircraftCoordinates = this.getSelectedAircraft().getCalcCoordinates();
             cv.getCameraNode().lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);

@@ -495,11 +495,21 @@ public class Force {
     }
     
     public void setLeftRearWheelFrictionForce(){
+<<<<<<< HEAD
     	this.leftRearWheelFrictionForce = Vector.NULL;//new Vector(this.getAircraft().getVelocity().getX()*this.getLeftRearWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax(), 0, 0);
     }
     
     public void setRightRearWheelFrictionForce(){
         this.rightRearWheelFrictionForce = Vector.NULL;//new Vector(this.getAircraft().getVelocity().getX()*this.getRightRearWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax(), 0, 0);
+=======
+    	this.leftRearWheelFrictionForce = new Vector(-this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).
+                getX()*this.getLeftRearWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax(), 0, 0);
+    }
+    
+    public void setRightRearWheelFrictionForce(){
+        this.rightRearWheelFrictionForce = new Vector(this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll())
+                .getX()*this.getRightRearWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax(), 0, 0);
+>>>>>>> 52c3cacdb0539ff908a17932cf1475735ed4b3a5
     }
     
     public Vector getLeftRearWheelFrictionForce(){

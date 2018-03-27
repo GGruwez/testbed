@@ -31,13 +31,6 @@ public class World {
     private boolean paused = true;
     private Vector goal;
 
-    private Camera chaseCam;
-    private CameraNode chaseCamNode;
-    private Camera topDownCam;
-    private CameraNode topDownCamNode;
-    private Camera sideCam;
-    private CameraNode sideCamNode;
-
     private MainSwingCanvas mainSwingCanvas;
     
     private ColorRGBA[] usedColors;
@@ -55,31 +48,6 @@ public class World {
         this.airports = new ArrayList<>();
         this.autopilot = AutopilotFactory.createAutopilot();
 
-        // Chase camera
-        this.chaseCam = new Camera(200, 200);
-        this.chaseCam.setFrustumPerspective(120, 1, 1, 1000);
-        this.chaseCam.setViewPort(4f, 5f, 1f, 2f);
-        this.chaseCamNode = new CameraNode("Chase cam Node", this.chaseCam);
-        this.chaseCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        // Top down camera
-        this.topDownCam = new Camera(200, 200);
-        this.topDownCam.setFrustumPerspective(120, 1, 1, 1000);
-        this.topDownCam.setViewPort(3f, 4f, 1f, 2f);
-        this.topDownCamNode = new CameraNode("Top down cam node", this.topDownCam);
-        this.topDownCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        this.topDownCamNode.setLocalTranslation(0, 30, 0);
-        this.topDownCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_X);
-        // Side camera
-        this.sideCam = new Camera(200, 200);
-        this.sideCam.setFrustumPerspective(120, 1, 1, 1000);
-        this.sideCam.setViewPort(3f, 4f, 0f, 1f);
-        this.sideCamNode = new CameraNode("Side cam node", this.sideCam);
-        this.sideCamNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
-        this.sideCamNode.setLocalTranslation(-50, 0, 0);
-        this.sideCamNode.lookAt(Vector3f.ZERO, Vector3f.UNIT_Y);
-
-        
-        
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
@@ -161,14 +129,6 @@ public class World {
             this.getSelectedAircraft().updateVisualRotation();
             // Aircraft's calc coordinates and actual visual position coordinates are now the same
 
-            // Camera's
-            this.chaseCam.resize(200, 200, false);
-            this.topDownCam.resize(200, 200, false);
-            this.sideCam.resize(200, 200, false);
-            Vector newChaseCamPosition = this.getSelectedAircraft().getCalcCoordinates().inverseTransform(0, 0,0 ).add(new Vector(0, 0, 20)).transform(0,0,0);
-            this.chaseCamNode.setLocalTranslation(newChaseCamPosition.getX(), newChaseCamPosition.getY(), newChaseCamPosition.getZ());
-            Vector aircraftCoordinates = this.getSelectedAircraft().getCalcCoordinates();
-            this.chaseCamNode.lookAt(new Vector3f(aircraftCoordinates.getX(), aircraftCoordinates.getY(), aircraftCoordinates.getZ()), Vector3f.UNIT_Y);
             first = false;
         }
 
@@ -214,30 +174,6 @@ public class World {
     
     public void setGoal(float x, float y, float z) {
         this.goal = new Vector(x, y, z);
-    }
-
-    public Camera getChaseCam(){
-        return this.chaseCam;
-    }
-
-    public CameraNode getChaseCamNode(){
-        return this.chaseCamNode;
-    }
-
-    public Camera getTopDownCam(){
-        return this.topDownCam;
-    }
-
-    public CameraNode getTopDownCamNode(){
-        return this.topDownCamNode;
-    }
-
-    public Camera getSideCam(){
-        return this.sideCam;
-    }
-
-    public CameraNode getSideCamNode(){
-        return this.sideCamNode;
     }
 
     public void generateCube(float x, float y, float z, ColorRGBA color){
