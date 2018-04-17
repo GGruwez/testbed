@@ -50,7 +50,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         this.callbackAfterAppInit = callbackAfterAppInit;
     }
 
-    private Aircraft addNewAircraft(){
+    public Aircraft addNewAircraft(){
         Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, 0, 1.12f + 0.2f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
         world.addAircraft(aircraft);

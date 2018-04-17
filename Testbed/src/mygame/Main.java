@@ -114,8 +114,9 @@ public class Main {
                     updateAircraftComboBox();
 
                     aircraftComboBox.addActionListener(e -> {
-                        String selectedAircraftString = (String) aircraftComboBox.getSelectedItem();
-                        System.out.println(selectedAircraftString);
+                        Aircraft selectedAircraftString = (Aircraft) aircraftComboBox.getSelectedItem();
+                        if(selectedAircraftString != null)
+                            System.out.println(selectedAircraftString);
                     });
                 }
             };
@@ -206,8 +207,12 @@ public class Main {
             gridBagConstraints.gridy = 6;
             buttonPanel.add(aircraftComboBox, gridBagConstraints);
 
-
             gridBagConstraints.gridy = 7;
+            JButton addAircraftButton = new JButton("Add aircraft");
+            addAircraftButton.addActionListener(e -> canvasApplication.addNewAircraft());
+            buttonPanel.add(addAircraftButton, gridBagConstraints);
+
+            gridBagConstraints.gridy = 8;
             JLabel infoLabel = new JLabel();
             buttonPanel.add(infoLabel, gridBagConstraints);
             canvasApplication.addUpdateListener(() -> {
