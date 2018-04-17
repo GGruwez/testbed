@@ -12,7 +12,6 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
@@ -24,13 +23,10 @@ import com.jme3.terrain.heightmap.Namer;
 import com.jme3.texture.Texture;
 import mygame.visualcomponents.RegularBox;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
@@ -50,8 +46,17 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
     private boolean mouseVisible = false;
 
-    public void addCallBackAfterAppInit(Callback callbackAfterAppInit) {
+    public void setCallBackAfterAppInit(Callback callbackAfterAppInit) {
         this.callbackAfterAppInit = callbackAfterAppInit;
+    }
+
+    private Aircraft addNewAircraft(){
+        Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, 0, 1.12f + 0.2f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+        world.addAircraft(aircraft);
+        rootNode.attachChild(aircraft);
+
+        return aircraft;
     }
 
     @Override
@@ -77,10 +82,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         
  //        getRootNode().attachChild(apm);
 
-         Aircraft aircraft = new Aircraft("Plane", assetManager, 0, 2f, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-         world.addAircraft(aircraft);
-         rootNode.attachChild(aircraft);
+        Aircraft aircraft = addNewAircraft();
 
 //        Box plane = new Box(1,1,2);
 //        Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
@@ -199,37 +201,31 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             initKeys();
             initialFrame = false;
         }
+        // Link new items
         try {
-
-            // Link new items
-            try {
-                while (!newSpatialQueue.isEmpty()) {
-                    synchronized(newSpatialQueue){
-                        if(!newSpatialQueue.isEmpty()) {
-                            rootNode.attachChild(newSpatialQueue.peek());
-                            newSpatialQueue.pop();
-                        }
+            while (!newSpatialQueue.isEmpty()) {
+                synchronized(newSpatialQueue){
+                    if(!newSpatialQueue.isEmpty()) {
+                        rootNode.attachChild(newSpatialQueue.peek());
+                        newSpatialQueue.pop();
                     }
                 }
-                // Unlink old items
-                while (!destructibleSpatialQueue.isEmpty()) {
-                    synchronized(destructibleSpatialQueue) {
-                        if(!destructibleSpatialQueue.isEmpty()) {
-                            rootNode.detachChild(destructibleSpatialQueue.peek());
-                            destructibleSpatialQueue.pop();
-                        }
-                    }
-                }
-
-                world.evolve(tpf);
-            }catch (ConcurrentModificationException cme){
-                System.out.println("Concurrent modification exception, completing later.");
             }
-            updateDifferentCameras();
+            // Unlink old items
+            while (!destructibleSpatialQueue.isEmpty()) {
+                synchronized(destructibleSpatialQueue) {
+                    if(!destructibleSpatialQueue.isEmpty()) {
+                        rootNode.detachChild(destructibleSpatialQueue.peek());
+                        destructibleSpatialQueue.pop();
+                    }
+                }
+            }
 
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            world.evolve(tpf);
+        }catch (ConcurrentModificationException cme){
+            System.out.println("Concurrent modification exception, completing later.");
         }
+        updateDifferentCameras();
         renderCamera.grabCamera();
 
         log.addLine(this.getSelectedAircraft());
@@ -305,11 +301,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
 
     public World getWorld(){return this.world;}
-
-    @Override
-    public void simpleRender(RenderManager rm) {
-        //TODO: add render code
-    }
 
     /** Custom Keybinding: Map named actions to inputs. */
     private void initKeys() {
