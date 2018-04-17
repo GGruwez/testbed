@@ -118,12 +118,9 @@ public class World {
                 if (temp.size()>0) collidesWithAirport = true;
             }
             if (results.size() > 0 && !first && !collidesWithAirport) {
-                System.out.println("Danio: "+ results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
-
-                this.endSimulation(); //TODO: support multiple airplanes
-
+                //this.endSimulation(); //TODO: support multiple airplanes
             }
-            if (hasToCrash(getSelectedAircraft())) this.endSimulation();
+            //if (hasToCrash(getSelectedAircraft())) this.endSimulation();
             // Update visual position of aircraft
             this.getSelectedAircraft().updateVisualCoordinates();
             this.getSelectedAircraft().updateVisualRotation();

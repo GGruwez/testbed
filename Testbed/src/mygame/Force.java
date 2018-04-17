@@ -345,15 +345,15 @@ public class Force {
    
     public float getLeftRearWheelDChange(){
     	//System.out.println("current:" + currentDLR + "previous: "+ previousDLR);
-    	return Math.abs(currentDLR - previousDLR);
+    	return Math.abs(currentDLR - previousDLR)/0.01f;
     }
     
     public float getRightRearWheelDChange(){
-    	return Math.abs(currentDRR - previousDRR);
+    	return Math.abs(currentDRR - previousDRR)/0.01f;
     }
     
     public float getFrontWheelDChange(){
-    	return Math.abs(currentDFront - previousDFront);
+    	return Math.abs(currentDFront - previousDFront)/0.01f;
     }
     
     public float getLeftRearWheelD(){
@@ -479,15 +479,15 @@ public class Force {
     }
     
     public Vector getRightRearWheelBreakForce(){
-    	return this.rightBreakForce;
+    	return new Vector(0,0,0); //return this.rightBreakForce;
     }
     
     public Vector getLeftRearWheelBreakForce(){
-    	return this.leftBreakForce;
+    	return new Vector(0,0,0); //return this.leftBreakForce;
     }
     
     public Vector getFrontWheelBreakForce(){
-    	return this.frontBreakForce;
+    	return new Vector(0,0,0); //return this.frontBreakForce;
     }
     
     public Vector getTotalBreakForce(){
