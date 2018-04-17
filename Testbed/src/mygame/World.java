@@ -96,54 +96,58 @@ public class World {
     }
 
     private void evolveAutopilot(float dt){
-        // TODO: evolve every aircraft
-        if (this.isSimulating() && !this.isPaused()) {
-            AutopilotInputs autopilotInputs = this.getSelectedAircraft().getAutopilotInputs();
-            AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs);
-            this.getSelectedAircraft().readAutopilotOutputs(autopilotOutputs);
-            this.getSelectedAircraft().updateAirplane(dt);
+        // Evolve every aircraft
+        for(Aircraft ac: getCollectionOfAircraft()) {
+            if (this.isSimulating() && !this.isPaused()) {
+                AutopilotInputs autopilotInputs = ac.getAutopilotInputs();
+                AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs); // TODO: use autopilot module (multithreading)
+                ac.readAutopilotOutputs(autopilotOutputs);
+                ac.updateAirplane(dt);
+            }
         }
     }
     
-    public void evolve(float dt) throws IOException {
-        // TODO: evolve every aircraft
-        if (this.isSimulating() && !this.isPaused()) {
-            //check collision with ground
-            CollisionResults results = new CollisionResults();
-            getSelectedAircraft().getAircraftGeometry().collideWith(this.mainSwingCanvas.getTerrain().getWorldBound(), results);
-            boolean collidesWithAirport = false;
-            CollisionResults temp = new CollisionResults();
-            for (Airport airport:airports) {
-                getSelectedAircraft().collideWith(airport.getBatchNode().getWorldBound(), temp);
-                if (temp.size()>0) collidesWithAirport = true;
+    public void evolve(float dt) {
+        // Evolve every aircraft
+        for(Aircraft ac: getCollectionOfAircraft()) {
+            if (this.isSimulating() && !this.isPaused()) {
+                //check collision with ground
+                CollisionResults results = new CollisionResults();
+                ac.getAircraftGeometry().collideWith(this.mainSwingCanvas.getTerrain().getWorldBound(), results);
+                boolean collidesWithAirport = false;
+                CollisionResults temp = new CollisionResults();
+                for (Airport airport : airports) {
+                    ac.collideWith(airport.getBatchNode().getWorldBound(), temp);
+                    if (temp.size() > 0) collidesWithAirport = true;
+                }
+                if (results.size() > 0 && !first && !collidesWithAirport) {
+                    System.out.println("Danio: " + results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
+
+                    this.endSimulation();
+
+                }
+                if (hasToCrash(ac)) this.endSimulation();
+                // Update visual position of aircraft
+                ac.updateVisualCoordinates();
+                ac.updateVisualRotation();
+                // Aircraft's calc coordinates and actual visual position coordinates are now the same
+
+                first = false;
             }
-            if (results.size() > 0 && !first && !collidesWithAirport) {
-                System.out.println("Danio: "+ results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
 
-                this.endSimulation(); //TODO: support multiple airplanes
 
+            // Removes the cubes the aircraft approaches // TODO: remove?
+            Cube cubeToRemove = null;
+            for (Cube cube : this.getCubesInWorld()) {
+                Vector cubePos = this.getCubePositions().get(cube);
+                if (this.getSelectedAircraft().getCalcCoordinates().calculateDistance(cubePos) <= 8) {
+                    cubeToRemove = cube;
+                    this.getCubePositions().remove(cube);
+                    cube.destroy();
+                }
             }
-            if (hasToCrash(getSelectedAircraft())) this.endSimulation();
-            // Update visual position of aircraft
-            this.getSelectedAircraft().updateVisualCoordinates();
-            this.getSelectedAircraft().updateVisualRotation();
-            // Aircraft's calc coordinates and actual visual position coordinates are now the same
-
-            first = false;
+            this.getCubesInWorld().remove(cubeToRemove);
         }
-
-        
-        
-        Cube cubeToRemove = null;
-        for(Cube cube:this.getCubesInWorld()) {
-            Vector cubePos = this.getCubePositions().get(cube);
-            if(this.getSelectedAircraft().getCalcCoordinates().calculateDistance(cubePos)<=8) {
-                cubeToRemove = cube;
-                this.getCubePositions().remove(cube);
-                cube.destroy();
-            }
-        }
-        this.getCubesInWorld().remove(cubeToRemove);
 
     }
     
@@ -155,11 +159,13 @@ public class World {
         }
     
     public void startSimulation() {
+        // TODO: support for autopilot module
         this.simulation = true;
         this.getAutopilot().simulationStarted(this.getSelectedAircraft().getConfig(), this.getSelectedAircraft().getAutopilotInputs());
     }
     
     public void endSimulation() {
+        // TODO: support for autopilot module
         this.simulation = false;
         this.getAutopilot().simulationEnded();
     }
@@ -203,7 +209,7 @@ public class World {
     }
 
     public void generateRandomCubes(int n) {
-        this.usedColors = new ColorRGBA[n];
+        this.usedColors = new ColorRGBA[n]; // TODO: take previously used colors into account as well
         for(int i=1; i<n+1; i++) {
             float z = i*-40;
             float x = (float) Math.random()*10;

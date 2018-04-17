@@ -199,37 +199,31 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             initKeys();
             initialFrame = false;
         }
+        // Link new items
         try {
-
-            // Link new items
-            try {
-                while (!newSpatialQueue.isEmpty()) {
-                    synchronized(newSpatialQueue){
-                        if(!newSpatialQueue.isEmpty()) {
-                            rootNode.attachChild(newSpatialQueue.peek());
-                            newSpatialQueue.pop();
-                        }
+            while (!newSpatialQueue.isEmpty()) {
+                synchronized(newSpatialQueue){
+                    if(!newSpatialQueue.isEmpty()) {
+                        rootNode.attachChild(newSpatialQueue.peek());
+                        newSpatialQueue.pop();
                     }
                 }
-                // Unlink old items
-                while (!destructibleSpatialQueue.isEmpty()) {
-                    synchronized(destructibleSpatialQueue) {
-                        if(!destructibleSpatialQueue.isEmpty()) {
-                            rootNode.detachChild(destructibleSpatialQueue.peek());
-                            destructibleSpatialQueue.pop();
-                        }
-                    }
-                }
-
-                world.evolve(tpf);
-            }catch (ConcurrentModificationException cme){
-                System.out.println("Concurrent modification exception, completing later.");
             }
-            updateDifferentCameras();
+            // Unlink old items
+            while (!destructibleSpatialQueue.isEmpty()) {
+                synchronized(destructibleSpatialQueue) {
+                    if(!destructibleSpatialQueue.isEmpty()) {
+                        rootNode.detachChild(destructibleSpatialQueue.peek());
+                        destructibleSpatialQueue.pop();
+                    }
+                }
+            }
 
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            world.evolve(tpf);
+        }catch (ConcurrentModificationException cme){
+            System.out.println("Concurrent modification exception, completing later.");
         }
+        updateDifferentCameras();
         renderCamera.grabCamera();
 
         log.addLine(this.getSelectedAircraft());
@@ -305,11 +299,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
 
     public World getWorld(){return this.world;}
-
-    @Override
-    public void simpleRender(RenderManager rm) {
-        //TODO: add render code
-    }
 
     /** Custom Keybinding: Map named actions to inputs. */
     private void initKeys() {
