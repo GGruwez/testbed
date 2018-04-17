@@ -17,7 +17,8 @@ import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
 
 public class Aircraft extends Node {
-    
+
+    private String name;
     
     private AutopilotConfig config = new AutopilotConfig();
     private Vector calcCoordinates = Vector.NULL;
@@ -68,6 +69,7 @@ public class Aircraft extends Node {
                     float thrust, float leftWingInclination, float rightWingInclination,
                     float horStabInclination, float verStabInclination) {
 
+        this.name = name;
         this.aircraftGeometry = new AirplaneModel(assetManager);
         
         // Plane camera
@@ -440,6 +442,11 @@ public class Aircraft extends Node {
                 return Aircraft.this.getElapsedTime();
             }
         };
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 
     

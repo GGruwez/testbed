@@ -48,6 +48,8 @@ public class Main {
             canvasPanels.add(panel1);
             tabbedPane.addTab("Regular view", null, panel1);
 
+            JComboBox<Aircraft> aircraftComboBox = new JComboBox<>();
+
             ChangeListener tabChangeListener = new ChangeListener() {
 
                 @Override
@@ -87,6 +89,13 @@ public class Main {
 
             Callback aai = new Callback() {
 
+                private void updateAircraftComboBox(){
+                    aircraftComboBox.removeAllItems();
+                    for(Aircraft ac: canvasApplication.getWorld().getCollectionOfAircraft())
+                        aircraftComboBox.addItem(ac);
+                    aircraftComboBox.setSelectedIndex(aircraftComboBox.getItemCount()-1); // Select last aircraft
+                }
+
                 @Override
                 public void run() {
 
@@ -100,9 +109,17 @@ public class Main {
                     canvasPanels.add(panel4);
 
                     tabbedPane.addChangeListener(tabChangeListener);
+
+                    canvasApplication.getWorld().addAircraftAddedListener(() -> updateAircraftComboBox());
+                    updateAircraftComboBox();
+
+                    aircraftComboBox.addActionListener(e -> {
+                        String selectedAircraftString = (String) aircraftComboBox.getSelectedItem();
+                        System.out.println(selectedAircraftString);
+                    });
                 }
             };
-            canvasApplication.addCallBackAfterAppInit(aai);
+            canvasApplication.setCallBackAfterAppInit(aai);
 
             Callback onButtonClick = new Callback() {
                 @Override
@@ -187,6 +204,10 @@ public class Main {
             buttonPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gridBagConstraints);
 
             gridBagConstraints.gridy = 6;
+            buttonPanel.add(aircraftComboBox, gridBagConstraints);
+
+
+            gridBagConstraints.gridy = 7;
             JLabel infoLabel = new JLabel();
             buttonPanel.add(infoLabel, gridBagConstraints);
             canvasApplication.addUpdateListener(() -> {

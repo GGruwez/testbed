@@ -24,6 +24,8 @@ public class World {
 
     private static long SIMULATION_PERIOD = 10; // Simulation period in milliseconds, determines how fast autopilot calculations happen
 
+    private ArrayList<Runnable> aircraftAddedListeners = new ArrayList<>();
+
     private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
     private Aircraft selectedAircraft;
     private Autopilot autopilot;
@@ -77,6 +79,9 @@ public class World {
         }
         this.collectionOfAircraft.add(aircraft);
         aircraft.setWorld(this);
+
+        for(Runnable aal: aircraftAddedListeners)
+            aal.run();
     }
 
     public void setSelectedAircraft(Aircraft aircraft){
@@ -87,7 +92,7 @@ public class World {
         return this.selectedAircraft;
     }
 
-    private ArrayList<Aircraft> getCollectionOfAircraft(){
+    public ArrayList<Aircraft> getCollectionOfAircraft(){
         return this.collectionOfAircraft;
     }
     
@@ -314,6 +319,7 @@ public class World {
         airport.build();
     }
 
-    
-    
+    public void addAircraftAddedListener(Runnable aircraftAddedListener) {
+        this.aircraftAddedListeners.add(aircraftAddedListener);
+    }
 }
