@@ -345,15 +345,15 @@ public class Force {
    
     public float getLeftRearWheelDChange(){
     	//System.out.println("current:" + currentDLR + "previous: "+ previousDLR);
-    	return Math.abs(currentDLR - previousDLR);
+    	return (currentDLR - previousDLR)/0.01f;
     }
     
     public float getRightRearWheelDChange(){
-    	return Math.abs(currentDRR - previousDRR);
+    	return (currentDRR - previousDRR)/0.01f;
     }
     
     public float getFrontWheelDChange(){
-    	return Math.abs(currentDFront - previousDFront);
+    	return (currentDFront - previousDFront)/0.01f;
     }
     
     public float getLeftRearWheelD(){
@@ -376,6 +376,8 @@ public class Force {
     	         Vector WheelPlace = getAircraft().getCalcCoordinates().add(FWheelWorld);
     	         //System.out.println("WheelPlaceFront: "+ WheelPlace);
     	         previousDFront = currentDFront; 
+                 
+                WheelPlace.printVector("wheelplace");
     	         currentDFront = - WheelPlace.getY() +  getAircraft().getTyreRadius();
     	         if (currentDFront < 0) {
     	             this.currentDFront = 0;
@@ -413,9 +415,10 @@ public class Force {
     public void setLeftRearWheelNormalForce(){
     	float tyreSlope = this.getAircraft().getConfig().getTyreSlope();
     	float dampSlope = this.getAircraft().getConfig().getDampSlope();
-    	
-    	
-    	this.leftRearWheelNormalForce = new Vector(0,Math.abs(tyreSlope*getLeftRearWheelD()+dampSlope*getLeftRearWheelDChange()),0);
+    	float temp = tyreSlope*getLeftRearWheelD()+dampSlope*getLeftRearWheelDChange();
+    	if (temp < 0)
+                temp = 0;
+    	this.leftRearWheelNormalForce = new Vector(0,temp,0);
 
     	
     }
@@ -424,8 +427,10 @@ public class Force {
     	float tyreSlope = this.getAircraft().getConfig().getTyreSlope();
     	float dampSlope = this.getAircraft().getConfig().getDampSlope();
     	
-    	
-    	this.rightRearWheelNormalForce = new Vector(0,Math.abs(tyreSlope*getRightRearWheelD()+dampSlope*getRightRearWheelDChange()),0);
+    	float temp = tyreSlope*getRightRearWheelD()+dampSlope*getRightRearWheelDChange();
+    	if (temp < 0)
+                temp = 0;
+    	this.rightRearWheelNormalForce = new Vector(0,temp,0);
     	
     }
     
@@ -434,8 +439,11 @@ public class Force {
     	float dampSlope = this.getAircraft().getConfig().getDampSlope();
     	
     	
-    	this.frontWheelNormalForce = new Vector(0,Math.abs(tyreSlope*this.getFrontWheelD()+dampSlope*getFrontWheelDChange()),0);
-
+    	float temp = tyreSlope*getFrontWheelD()+dampSlope*getFrontWheelDChange();
+    	if (temp < 0)
+                temp = 0;
+    	this.frontWheelNormalForce = new Vector(0,temp,0);
+        System.out.println("frontwheelDchange: " + getFrontWheelDChange());
     }
     
     public void setTotalNormalForce(){

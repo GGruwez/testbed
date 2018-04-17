@@ -22,7 +22,7 @@ import java.io.FileWriter;
 
 public class World {
 
-    private static long SIMULATION_PERIOD = 10; // Simulation period in milliseconds, determines how fast autopilot calculations happen
+    private static long SIMULATION_PERIOD = 5;// Simulation period in milliseconds, determines how fast autopilot calculations happen
 
     private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
     private Aircraft selectedAircraft;
@@ -60,7 +60,7 @@ public class World {
             @Override
             public void run() {
                 try {
-                    evolveAutopilot((float) SIMULATION_PERIOD / 1000);
+                    evolveAutopilot((float) 0.01);
                 } catch (Exception ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Evolve failed", ex);
                 }
@@ -120,7 +120,7 @@ public class World {
             if (results.size() > 0 && !first && !collidesWithAirport) {
                 System.out.println("Danio: "+ results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
 
-                this.endSimulation(); //TODO: support multiple airplanes
+               // this.endSimulation(); //TODO: support multiple airplanes
 
             }
             if (hasToCrash(getSelectedAircraft())) this.endSimulation();
