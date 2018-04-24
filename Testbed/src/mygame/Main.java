@@ -213,6 +213,16 @@ public class Main {
             buttonPanel.add(addAircraftButton, gridBagConstraints);
 
             gridBagConstraints.gridy = 8;
+            JTextField changeSimulationPeriodMultiplierTextField = new JTextField(Float.toString(World.DEFAULT_SIMULATION_PERIOD_MULTIPLIER));
+            changeSimulationPeriodMultiplierTextField.addActionListener(e -> {
+                try {
+                    float newSimulationPeriodMultiplier = Float.parseFloat(changeSimulationPeriodMultiplierTextField.getText());
+                    canvasApplication.getWorld().setSimulationPeriodMultiplier(newSimulationPeriodMultiplier);
+                } catch (NumberFormatException ex) {}
+            });
+            buttonPanel.add(changeSimulationPeriodMultiplierTextField, gridBagConstraints);
+
+            gridBagConstraints.gridy = 9;
             JLabel infoLabel = new JLabel();
             buttonPanel.add(infoLabel, gridBagConstraints);
             canvasApplication.addUpdateListener(() -> {
