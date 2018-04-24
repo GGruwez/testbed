@@ -476,7 +476,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
     
     private void updateMiniMap() {
-        
+        minimap.removeAll();
         minimap.setLayout(null);
         //JLabel label = new JLabel("test");
         //label.setBounds(new Rectangle(new Point(100,100), label.getPreferredSize()));
@@ -492,6 +492,17 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             aircraftLabel.setBounds(new Rectangle(point,aircraftLabel.getPreferredSize()));
             minimap.add(aircraftLabel);
         }  
+        for (Airport airport:world.getAirports()) {
+            JLabel airportLabel = new JLabel();
+            airportLabel.setBackground(Color.RED);
+            airportLabel.setPreferredSize(new Dimension(10,5));
+            airportLabel.setOpaque(true);
+            int x = (int) airport.getX();
+            int y = (int) airport.getZ();
+            Point point = rescale(x,y);
+            airportLabel.setBounds(new Rectangle(point,airportLabel.getPreferredSize()));
+            minimap.add(airportLabel);
+        }
     }
    
     

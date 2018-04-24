@@ -321,4 +321,6 @@ public class World {
     public void addAircraftAddedListener(Runnable aircraftAddedListener) {
         this.aircraftAddedListeners.add(aircraftAddedListener);
     }
+    
+    public ArrayList<Airport> getAirports() {return this.airports;}
 }
