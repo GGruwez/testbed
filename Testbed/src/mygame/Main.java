@@ -112,12 +112,6 @@ public class Main {
 
                     canvasApplication.getWorld().addAircraftAddedListener(() -> updateAircraftComboBox());
                     updateAircraftComboBox();
-
-                    aircraftComboBox.addActionListener(e -> {
-                        Aircraft selectedAircraftString = (Aircraft) aircraftComboBox.getSelectedItem();
-                        if(selectedAircraftString != null)
-                            System.out.println(selectedAircraftString);
-                    });
                 }
             };
             canvasApplication.setCallBackAfterAppInit(aai);
@@ -216,7 +210,14 @@ public class Main {
             JLabel infoLabel = new JLabel();
             buttonPanel.add(infoLabel, gridBagConstraints);
             canvasApplication.addUpdateListener(() -> {
-                infoLabel.setText("<html>" + canvasApplication.getAircraftInfo().replace("\r\n", "<br>") + "</html>");
+                updateInfoLabel(canvasApplication, infoLabel);
+            });
+            aircraftComboBox.addActionListener(e -> {
+                Aircraft selectedAircraft = (Aircraft) aircraftComboBox.getSelectedItem();
+                if(selectedAircraft != null) {
+                    canvasApplication.getWorld().setSelectedAircraft(selectedAircraft);
+                    updateInfoLabel(canvasApplication, infoLabel);
+                }
             });
 
             window.add(buttonPanel);
@@ -224,5 +225,9 @@ public class Main {
             window.setVisible(true);
 
         });
+    }
+
+    private static void updateInfoLabel(MainSwingCanvas canvasApplication, JLabel infoLabel) {
+        infoLabel.setText("<html>" + canvasApplication.getAircraftInfo().replace("\r\n", "<br>") + "</html>");
     }
 }

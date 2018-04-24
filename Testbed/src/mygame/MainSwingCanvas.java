@@ -32,7 +32,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
     protected RenderCamera renderCamera;
     private World world;
-    private BitmapText aircraftInfo;
     private TerrainGrid terrain;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
@@ -410,11 +409,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         synchronized(newSpatialQueue){
             this.newSpatialQueue.clear();
         }
-    }
-    
-    public void crashAircraft() {
-        this.getRootNode().detachChild(this.getSelectedAircraft());
-        this.stop();
     }
 
     public void addToNewSpatialQueue(Spatial newItem){
