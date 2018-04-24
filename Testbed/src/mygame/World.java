@@ -9,10 +9,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
-import com.jme3.scene.CameraNode;
-import com.jme3.scene.control.CameraControl;
+
 import interfaces.Autopilot;
 import interfaces.AutopilotFactory;
 import interfaces.AutopilotInputs;
@@ -128,18 +125,16 @@ public class World {
                 if (results.size() > 0 && !first && !collidesWithAirport) {
                     System.out.println("Danio: " + results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
 
-                    this.endSimulation();
+                 //   this.endSimulation();
 
-<<<<<<< HEAD
-               // this.endSimulation(); //TODO: support multiple airplanes
-=======
+
                 }
                 if (hasToCrash(ac)) this.endSimulation();
                 // Update visual position of aircraft
                 ac.updateVisualCoordinates();
                 ac.updateVisualRotation();
                 // Aircraft's calc coordinates and actual visual position coordinates are now the same
->>>>>>> dd1318c84872ed00653ebcfed59ae2489ea7cdc8
+
 
                 first = false;
             }
