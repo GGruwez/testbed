@@ -177,6 +177,12 @@ public class Main {
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
+            JPanel minimap = new JPanel();
+            minimap.setBackground(Color.GREEN);
+            minimap.setPreferredSize(new Dimension(250,250));
+            buttonPanel.add(minimap);
+            canvasApplication.setupMiniMap(minimap);
+            
             gridBagConstraints.gridy = 0;
             JPanel startStopButtonPanel = new JPanel(new GridBagLayout());
             GridBagConstraints startStopButtonPanelGridBagConstraints = new GridBagConstraints();
@@ -218,11 +224,12 @@ public class Main {
             canvasApplication.addUpdateListener(() -> {
                 infoLabel.setText("<html>" + canvasApplication.getAircraftInfo().replace("\r\n", "<br>") + "</html>");
             });
-
+            
+            
+            
             window.add(buttonPanel);
             window.pack();
             window.setVisible(true);
-
         });
     }
 }
