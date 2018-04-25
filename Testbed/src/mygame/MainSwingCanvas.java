@@ -21,18 +21,24 @@ import com.jme3.terrain.geomipmap.grid.ImageTileLoader;
 import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
 import com.jme3.terrain.heightmap.Namer;
 import com.jme3.texture.Texture;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.Point;
+import java.awt.Rectangle;
 import mygame.visualcomponents.RegularBox;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
     protected RenderCamera renderCamera;
     private World world;
-    private BitmapText aircraftInfo;
     private TerrainGrid terrain;
     private Log log = new Log();
     private Callback callbackAfterAppInit;
@@ -45,6 +51,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private List<Runnable> updateListeners = new ArrayList<Runnable>();
 
     private boolean mouseVisible = false;
+    
+    private JPanel minimap;
 
     public void setCallBackAfterAppInit(Callback callbackAfterAppInit) {
         this.callbackAfterAppInit = callbackAfterAppInit;
@@ -222,6 +230,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             }
 
             world.evolve(tpf);
+            updateMiniMap();
         }catch (ConcurrentModificationException cme){
             System.out.println("Concurrent modification exception, completing later.");
         }
@@ -411,11 +420,6 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             this.newSpatialQueue.clear();
         }
     }
-    
-    public void crashAircraft() {
-        this.getRootNode().detachChild(this.getSelectedAircraft());
-        this.stop();
-    }
 
     public void addToNewSpatialQueue(Spatial newItem){
         synchronized(newSpatialQueue) {
@@ -466,5 +470,45 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     }
     
     public TerrainGrid getTerrain() {return this.terrain;}
+    
+    public void setupMiniMap(JPanel minimap) {
+        this.minimap = minimap;
+    }
+    
+    private void updateMiniMap() {
+        minimap.removeAll();
+        minimap.setLayout(null);
+        //JLabel label = new JLabel("test");
+        //label.setBounds(new Rectangle(new Point(100,100), label.getPreferredSize()));
+        //this.minimap.add(label);
+        for (Aircraft aircraft:world.getCollectionOfAircraft()) {
+            JLabel aircraftLabel = new JLabel();
+            aircraftLabel.setBackground(Color.BLACK);
+            aircraftLabel.setPreferredSize(new Dimension(5,5));
+            aircraftLabel.setOpaque(true);
+            int xOriginal = (int) aircraft.getCalcCoordinates().getX();
+            int yOriginal = (int) aircraft.getCalcCoordinates().getZ();
+            Point point = rescale(xOriginal,yOriginal);
+            aircraftLabel.setBounds(new Rectangle(point,aircraftLabel.getPreferredSize()));
+            minimap.add(aircraftLabel);
+        }  
+        for (Airport airport:world.getAirports()) {
+            JLabel airportLabel = new JLabel();
+            airportLabel.setBackground(Color.RED);
+            airportLabel.setPreferredSize(new Dimension(10,5));
+            airportLabel.setOpaque(true);
+            int x = (int) airport.getX();
+            int y = (int) airport.getZ();
+            Point point = rescale(x,y);
+            airportLabel.setBounds(new Rectangle(point,airportLabel.getPreferredSize()));
+            minimap.add(airportLabel);
+        }
+    }
+   
+    
+    private Point rescale(int x, int y) {
+        int size = minimap.getWidth();
+        return new Point(x/size+size/2,y/size+size/2);
+    }
 
 }

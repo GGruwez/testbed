@@ -19,9 +19,14 @@ import java.io.FileWriter;
 
 public class World {
 
-    private static long SIMULATION_PERIOD = 2;// Simulation period in milliseconds, determines how fast autopilot calculations happen
+
+    public static float DEFAULT_SIMULATION_PERIOD_MULTIPLIER = 1;
+    public static float DEFAULT_AUTOPILOT_SIMULATION_TIME_DIFFERENCE = 0.01f;
+    private float simulationPeriodMultiplier = DEFAULT_SIMULATION_PERIOD_MULTIPLIER; // spm value of 1 means: 1 second simulation period equals 1 second real time
+
 
     private ArrayList<Runnable> aircraftAddedListeners = new ArrayList<>();
+    private ArrayList<Runnable> simulationPeriodChangedListeners = new ArrayList<>();
 
     private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
     private Aircraft selectedAircraft;
@@ -54,20 +59,39 @@ public class World {
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
-        Timer simulationTimer = new Timer(true);
+        createAndStartSimulationTimer();
+
+        // TODO: support changing simulationPeriodMultiplier
+        addSimulationPeriodChangedListener(()->{
+            if(simulationTimer != null) {
+                createAndStartSimulationTimer();
+            }
+        });
+
+        //this.generateCubes(this.readFile("cubePositions.txt"));
+    }
+
+    Timer simulationTimer;
+
+    /**
+     * Creates and starts new simulation timer.
+     * Previous simulation timer will be canceled.
+     */
+    private void createAndStartSimulationTimer(){
+        if(simulationTimer != null)
+            simulationTimer.cancel();
+        simulationTimer = new Timer(true);
         TimerTask simulationTimerTask = new TimerTask() {
             @Override
             public void run() {
                 try {
-                    evolveAutopilot((float) 0.01);
+                    evolveAutopilot(DEFAULT_AUTOPILOT_SIMULATION_TIME_DIFFERENCE);
                 } catch (Exception ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, "Evolve failed", ex);
                 }
             }
         };
-        simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, SIMULATION_PERIOD);
-
-        //this.generateCubes(this.readFile("cubePositions.txt"));
+        simulationTimer.scheduleAtFixedRate(simulationTimerTask, 0, getSimulationPeriod());
     }
 
     public void addAircraft(Aircraft aircraft) {
@@ -144,7 +168,7 @@ public class World {
             Cube cubeToRemove = null;
             for (Cube cube : this.getCubesInWorld()) {
                 Vector cubePos = this.getCubePositions().get(cube);
-                if (this.getSelectedAircraft().getCalcCoordinates().calculateDistance(cubePos) <= 8) {
+                if (ac.getCalcCoordinates().calculateDistance(cubePos) <= 8) {
                     cubeToRemove = cube;
                     this.getCubePositions().remove(cube);
                     cube.destroy();
@@ -321,4 +345,26 @@ public class World {
     public void addAircraftAddedListener(Runnable aircraftAddedListener) {
         this.aircraftAddedListeners.add(aircraftAddedListener);
     }
+
+    
+    public ArrayList<Airport> getAirports() {return this.airports;}
+
+
+    public void addSimulationPeriodChangedListener(Runnable listener) {
+        this.simulationPeriodChangedListeners.add(listener);
+    }
+
+    public void setSimulationPeriodMultiplier(float newMultiplier){
+        this.simulationPeriodMultiplier = newMultiplier;
+        for(Runnable l: simulationPeriodChangedListeners)
+            l.run();
+    }
+
+    private long getSimulationPeriod(){// Simulation period in milliseconds, determines how fast autopilot calculations happen
+        // simulationPeriodMultiplier value of 1 means:     1 second passed equals 1 second autopilot time passed
+        // simulationPeriodMultiplier value of 10 means:    1 second passed equals 10 seconds autopilot time passed
+        // simulationPeriodMultiplier value of 0.1 means:   1 second passed equals 0.1 seconds autopilot time passed
+        return (long)((1/simulationPeriodMultiplier)*1000*DEFAULT_AUTOPILOT_SIMULATION_TIME_DIFFERENCE);
+    }
+
 }

@@ -83,5 +83,8 @@ public class Airport extends Node{
     public BatchNode getBatchNode() {
         return this.batchNode;
     }
+    
+    public float getX() {return x;}
+    public float getZ() {return z;}
 }
  

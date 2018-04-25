@@ -112,12 +112,6 @@ public class Main {
 
                     canvasApplication.getWorld().addAircraftAddedListener(() -> updateAircraftComboBox());
                     updateAircraftComboBox();
-
-                    aircraftComboBox.addActionListener(e -> {
-                        Aircraft selectedAircraftString = (Aircraft) aircraftComboBox.getSelectedItem();
-                        if(selectedAircraftString != null)
-                            System.out.println(selectedAircraftString);
-                    });
                 }
             };
             canvasApplication.setCallBackAfterAppInit(aai);
@@ -177,6 +171,12 @@ public class Main {
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
+            JPanel minimap = new JPanel();
+            minimap.setBackground(Color.GREEN);
+            minimap.setPreferredSize(new Dimension(250,250));
+            buttonPanel.add(minimap);
+            canvasApplication.setupMiniMap(minimap);
+            
             gridBagConstraints.gridy = 0;
             JPanel startStopButtonPanel = new JPanel(new GridBagLayout());
             GridBagConstraints startStopButtonPanelGridBagConstraints = new GridBagConstraints();
@@ -213,16 +213,38 @@ public class Main {
             buttonPanel.add(addAircraftButton, gridBagConstraints);
 
             gridBagConstraints.gridy = 8;
+            JTextField changeSimulationPeriodMultiplierTextField = new JTextField(Float.toString(World.DEFAULT_SIMULATION_PERIOD_MULTIPLIER));
+            changeSimulationPeriodMultiplierTextField.addActionListener(e -> {
+                try {
+                    float newSimulationPeriodMultiplier = Float.parseFloat(changeSimulationPeriodMultiplierTextField.getText());
+                    canvasApplication.getWorld().setSimulationPeriodMultiplier(newSimulationPeriodMultiplier);
+                } catch (NumberFormatException ex) {}
+            });
+            buttonPanel.add(changeSimulationPeriodMultiplierTextField, gridBagConstraints);
+
+            gridBagConstraints.gridy = 9;
             JLabel infoLabel = new JLabel();
             buttonPanel.add(infoLabel, gridBagConstraints);
             canvasApplication.addUpdateListener(() -> {
-                infoLabel.setText("<html>" + canvasApplication.getAircraftInfo().replace("\r\n", "<br>") + "</html>");
+                updateInfoLabel(canvasApplication, infoLabel);
             });
-
+            aircraftComboBox.addActionListener(e -> {
+                Aircraft selectedAircraft = (Aircraft) aircraftComboBox.getSelectedItem();
+                if(selectedAircraft != null) {
+                    canvasApplication.getWorld().setSelectedAircraft(selectedAircraft);
+                    updateInfoLabel(canvasApplication, infoLabel);
+                }
+            });
+            
+            
+            
             window.add(buttonPanel);
             window.pack();
             window.setVisible(true);
-
         });
+    }
+
+    private static void updateInfoLabel(MainSwingCanvas canvasApplication, JLabel infoLabel) {
+        infoLabel.setText("<html>" + canvasApplication.getAircraftInfo().replace("\r\n", "<br>") + "</html>");
     }
 }
