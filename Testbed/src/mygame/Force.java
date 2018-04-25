@@ -102,38 +102,63 @@ public class Force {
     
     
     public void setBrakeForces(float front, float left, float right) {
-        float maxbrake = -(getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).getZ() * getAircraft().getTotalMass()/0.01f + getThrustForce().getZ());
-        
+//        float maxbrake = -(getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).getZ() * getAircraft().getTotalMass()/0.01f + getThrustForce().getZ());
+//        
         System.out.println("forward speed " +  getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).getZ());
-        System.out.println("thrust" + -getThrustForce().getZ());
-       
-        
-        if (maxbrake > getAircraft().getConfig().getRMax()){
-            maxbrake = getAircraft().getConfig().getRMax();
-        }
-        if (front + right + left < maxbrake){
+//        System.out.println("thrust" + -getThrustForce().getZ());
+//       
+//        
+//        if (maxbrake > getAircraft().getConfig().getRMax()){
+//            maxbrake = getAircraft().getConfig().getRMax();
+//        }
+//        if (front + right + left < maxbrake){
         this.setFrontWheelBreakForce(front);
         this.setRightRearWheelBreakForce(right);
         this.setLeftRearWheelBreakForce(left);
-        } 
-        
-        else if(maxbrake > 100){
-        this.setFrontWheelBreakForce(front * maxbrake/(front+left+right));
-        this.setRightRearWheelBreakForce(right* maxbrake/(front+left+right));
-        this.setLeftRearWheelBreakForce(left* maxbrake/(front+left+right));
-        }else{
-        this.setFrontWheelBreakForce(0);
-        this.setRightRearWheelBreakForce(0);
-        this.setLeftRearWheelBreakForce(0);
-        }
-        System.out.println("maxbrake:  " + maxbrake);
-        getTotalBreakForce().printVector("totalBrake");
+//        } 
+//        
+//        else if(maxbrake > 100){
+//        this.setFrontWheelBreakForce(front * maxbrake/(front+left+right));
+//        this.setRightRearWheelBreakForce(right* maxbrake/(front+left+right));
+//        this.setLeftRearWheelBreakForce(left* maxbrake/(front+left+right));
+//        }else{
+//        this.setFrontWheelBreakForce(0);
+//        this.setRightRearWheelBreakForce(0);
+//        this.setLeftRearWheelBreakForce(0);
+//        }
+//        System.out.println("maxbrake:  " + maxbrake);
+//        getTotalBreakForce().printVector("totalBrake");
     }
 
-    public void checkBrakes(Vector Acc, Vector Vel){
-        if (Acc.getZ()< 0 && Vel.getZ()> 0 ){
+    public void checkBrakes(Vector prevvel, Vector Vel, Vector prevavel, Vector avel){
+        Vector totalForceWithoutBrakes = getTotalForce().subtract(getTotalBreakForce());
+        Vector VelWithoutBrakes = prevvel.add(totalForceWithoutBrakes.transform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).constantProduct(1/getAircraft().getTotalMass()).constantProduct(0.01f));
+        Vector droneVel = Vel.inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll());
+        Vector droneVelWithoutBrakes = VelWithoutBrakes.inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll());
+        getTotalBreakForce().printVector("totalBreakForce");
+        droneVel.printVector("droneVel: ");
+        droneVelWithoutBrakes.printVector("droneVelWithoutBrakes: ");
+        if (Math.signum(droneVel.getZ()) != Math.signum(droneVelWithoutBrakes.getZ()) || droneVelWithoutBrakes.getZ() == 0){
             this.getAircraft().setVelocity(Vector.NULL);
             this.getAircraft().setAcceleration(Vector.NULL);
+        }
+        Vector wingR = getAircraft().getWingX()
+                .crossProduct(getWingGravityForce().add(getRightWingLift()));
+        Vector wingL = getAircraft().getWingX()
+                .constantProduct(-1).crossProduct(getWingGravityForce().add(getLeftWingLift()));
+        Vector tail  = getAircraft().getTailSize()
+                .crossProduct(getTailGravityForce().add(getHorizontalStabilizerLift()).add(getVerticalStabilizerLift()));
+        Vector engine = getEnginePlace().crossProduct(getEngineGravityForce());
+        Vector frontWheel = getAircraft().getFrontWheel().crossProduct(getFrontWheelNormalForce());
+        Vector rearLeft = getAircraft().getLeftRearWheel().crossProduct(getLeftRearWheelNormalForce().add(getLeftRearWheelFrictionForce()));
+        Vector rearRight = getAircraft().getRightRearWheel().crossProduct(getRightRearWheelNormalForce().add(getRightRearWheelFrictionForce()));
+        Vector totalMomentWithoutBrakes =  wingR.add(wingL).add(tail).add(engine).add(frontWheel).add(rearLeft).add(rearRight);
+        Vector aacc = totalMomentWithoutBrakes.applyInertiaTensor(getInverseInertia()).transform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll());
+        Vector avelWithoutBrakes = prevavel.add(aacc.constantProduct(0.01f));
+        
+//        avel.printVector("avel: ");
+//        avelWithoutBrakes.printVector("avelWithoutBrakes: ");
+        if ((Math.signum(avelWithoutBrakes.getZ()) != Math.signum(avel.getZ()) || avelWithoutBrakes.getZ() == 0) && droneVel.getZ() > -1f){
             this.getAircraft().setAngularVelocity(Vector.NULL);
             this.getAircraft().setAngularAcceleration(Vector.NULL);
         }

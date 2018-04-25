@@ -288,6 +288,7 @@ public class Aircraft extends Node {
         this.setElapsedTime(this.getElapsedTime()+time);
 
         setAcceleration(getForce().getTotalForce().transform(getHeading(), getPitch(), getRoll()).constantProduct(1/getTotalMass()).checkAndNeglect(neglectValue));
+        Vector prevvel = getVelocity();
         setVelocity(getVelocity().add(getAcceleration().constantProduct(time).checkAndNeglect(neglectValue)));
     	setCalcCoordinates(getCalcCoordinates().add(getVelocity().constantProduct(time))); // TODO: put back
 
@@ -296,13 +297,12 @@ public class Aircraft extends Node {
         //totalF.printVector("na transform");
         
         setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(neglectValue).transform(getHeading(), getPitch(), getRoll()));
+        Vector prevavel = getAngularVelocity();
         setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(neglectValue));
-    	
-        getForce().checkBrakes(getAcceleration().inverseTransform(getHeading(), getPitch(), getRoll()) , getVelocity().inverseTransform(getHeading(), getPitch(), getRoll()));
-            getForce().getFrontWheelNormalForce().transform(heading, pitch, roll).printVector("Front wheel normal force: ");
-            getForce().getLeftRearWheelNormalForce().transform(heading, pitch, roll).printVector("Left wheel normal force: ");
-            getForce().getRightRearWheelNormalForce().transform(heading, pitch, roll).printVector("right wheel normal force: ");
-
+    	if (getCalcCoordinates().getY() <2){
+        getForce().checkBrakes(prevvel, getVelocity(), prevavel, getAngularVelocity());
+         
+        }
         
         setPitch(getPitch() + getAngularVelocity().inverseTransform(getHeading(), 0, 0).getX()*time);
     	setRoll(getRoll() + getAngularVelocity().inverseTransform(getHeading(), getPitch(), getRoll()).getZ()*time);
