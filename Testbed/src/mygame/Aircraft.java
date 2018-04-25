@@ -112,7 +112,7 @@ public class Aircraft extends Node {
         Quaternion pitchQuat = new Quaternion();
         pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
         Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(getRoll(), (new Vector3f(0, 0, 1)));
+        rollQuat.fromAngleAxis(getRoll(), (new Vector3f(0, 0, -1)));
         Quaternion yawQuat = new Quaternion();
         yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
         Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
@@ -136,7 +136,9 @@ public class Aircraft extends Node {
     }
     
     public void setVelocity(Vector velocity){
+
     	this.velocity = velocity;
+        
     }
     
     public Vector getAcceleration(){
@@ -296,14 +298,20 @@ public class Aircraft extends Node {
         setAngularAcceleration(getForce().getTotalMoment().applyInertiaTensor(this.getForce().getInverseInertia()).checkAndNeglect(neglectValue).transform(getHeading(), getPitch(), getRoll()));
         setAngularVelocity(getAngularVelocity().add(getAngularAcceleration().constantProduct(time)).checkAndNeglect(neglectValue));
     	
+        getForce().checkBrakes(getAcceleration().inverseTransform(getHeading(), getPitch(), getRoll()) , getVelocity().inverseTransform(getHeading(), getPitch(), getRoll()));
+            getForce().getFrontWheelNormalForce().transform(heading, pitch, roll).printVector("Front wheel normal force: ");
+            getForce().getLeftRearWheelNormalForce().transform(heading, pitch, roll).printVector("Left wheel normal force: ");
+            getForce().getRightRearWheelNormalForce().transform(heading, pitch, roll).printVector("right wheel normal force: ");
+
+        
         setPitch(getPitch() + getAngularVelocity().inverseTransform(getHeading(), 0, 0).getX()*time);
     	setRoll(getRoll() + getAngularVelocity().inverseTransform(getHeading(), getPitch(), getRoll()).getZ()*time);
     	setHeading(getHeading() + getAngularVelocity().getY()*time);
 
 //        getForce().getRightRearWheelNormalForce().printVector("Right wheel normal force: ");
 //        getForce().getLeftRearWheelNormalForce().printVector("Left wheel normal force: ");
-        getForce().getFrontWheelNormalForce().printVector("Front wheel normal force: ");
-        System.out.println("Front wheel D: " + getForce().getFrontWheelD());
+    
+ //       System.out.println("Front wheel D: " + getForce().getFrontWheelD());
 //        System.out.println("Right wheel D: " + getForce().getRightRearWheelD());
 //        System.out.println("Left wheel D: " + getForce().getLeftRearWheelD());
 //        System.out.println("Yvelocity: " + getVelocity().getY());

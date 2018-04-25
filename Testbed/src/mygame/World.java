@@ -19,7 +19,7 @@ import java.io.FileWriter;
 
 public class World {
 
-    private static long SIMULATION_PERIOD = 5;// Simulation period in milliseconds, determines how fast autopilot calculations happen
+    private static long SIMULATION_PERIOD = 2;// Simulation period in milliseconds, determines how fast autopilot calculations happen
 
     private ArrayList<Runnable> aircraftAddedListeners = new ArrayList<>();
 
