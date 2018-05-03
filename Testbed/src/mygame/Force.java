@@ -2,11 +2,6 @@
 
 
 
-/**
- * 
- * @author Gilles
- *
- */
 public class Force {
 
     private Aircraft plane;
@@ -135,9 +130,9 @@ public class Force {
         Vector VelWithoutBrakes = prevvel.add(totalForceWithoutBrakes.transform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).constantProduct(1/getAircraft().getTotalMass()).constantProduct(0.01f));
         Vector droneVel = Vel.inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll());
         Vector droneVelWithoutBrakes = VelWithoutBrakes.inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll());
-        getTotalBreakForce().printVector("totalBreakForce");
-        droneVel.printVector("droneVel: ");
-        droneVelWithoutBrakes.printVector("droneVelWithoutBrakes: ");
+        //getTotalBreakForce().printVector("totalBreakForce");
+        //droneVel.printVector("droneVel: ");
+        //droneVelWithoutBrakes.printVector("droneVelWithoutBrakes: ");
         if (Math.signum(droneVel.getZ()) != Math.signum(droneVelWithoutBrakes.getZ()) || droneVelWithoutBrakes.getZ() == 0){
             this.getAircraft().setVelocity(Vector.NULL);
             this.getAircraft().setAcceleration(Vector.NULL);
@@ -575,23 +570,27 @@ public class Force {
     }
     
     public void setLeftRearWheelFrictionForce(){
-
     	this.leftRearWheelFrictionForce = new Vector(-this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).
                 getX()*this.getLeftRearWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax(), 0, 0);
+        
         
     }
     
     public void setRightRearWheelFrictionForce(){
-        this.rightRearWheelFrictionForce = new Vector(this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll())
+        this.rightRearWheelFrictionForce = new Vector(-this.getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll())
                 .getX()*this.getRightRearWheelNormalForce().getY()*this.getAircraft().getConfig().getFcMax(), 0, 0);
     }
     
     public Vector getLeftRearWheelFrictionForce(){
-    	return this.leftRearWheelFrictionForce;
+        System.out.println("left  " +leftRearWheelFrictionForce);
+    	return  this.leftRearWheelFrictionForce;
+        
     }
     
     public Vector getRightRearWheelFrictionForce(){
-    	return this.rightRearWheelFrictionForce;
+        System.out.println("right  " + rightRearWheelFrictionForce);
+
+    	return  this.rightRearWheelFrictionForce;
     }
     
     public Vector getTotalFrictionForce(){

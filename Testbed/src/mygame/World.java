@@ -11,7 +11,8 @@ import java.util.logging.Logger;
 import com.jme3.math.ColorRGBA;
 
 import interfaces.Autopilot;
-import interfaces.AutopilotFactory;
+//import interfaces.AutopilotFactory;
+import interfaces.AutopilotImplementation;
 import interfaces.AutopilotInputs;
 import interfaces.AutopilotOutputs;
 import java.io.BufferedWriter;
@@ -41,8 +42,8 @@ public class World {
     private HashMap<Cube,Vector> cubePositions;
     private Set<Cube> cubesInWorld;
     
-    private static int W = 10;
-    private static int L = 350;
+    private static int W = 30;
+    private static int L = 400;
     private ArrayList<Airport> airports;
     
     private boolean first = true;
@@ -50,12 +51,13 @@ public class World {
 
     public World(MainSwingCanvas app) {
         this.airports = new ArrayList<>();
-        this.autopilot = AutopilotFactory.createAutopilot();
+        this.autopilot = new AutopilotImplementation(new interfaces.Airport(0,0,0,-1), 0, 0, new AutopilotConfig());
 
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        this.addAirport(0,-110);
+        this.addAirport(0,0);
+        this.addAirport(4000,0);
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
