@@ -85,6 +85,11 @@ public class Airport extends Node{
     }
     
     public float getX() {return x;}
+    public float getY() {return 0;}
     public float getZ() {return z;}
+
+    // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
+    public float getCenterToRunway0X(){ return 0; } // TODO: check if correct
+    public float getCenterToRunway0Z(){ return -1; } // TODO: check if correct
 }
  
