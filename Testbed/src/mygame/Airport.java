@@ -51,7 +51,7 @@ public class Airport extends Node{
     }
     
     public void build() {
-        Box gate = new RegularBox(W,2,W);
+        Box gate = new RegularBox(W,0.3f,W);
         Box landingStrip0 = new RegularBox(2*W,0.2f,L);
         Box landingStrip1 = new RegularBox(2*W,0.2f,L);
         Geometry gateG = new Geometry("gate", gate);
