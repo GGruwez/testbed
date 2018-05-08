@@ -51,7 +51,7 @@ public class Airport extends Node{
     }
     
     public void build() {
-        Box gate = new RegularBox(W,2,W);
+        Box gate = new RegularBox(W,0.3f,W);
         Box landingStrip0 = new RegularBox(2*W,0.2f,L);
         Box landingStrip1 = new RegularBox(2*W,0.2f,L);
         Geometry gateG = new Geometry("gate", gate);
@@ -85,6 +85,11 @@ public class Airport extends Node{
     }
     
     public float getX() {return x;}
+    public float getY() {return 0;}
     public float getZ() {return z;}
+
+    // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
+    public float getCenterToRunway0X(){ return 0; } // TODO: check if correct
+    public float getCenterToRunway0Z(){ return -1; } // TODO: check if correct
 }
  

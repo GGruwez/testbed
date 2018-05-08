@@ -49,25 +49,22 @@ public class Aircraft extends Node {
     
     private float thrust;
 
+    private Airport airport;
+    private int gate;
+    private int runway;
+
     /**
      *
      * @param name
      * @param assetManager
-     * @param x
-     * @param y
-     * @param z
+     * @param airport
+     * @param gate
+     * @param runway
      * @param xVelocity
      * @param yVelocity
      * @param zVelocity
-     * @param thrust
-     * @param leftWingInclination
-     * @param rightWingInclination
-     * @param horStabInclination
-     * @param verStabInclination
      */
-    public Aircraft(String name, AssetManager assetManager, float x, float y, float z, float xVelocity, float yVelocity, float zVelocity,
-                    float thrust, float leftWingInclination, float rightWingInclination,
-                    float horStabInclination, float verStabInclination) {
+    public Aircraft(String name, AssetManager assetManager, Airport airport, int gate, int runway, float xVelocity, float yVelocity, float zVelocity) {
 
         this.name = name;
         this.aircraftGeometry = new AirplaneModel(assetManager);
@@ -82,11 +79,41 @@ public class Aircraft extends Node {
         this.attachChild(this.aircraftCameraNode);
         this.aircraftCameraNode.setLocalTranslation(0, 0, -AirplaneModel.PLANE_TAIL_MASS_OFFSET);
         this.aircraftCameraNode.lookAt(new Vector3f(0,0,-10), Vector3f.UNIT_Y); // Front of the plane is in -z direction
+
+        this.setAirport(airport);
+        this.setGate(gate);
+        this.setRunway(runway);
         
         // Fysica
-        this.setCalcCoordinates(new Vector(x, y, z));
+        // TODO: incorporate gate location
+        // TODO: incorporate runway into orientation
+        this.setCalcCoordinates(new Vector(airport.getX(), airport.getY(), airport.getZ()));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
         this.forces = new Force(0,this);
+    }
+
+    private void setAirport(Airport airport){
+        this.airport = airport;
+    }
+
+    public Airport getAirport(){
+        return airport;
+    }
+
+    private void setGate(int gate){
+        this.gate = gate;
+    }
+
+    public int getGate(){
+        return gate;
+    }
+
+    private void setRunway(int runway){
+        this.runway = runway;
+    }
+
+    public int getRunway(){
+        return runway;
     }
 
     public Spatial getAircraftGeometry(){
