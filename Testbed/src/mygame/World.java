@@ -10,11 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.jme3.math.ColorRGBA;
 
-import interfaces.Autopilot;
-//import interfaces.AutopilotFactory;
-import interfaces.AutopilotImplementation;
-import interfaces.AutopilotInputs;
+import interfaces.*;
 import interfaces.AutopilotOutputs;
+//import interfaces.AutopilotFactory;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
@@ -31,7 +29,6 @@ public class World {
 
     private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
     private Aircraft selectedAircraft;
-    private Autopilot autopilot;
     private boolean simulation;
     private boolean paused = true;
     private Vector goal;
@@ -45,13 +42,15 @@ public class World {
     private static int W = 30;
     private static int L = 400;
     private ArrayList<Airport> airports;
+    private AutopilotModule autopilotModule;
     
     private boolean first = true;
     
 
     public World(MainSwingCanvas app) {
         this.airports = new ArrayList<>();
-        this.autopilot = new AutopilotImplementation(new interfaces.Airport(0,0,0,-1), 0, 0, new AutopilotConfig());
+        this.autopilotModule = new AutopilotModuleImplementation();
+        this.autopilotModule.defineAirportParams(L, W);
 
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
@@ -103,6 +102,9 @@ public class World {
         this.collectionOfAircraft.add(aircraft);
         aircraft.setWorld(this);
 
+        // airport, gate, pointingToRunway, autopilotConfig
+        getAutopilotModule().defineDrone(aircraft.getAirport().getID(), aircraft.getGate(), aircraft.getRunway(), aircraft.getConfig());
+
         for(Runnable aal: aircraftAddedListeners)
             aal.run();
     }
@@ -119,19 +121,25 @@ public class World {
         return this.collectionOfAircraft;
     }
     
-    public Autopilot getAutopilot() {
-        return this.autopilot;
+    public AutopilotModule getAutopilotModule() {
+        return this.autopilotModule;
     }
 
     private void evolveAutopilot(float dt){
         // Evolve every aircraft
+        int i = 0;
         for(Aircraft ac: getCollectionOfAircraft()) {
             if (this.isSimulating() && !this.isPaused()) {
                 AutopilotInputs autopilotInputs = ac.getAutopilotInputs();
-                AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs); // TODO: use autopilot module (multithreading)
+//                AutopilotOutputs autopilotOutputs = getAutopilot().timePassed(autopilotInputs); // TODO: use multithreading..?
+
+                getAutopilotModule().startTimeHasPassed(i, autopilotInputs);
+                AutopilotOutputs autopilotOutputs = getAutopilotModule().completeTimeHasPassed(i);
+
                 ac.readAutopilotOutputs(autopilotOutputs);
                 ac.updateAirplane(dt);
             }
+            i++;
         }
     }
     
@@ -149,9 +157,9 @@ public class World {
                     if (temp.size() > 0) collidesWithAirport = true;
                 }
                 if (results.size() > 0 && !first && !collidesWithAirport) {
-                    System.out.println("Danio: " + results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
+//                    System.out.println("Danio: " + results.getClosestCollision().getGeometry().getLocalTranslation().getZ());
 
-                 //   this.endSimulation();
+                    this.endSimulation();
 
 
                 }
@@ -191,13 +199,12 @@ public class World {
     public void startSimulation() {
         // TODO: support for autopilot module
         this.simulation = true;
-        this.getAutopilot().simulationStarted(this.getSelectedAircraft().getConfig(), this.getSelectedAircraft().getAutopilotInputs());
+//        this.getAutopilot().simulationStarted(this.getSelectedAircraft().getConfig(), this.getSelectedAircraft().getAutopilotInputs());
     }
     
     public void endSimulation() {
-        // TODO: support for autopilot module
         this.simulation = false;
-        this.getAutopilot().simulationEnded();
+        this.getAutopilotModule().simulationEnded();
     }
     
     public boolean isSimulating() {
@@ -342,13 +349,17 @@ public class World {
         Airport airport = new Airport(W,L,airports.size(),xPos,zPos,this);
         airports.add(airport);
         airport.build();
+
+        // centerX, centerZ, centerToRunway0X, centerToRunway0Z
+        // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
+        getAutopilotModule().defineAirport(airport.getX(), airport.getZ(), airport.getCenterToRunway0X(), airport.getCenterToRunway0Z());
     }
 
     public void addAircraftAddedListener(Runnable aircraftAddedListener) {
         this.aircraftAddedListeners.add(aircraftAddedListener);
     }
 
-    
+
     public ArrayList<Airport> getAirports() {return this.airports;}
 
 
