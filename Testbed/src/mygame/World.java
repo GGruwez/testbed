@@ -43,11 +43,13 @@ public class World {
     private static int L = 400;
     private ArrayList<Airport> airports;
     private AutopilotModule autopilotModule;
+    private ArrayList<Package> packages;
     
     private boolean first = true;
     
 
     public World(MainSwingCanvas app) {
+        this.packages = new ArrayList<>();
         this.airports = new ArrayList<>();
         this.autopilotModule = new AutopilotModuleImplementation();
         this.autopilotModule.defineAirportParams(L, W);
@@ -257,6 +259,9 @@ public class World {
         }
     }
     
+   
+   
+    
     public void setPath(Vector[] positions) {
         for(int i=0; i<positions.length; i++) {
             Vector currentPos = positions[i];
@@ -379,5 +384,14 @@ public class World {
         // simulationPeriodMultiplier value of 0.1 means:   1 second passed equals 0.1 seconds autopilot time passed
         return (long)((1/simulationPeriodMultiplier)*1000*DEFAULT_AUTOPILOT_SIMULATION_TIME_DIFFERENCE);
     }
+    
+    public void addPackage(Package x) {
+        this.packages.add(x);
+    }
+    
+    public ArrayList<Package> getPackages() {return this.packages;}
+    
+    }
+    
 
-}
+
