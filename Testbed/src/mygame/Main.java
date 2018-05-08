@@ -172,16 +172,15 @@ public class Main {
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
             JFrame minimapFrame = new JFrame("minimap");
-            JPanel minimap = new JPanel();
-            minimap.setBackground(Color.GREEN);
-            minimap.setPreferredSize(new Dimension(250,250));
-            //buttonPanel.add(minimap);
+            
             minimapFrame.add(new Minimap(canvasApplication));
             minimapFrame.setAlwaysOnTop(true);
             minimapFrame.setVisible(true);
             minimapFrame.pack();
             minimapFrame.setResizable(false);
             minimapFrame.setDefaultCloseOperation(0);
+            minimapFrame.setLocationRelativeTo(null);
+            minimapFrame.setLocation(1305, 0);
             
             
             
