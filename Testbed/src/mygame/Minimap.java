@@ -22,25 +22,24 @@ public class Minimap extends JPanel {
         g.setColor(Color.GREEN);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        for (Airport airport:world.getAirports()) {
-            int x = (int) airport.getX();
-            int z = (int) airport.getZ();
+        world.getAirports().forEach((airport) -> {
+            float x =  airport.getX();
+            float z =  airport.getZ();
             g.setColor(Color.LIGHT_GRAY);
             g.fillRect(scale(z)+this.getWidth()/2, scale(x)+this.getHeight()/2, 10, 5);
-        }
-        for (Package p:world.getPackages()) {
-            int x = (int) p.getX();
-            int z = (int) p.getZ(); 
-            g.setColor(Color.yellow);
-            g.fillRect(scale(z)+this.getWidth()/2, scale(x) + this.getHeight()/2, 3,3);
-        }
-        for (Aircraft aircraft:world.getCollectionOfAircraft()) {
-            float x = (int) aircraft.getCalcCoordinates().getX();
-            float z = (int) aircraft.getCalcCoordinates().getZ();
+        });
+        world.getCollectionOfAircraft().forEach((aircraft) -> {
+            float x =  aircraft.getCalcCoordinates().getX();
+            float z =  aircraft.getCalcCoordinates().getZ();
             g.setColor(Color.BLACK);
             g.fillRect(scale(z)+this.getWidth()/2, scale(x)+this.getHeight()/2, 5, 5);
-           
-        }
+        });
+        world.getPackages().forEach((p) -> {
+            float x =  p.getX();
+            float z =  p.getZ(); 
+            g.setColor(Color.yellow);
+            g.fillRect(scale(z)+this.getWidth()/2, scale(x) + this.getHeight()/2, 3,3);
+        });
     }
     
     private int scale(float x) {

@@ -385,8 +385,10 @@ public class World {
         return (long)((1/simulationPeriodMultiplier)*1000*DEFAULT_AUTOPILOT_SIMULATION_TIME_DIFFERENCE);
     }
     
-    public void addPackage(Package x) {
-        this.packages.add(x);
+    
+    
+    public void addJob(Job job) {
+        this.packages.add(new Package(job));
     }
     
     public ArrayList<Package> getPackages() {return this.packages;}
