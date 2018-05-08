@@ -171,11 +171,19 @@ public class Main {
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 
+            JFrame minimapFrame = new JFrame("minimap");
             JPanel minimap = new JPanel();
             minimap.setBackground(Color.GREEN);
             minimap.setPreferredSize(new Dimension(250,250));
-            buttonPanel.add(minimap);
-            canvasApplication.setupMiniMap(minimap);
+            //buttonPanel.add(minimap);
+            minimapFrame.add(new Minimap(canvasApplication));
+            minimapFrame.setAlwaysOnTop(true);
+            minimapFrame.setVisible(true);
+            minimapFrame.pack();
+            minimapFrame.setResizable(false);
+            minimapFrame.setDefaultCloseOperation(0);
+            
+            
             
             gridBagConstraints.gridy = 0;
             JPanel startStopButtonPanel = new JPanel(new GridBagLayout());
@@ -228,6 +236,9 @@ public class Main {
             canvasApplication.addUpdateListener(() -> {
                 updateInfoLabel(canvasApplication, infoLabel);
             });
+            canvasApplication.addUpdateListener(() -> {
+                minimapFrame.repaint();
+            });
             aircraftComboBox.addActionListener(e -> {
                 Aircraft selectedAircraft = (Aircraft) aircraftComboBox.getSelectedItem();
                 if(selectedAircraft != null) {
@@ -247,4 +258,6 @@ public class Main {
     private static void updateInfoLabel(MainSwingCanvas canvasApplication, JLabel infoLabel) {
         infoLabel.setText("<html>" + canvasApplication.getAircraftInfo().replace("\r\n", "<br>") + "</html>");
     }
+    
+    
 }
