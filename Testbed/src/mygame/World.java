@@ -40,7 +40,7 @@ public class World {
     private Set<Cube> cubesInWorld;
     
     private static int W = 30;
-    private static int L = 400;
+    private static int L = 600;
     private ArrayList<Airport> airports;
     private AutopilotModule autopilotModule;
     private ArrayList<Package> packages;

@@ -52,6 +52,7 @@ public class CustomView extends LegacyApplication implements CustomCanvas {
         super.inputEnabled = false;
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
+        this.setPauseOnLostFocus(false);
 
         this.width = 1024;
         this.height = 768;
