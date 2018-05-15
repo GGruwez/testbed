@@ -85,7 +85,8 @@ public class Aircraft extends Node {
         // Fysica
         // TODO: incorporate gate location
         // TODO: incorporate runway into orientation
-        this.setCalcCoordinates(new Vector(airport.getX(), airport.getY(), airport.getZ()));
+        this.setCalcCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
+        this.setCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
         this.forces = new Force(0,this);
     }

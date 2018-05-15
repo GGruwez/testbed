@@ -92,7 +92,8 @@ public class PackageGUI extends JPanel {
         int fromGate = (int)fromGateCombobox.getSelectedItem();
         int toGate = (int)toGateCombobox.getSelectedItem();
 
-        // TODO: register package
+        // Register package
+        getWorld().addPackage(fromAirport, fromGate, toAirport, toGate);
         listModel.addElement(fromAirport.getName() + "[" + fromGate + "] - " + toAirport.getName() + "[" + toGate + "]");
     }
 
