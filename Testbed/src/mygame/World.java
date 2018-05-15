@@ -431,6 +431,16 @@ public class World {
         return false;
     }
     
+    private boolean isDelivered(Package p) {
+        if (p.isPickedUp() && p.getX()>p.getAirportTo().getX()-Airport.W/2
+                && p.getX()<p.getAirportTo().getX()+Airport.W/2
+                && p.getY()<2
+                && p.getZ()>p.getAirportTo().getZ()-Airport.W/2
+                && p.getZ()<p.getAirportTo().getZ()+Airport.W/2)
+            return true;
+        else return false;
+    }
+    
     
     }
     
