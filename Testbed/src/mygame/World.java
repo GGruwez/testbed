@@ -387,11 +387,14 @@ public class World {
     
     
     
-    public void addJob(Job job) {
-        this.packages.add(new Package(job));
+    public void addPackage(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
+        Package toAdd = new Package(airportFrom.getID(),gateFrom,airportTo.getID(),gateTo);
+        this.packages.add(toAdd);
+        this.autopilotModule.deliverPackage(airportFrom.getID(),gateFrom,airportTo.getID(),gateTo);
     }
     
     public ArrayList<Package> getPackages() {return this.packages;}
+    
     
     }
     
