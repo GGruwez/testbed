@@ -431,6 +431,14 @@ public class World {
         return false;
     }
     
+    private void checkPickups() {
+        for(Aircraft aircraft:this.getCollectionOfAircraft()) {
+            for(Package p:this.getPackages()) {
+                if (!p.isPickedUp() &&)
+            }
+        }
+    }
+    
     private boolean isDelivered(Package p) {
         if (p.isPickedUp() && p.getX()>p.getAirportTo().getX()-Airport.W/2
                 && p.getX()<p.getAirportTo().getX()+Airport.W/2
@@ -440,6 +448,17 @@ public class World {
             return true;
         else return false;
     }
+    
+//    private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
+//        int offset;
+//        if (gate == 0) offset = W/2;
+//        else offset = -W/2;
+//        if (x>airport.getX()-Airport.W/2
+//                && p.getX()<p.getAirportTo().getX()+Airport.W/2
+//                && p.getY()<2
+//                && p.getZ()>p.getAirportTo().getZ()-Airport.W/2
+//                && p.getZ()<p.getAirportTo().getZ()+Airport.W/2)
+//    }
     
     
     }
