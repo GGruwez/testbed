@@ -169,7 +169,7 @@ public class World {
                 }
                 if (hasToCrash(ac)) this.endSimulation();
                 for (Aircraft aircraft:this.collectionOfAircraft) {
-                    if (hasToCrash(ac,aircraft)) this.endSimulation();
+                    if (!aircraft.equals(ac) && hasToCrash(ac,aircraft)) this.endSimulation();
                 }
                 // Update visual position of aircraft
                 ac.updateVisualCoordinates();
