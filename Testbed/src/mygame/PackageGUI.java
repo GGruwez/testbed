@@ -38,7 +38,7 @@ public class PackageGUI extends JPanel {
 //        list.setVisibleRowCount(-1);
 
         JScrollPane listScroller = new JScrollPane(list);
-        listScroller.setPreferredSize(new Dimension(200, 80));
+        listScroller.setPreferredSize(new Dimension(250, 80));
         this.add(listScroller, gridBagConstraints);
 
         JLabel fromAirportLabel = new JLabel("From airport:");
