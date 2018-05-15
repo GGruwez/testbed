@@ -388,12 +388,48 @@ public class World {
     
     
     public void addPackage(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
+        if (gateNotAvailable(airportFrom,gateFrom)) return;
         Package toAdd = new Package(airportFrom,gateFrom,airportTo,gateTo);
         this.packages.add(toAdd);
         this.autopilotModule.deliverPackage(airportFrom.getID(),gateFrom,airportTo.getID(),gateTo);
+        
     }
     
     public ArrayList<Package> getPackages() {return this.packages;}
+    
+    private void addRandomPackage() {
+        Random random = new Random();
+        ArrayList<Airport> airportsAvailable = this.getAvailableAirports();
+        if (airportsAvailable.size()>0) {
+            int index = random.nextInt(airportsAvailable.size());
+            this.addPackage(airportsAvailable.get(index), random.nextInt(1), airports.get(random.nextInt(airports.size()-1)), random.nextInt(1));
+        }
+    }
+    
+    private ArrayList<Airport> getAvailableAirports() {
+        ArrayList<Airport> toReturn = new ArrayList();
+        for(Airport airport:this.getAirports()) {
+            if (isAvailable(airport)) toReturn.add(airport);
+        }
+        return toReturn;
+    }
+    
+    private boolean isAvailable(Airport airport) {
+        int counter = 0;
+        for (Package p:this.getPackages()) {
+            if (!p.isPickedUp() && p.getAirportFrom().equals(airport)) {
+                counter++;
+            }
+        }
+        return counter<2;
+    }
+
+    private boolean gateNotAvailable(Airport airportFrom, int gateFrom) {
+        for (Package p:packages) {
+            if (!p.isPickedUp() && p.getAirportFrom().equals(airportFrom)&& p.getGateFrom() == gateFrom) return true;
+        }
+        return false;
+    }
     
     
     }
