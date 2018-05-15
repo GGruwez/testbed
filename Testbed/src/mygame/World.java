@@ -58,7 +58,7 @@ public class World {
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
         this.addAirport(0,0);
-        this.addAirport(4000,0);
+        this.addAirport(-4000,0);
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds

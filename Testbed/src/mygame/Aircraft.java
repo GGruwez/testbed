@@ -136,12 +136,15 @@ public class Aircraft extends Node {
 
     public void updateVisualRotation(){
         // Rotatie tonen
+        Vector pitchVec = new Vector(1,0,0).transform(getHeading(),0,0);
+        Vector yawVec = new Vector(0,1,0).transform(getHeading(),0,0);
+        Vector rollVec = new Vector(0,0,1).transform(getHeading(),0,0);
         Quaternion pitchQuat = new Quaternion();
-        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(pitchVec.getX(), pitchVec.getY(), pitchVec.getZ()));
         Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(getRoll(), (new Vector3f(0, 0, -1)));
+        rollQuat.fromAngleAxis(getRoll(), (new Vector3f(rollVec.getX(), rollVec.getY(), rollVec.getZ())));
         Quaternion yawQuat = new Quaternion();
-        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+        yawQuat.fromAngleAxis(getHeading(), new Vector3f(yawVec.getX(), yawVec.getY(), yawVec.getZ()));
         Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
         this.setLocalRotation(totalQuat); // TODO: put back
     }
