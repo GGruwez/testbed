@@ -99,5 +99,13 @@ public class Airport extends Node{
     // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
     public float getCenterToRunway0X(){ return 0; } // TODO: check if correct
     public float getCenterToRunway0Z(){ return -1; } // TODO: check if correct
+
+    public String toString(){
+        return getName();
+    }
+
+    public String getName(){
+        return "Airport " + this.airportID;
+    }
 }
  
