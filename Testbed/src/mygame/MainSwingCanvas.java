@@ -37,6 +37,8 @@ import javax.swing.JPanel;
 
 public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
+    private static boolean GRAB_CAMERA = false;
+
     protected RenderCamera renderCamera;
     private World world;
     private TerrainGrid terrain;
@@ -235,7 +237,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             System.out.println("Concurrent modification exception, completing later.");
         }
         updateDifferentCameras();
-        renderCamera.grabCamera();
+        if(GRAB_CAMERA)
+            renderCamera.grabCamera();
 
         log.addLine(this.getSelectedAircraft());
         log.save();
