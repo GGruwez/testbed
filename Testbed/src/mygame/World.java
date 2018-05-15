@@ -471,9 +471,15 @@ public class World {
         for (Package p:this.getPackages()) {
             if (p.isPickedUp() && isInGate(p.getX(),p.getY(),p.getZ(),p.getAirportTo(),p.getGateTo())) {
                 p.setPickedUp(false);
-                packages.remove(p);
+                removePackage(p);
             }
         }
+    }
+
+    private void removePackage(Package p){
+        packages.remove(p);
+        for(Runnable aal: packagesChangedListeners)
+            aal.run();
     }
     
     private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
