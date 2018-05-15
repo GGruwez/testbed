@@ -219,6 +219,8 @@ public class Main {
             basicPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gridBagConstraints);
 
             gridBagConstraints.gridy++;
+            basicPanel.add(new JLabel("Aircraft management:"), gridBagConstraints);
+            gridBagConstraints.gridy++;
             basicPanel.add(aircraftComboBox, gridBagConstraints);
 
             gridBagConstraints.gridy++;
@@ -226,6 +228,8 @@ public class Main {
             addAircraftButton.addActionListener(e -> canvasApplication.addNewAircraft());
             basicPanel.add(addAircraftButton, gridBagConstraints);
 
+            gridBagConstraints.gridy++;
+            basicPanel.add(new JLabel("Simulation period multiplier:"), gridBagConstraints);
             gridBagConstraints.gridy++;
             JTextField changeSimulationPeriodMultiplierTextField = new JTextField(Float.toString(World.DEFAULT_SIMULATION_PERIOD_MULTIPLIER));
             changeSimulationPeriodMultiplierTextField.addActionListener(e -> {
