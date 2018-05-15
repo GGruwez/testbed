@@ -114,7 +114,7 @@ public class Main {
                     updateAircraftComboBox();
                 }
             };
-            canvasApplication.setCallBackAfterAppInit(aai);
+            canvasApplication.addCallBackAfterAppInit(aai);
 
             Callback onButtonClick = new Callback() {
                 @Override
@@ -245,9 +245,13 @@ public class Main {
                     updateInfoLabel(canvasApplication, infoLabel);
                 }
             });
-            
-            
-            
+
+            gridBagConstraints.gridy = 10;
+            buttonPanel.add(new PackageGUI(canvasApplication), gridBagConstraints);
+
+
+
+
             window.add(buttonPanel);
             window.pack();
             window.setVisible(true);

@@ -25,6 +25,7 @@ public class World {
 
 
     private ArrayList<Runnable> aircraftAddedListeners = new ArrayList<>();
+    private ArrayList<Runnable> airportAddedListeners = new ArrayList<>();
     private ArrayList<Runnable> simulationPeriodChangedListeners = new ArrayList<>();
 
     private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
@@ -358,10 +359,17 @@ public class World {
         // centerX, centerZ, centerToRunway0X, centerToRunway0Z
         // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
         getAutopilotModule().defineAirport(airport.getX(), airport.getZ(), airport.getCenterToRunway0X(), airport.getCenterToRunway0Z());
+
+        for(Runnable aal: airportAddedListeners)
+            aal.run();
     }
 
     public void addAircraftAddedListener(Runnable aircraftAddedListener) {
         this.aircraftAddedListeners.add(aircraftAddedListener);
+    }
+
+    public void addAirportAddedListener(Runnable airportAddedListener) {
+        this.airportAddedListeners.add(airportAddedListener);
     }
 
 

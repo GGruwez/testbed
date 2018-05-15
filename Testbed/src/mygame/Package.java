@@ -12,8 +12,9 @@ public class Package {
     
     public Package(Job job) {
         this.job = job;
-        this.x = job.getAirportFrom().getCenterX();
-        this.z = job.getAirportFrom().getCenterZ();
+        // TODO: complete
+//        this.x = job.getAirportFrom().getCenterX();
+//        this.z = job.getAirportFrom().getCenterZ();
     }
     
     public float getX() {
