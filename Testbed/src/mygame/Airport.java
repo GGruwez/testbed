@@ -12,8 +12,8 @@ import mygame.visualcomponents.RegularBox;
 
 public class Airport extends Node{
     
-    private int W;
-    private int L;
+    public static int W;
+    public static int L;
     private float x;
     private float z;
     private int airportID;
@@ -67,8 +67,8 @@ public class Airport extends Node{
         mat2.setColor("Color", ColorRGBA.Gray);
         strip0G.setMaterial(mat2);
         strip1G.setMaterial(mat2);
-        gateG.setLocalTranslation(x- W/2, 0, z );
-        gateG1.setLocalTranslation(x+ W/2,0,z );
+        gateG.setLocalTranslation(x+ W/2, 0, z );
+        gateG1.setLocalTranslation(x- W/2,0,z );
         strip0G.setLocalTranslation(x , 0, z+ W/2);
         strip1G.setLocalTranslation(x , 0, z- W/2);
         batchNode = new BatchNode();
@@ -87,6 +87,14 @@ public class Airport extends Node{
     public float getX() {return x;}
     public float getY() {return 0;}
     public float getZ() {return z;}
+    
+    public Vector getPositionOfGate0() {
+        return new Vector(x+ W/2, 0, z); 
+    }
+    
+    public Vector getPositionOfGate1() {
+        return new Vector(x- W/2,0,z );
+    }
 
     // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
     public float getCenterToRunway0X(){ return 0; } // TODO: check if correct
