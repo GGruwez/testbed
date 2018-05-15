@@ -26,6 +26,7 @@ public class World {
 
     private ArrayList<Runnable> aircraftAddedListeners = new ArrayList<>();
     private ArrayList<Runnable> airportAddedListeners = new ArrayList<>();
+    private ArrayList<Runnable> packagesChangedListeners = new ArrayList<>();
     private ArrayList<Runnable> simulationPeriodChangedListeners = new ArrayList<>();
 
     private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
@@ -377,6 +378,10 @@ public class World {
         this.airportAddedListeners.add(airportAddedListener);
     }
 
+    public void addPackagesChangedListeners(Runnable listener) {
+        this.packagesChangedListeners.add(listener);
+    }
+
 
     public ArrayList<Airport> getAirports() {return this.airports;}
 
@@ -403,9 +408,10 @@ public class World {
     public void addPackage(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
         if (gateNotAvailable(airportFrom,gateFrom)) return;
         Package toAdd = new Package(airportFrom,gateFrom,airportTo,gateTo);
-        this.packages.add(toAdd);
         this.autopilotModule.deliverPackage(airportFrom.getID(),gateFrom,airportTo.getID(),gateTo);
-        
+        this.packages.add(toAdd);
+        for(Runnable aal: packagesChangedListeners)
+            aal.run();
     }
     
     public ArrayList<Package> getPackages() {return this.packages;}
@@ -468,9 +474,15 @@ public class World {
         for (Package p:this.getPackages()) {
             if (p.isPickedUp() && isInGate(p.getX(),p.getY(),p.getZ(),p.getAirportTo(),p.getGateTo())) {
                 p.setPickedUp(false);
-                packages.remove(p);
+                removePackage(p);
             }
         }
+    }
+
+    private void removePackage(Package p){
+        packages.remove(p);
+        for(Runnable aal: packagesChangedListeners)
+            aal.run();
     }
     
     private boolean isInGate(float x, float y, float z, Airport airport, int gate) {

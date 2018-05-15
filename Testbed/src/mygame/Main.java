@@ -254,7 +254,7 @@ public class Main {
             });
 
             gridBagConstraints.gridy++;
-            jobsPanel.add(new PackageGUI(canvasApplication), gridBagConstraints);
+            jobsPanel.add(new PackageGUI(canvasApplication));
 
 
 

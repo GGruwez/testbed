@@ -76,6 +76,7 @@ public class PackageGUI extends JPanel {
 
         canvas.addCallBackAfterAppInit(()->{
             updateComboboxes();
+            getWorld().addPackagesChangedListeners(this::updateList);
             getWorld().addAirportAddedListener(this::updateComboboxes);
         });
 
@@ -94,7 +95,12 @@ public class PackageGUI extends JPanel {
 
         // Register package
         getWorld().addPackage(fromAirport, fromGate, toAirport, toGate);
-        listModel.addElement(fromAirport.getName() + "[" + fromGate + "] - " + toAirport.getName() + "[" + toGate + "]");
+    }
+
+    private void updateList(){
+        listModel.removeAllElements();
+        for(Package p : getWorld().getPackages())
+            listModel.addElement(p.getAirportFrom().getName() + "[" + p.getGateFrom() + "] - " + p.getAirportTo().getName() + "[" + p.getGateTo() + "]");
     }
 
     private void updateComboboxes(){
