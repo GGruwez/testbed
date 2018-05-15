@@ -439,13 +439,13 @@ public class World {
         return false;
     }
     
-    private void checkPickups() {
-        for(Aircraft aircraft:this.getCollectionOfAircraft()) {
-            for(Package p:this.getPackages()) {
-                if (!p.isPickedUp() &&)
-            }
-        }
-    }
+//    private void checkPickups() {
+//        for(Aircraft aircraft:this.getCollectionOfAircraft()) {
+//            for(Package p:this.getPackages()) {
+//                if (!p.isPickedUp() &&)
+//            }
+//        }
+//    }
     
     private boolean isDelivered(Package p) {
         if (p.isPickedUp() && p.getX()>p.getAirportTo().getX()-Airport.W/2

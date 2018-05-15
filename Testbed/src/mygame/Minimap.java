@@ -26,19 +26,19 @@ public class Minimap extends JPanel {
             float x =  airport.getX();
             float z =  airport.getZ();
             g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(scale(z)+this.getWidth()/2, scale(x)+this.getHeight()/2, 10, 5);
+            g.fillRect(scale(z)+this.getWidth()/2, -scale(x)+this.getHeight()/2, 10, 5);
         });
         world.getCollectionOfAircraft().forEach((aircraft) -> {
             float x =  aircraft.getCalcCoordinates().getX();
             float z =  aircraft.getCalcCoordinates().getZ();
             g.setColor(Color.BLACK);
-            g.fillRect(scale(z)+this.getWidth()/2, scale(x)+this.getHeight()/2, 5, 5);
+            g.fillRect(scale(z)+this.getWidth()/2, -scale(x)+this.getHeight()/2, 5, 5);
         });
         world.getPackages().forEach((p) -> {
             float x =  p.getX();
             float z =  p.getZ(); 
             g.setColor(Color.yellow);
-            g.fillRect(scale(z)+this.getWidth()/2, scale(x) + this.getHeight()/2, 3,3);
+            g.fillRect(scale(z)+this.getWidth()/2, -scale(x) + this.getHeight()/2, 3,3);
         });
     }
     

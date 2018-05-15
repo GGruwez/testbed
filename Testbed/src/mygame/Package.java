@@ -11,6 +11,7 @@ public class Package {
     private Airport airportTo;
     private int gateTo;
     private float x;
+    private float y;
     private float z;
     private boolean pickedUp;
     
@@ -21,6 +22,7 @@ public class Package {
        this.gateTo = gateTo;
        this.pickedUp = false;
        this.x = getStartPosition().getX();
+       this.y=0;
        this.z = getStartPosition().getZ();
     }
     
@@ -33,9 +35,15 @@ public class Package {
     
     public Airport getAirportFrom() {return this.airportFrom;}
     public int getGateFrom() {return this.gateFrom;}
+    public Airport getAirportTo() {return this.airportTo;}
+    public int getGateTo() {return this.gateTo;}
     
     public float getX() {
         return this.x;
+    }
+    
+    public float getY() {
+        return this.y;
     }
     
     public float getZ() {
