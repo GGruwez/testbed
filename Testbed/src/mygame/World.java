@@ -25,6 +25,8 @@ public class World {
 
 
     private ArrayList<Runnable> aircraftAddedListeners = new ArrayList<>();
+    private ArrayList<Runnable> airportAddedListeners = new ArrayList<>();
+    private ArrayList<Runnable> packagesChangedListeners = new ArrayList<>();
     private ArrayList<Runnable> simulationPeriodChangedListeners = new ArrayList<>();
 
     private ArrayList<Aircraft> collectionOfAircraft = new ArrayList<>();
@@ -166,11 +168,16 @@ public class World {
 
                 }
                 if (hasToCrash(ac)) this.endSimulation();
+                for (Aircraft aircraft:this.collectionOfAircraft) {
+                    if (!aircraft.equals(ac) && hasToCrash(ac,aircraft)) this.endSimulation();
+                }
                 // Update visual position of aircraft
                 ac.updateVisualCoordinates();
                 ac.updateVisualRotation();
                 // Aircraft's calc coordinates and actual visual position coordinates are now the same
 
+                
+                this.updatePackages();
 
                 first = false;
             }
@@ -358,10 +365,21 @@ public class World {
         // centerX, centerZ, centerToRunway0X, centerToRunway0Z
         // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
         getAutopilotModule().defineAirport(airport.getX(), airport.getZ(), airport.getCenterToRunway0X(), airport.getCenterToRunway0Z());
+
+        for(Runnable aal: airportAddedListeners)
+            aal.run();
     }
 
     public void addAircraftAddedListener(Runnable aircraftAddedListener) {
         this.aircraftAddedListeners.add(aircraftAddedListener);
+    }
+
+    public void addAirportAddedListener(Runnable airportAddedListener) {
+        this.airportAddedListeners.add(airportAddedListener);
+    }
+
+    public void addPackagesChangedListeners(Runnable listener) {
+        this.packagesChangedListeners.add(listener);
     }
 
 
@@ -387,11 +405,119 @@ public class World {
     
     
     
-    public void addJob(Job job) {
-        this.packages.add(new Package(job));
+    public void addPackage(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
+        if (gateNotAvailable(airportFrom,gateFrom)) return;
+        Package toAdd = new Package(airportFrom,gateFrom,airportTo,gateTo);
+        this.autopilotModule.deliverPackage(airportFrom.getID(),gateFrom,airportTo.getID(),gateTo);
+        this.packages.add(toAdd);
+        for(Runnable aal: packagesChangedListeners)
+            aal.run();
     }
     
     public ArrayList<Package> getPackages() {return this.packages;}
+    
+    private void addRandomPackage() {
+        Random random = new Random();
+        ArrayList<Airport> airportsAvailable = this.getAvailableAirports();
+        if (airportsAvailable.size()>0) {
+            int index = random.nextInt(airportsAvailable.size());
+            this.addPackage(airportsAvailable.get(index), random.nextInt(1), airports.get(random.nextInt(airports.size()-1)), random.nextInt(1));
+        }
+    }
+    
+    private ArrayList<Airport> getAvailableAirports() {
+        ArrayList<Airport> toReturn = new ArrayList();
+        for(Airport airport:this.getAirports()) {
+            if (isAvailable(airport)) toReturn.add(airport);
+        }
+        return toReturn;
+    }
+    
+    private boolean isAvailable(Airport airport) {
+        int counter = 0;
+        for (Package p:this.getPackages()) {
+            if (!p.isPickedUp() && p.getAirportFrom().equals(airport)) {
+                counter++;
+            }
+        }
+        return counter<2;
+    }
+
+    private boolean gateNotAvailable(Airport airportFrom, int gateFrom) {
+        for (Package p:packages) {
+            if (!p.isPickedUp() && p.getAirportFrom().equals(airportFrom)&& p.getGateFrom() == gateFrom) return true;
+        }
+        return false;
+    }
+
+    private void notifyPackagesUpdated(){
+        for(Runnable aal: packagesChangedListeners)
+            aal.run();
+    }
+    
+    private void checkPickups() {
+        for(Aircraft aircraft:this.getCollectionOfAircraft()) {
+            float x = aircraft.getCalcCoordinates().getX();
+            float y = aircraft.getCalcCoordinates().getY();
+            float z = aircraft.getCalcCoordinates().getZ();
+            for(Package p:this.getPackages()) {
+                if (!p.isPickedUp() && isInGate(x,y,z,p.getAirportFrom(),p.getGateFrom())) {
+                    p.setPickedUp(true);
+                    p.setPickedUpBy(aircraft);
+                    notifyPackagesUpdated();
+                }
+            }
+        }
+    }
+    
+    private boolean isDelivered(Package p) {
+        if (p.isPickedUp() && isInGate(p.getX(),p.getY(),p.getZ(),p.getAirportTo(),p.getGateTo()))
+            return true;
+        else return false;
+    }
+    
+    private void checkDropOffs() {
+        for (Package p:this.getPackages()) {
+            if (p.isPickedUp() && isInGate(p.getX(),p.getY(),p.getZ(),p.getAirportTo(),p.getGateTo())) {
+                p.setPickedUp(false);
+                removePackage(p);
+            }
+        }
+    }
+
+    private void removePackage(Package p){
+        packages.remove(p);
+        notifyPackagesUpdated();
+    }
+    
+    private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
+        int offset;
+        if (gate == 0) offset = W/2;
+        else offset = -W/2;
+        if (x>airport.getX()-Airport.W/2+offset
+                && x<airport.getX()+Airport.W/2+offset
+                && y<2
+                && z>airport.getZ()-Airport.W/2
+                && z<airport.getZ()+Airport.W/2)
+            return true;
+        else return false;
+    }
+    
+    private void updatePackages() {
+        this.checkPickups();
+        this.checkDropOffs();
+        for (Package p:this.packages) {
+            p.updatePosition();
+        }
+    }
+    
+    private boolean hasToCrash(Aircraft a1, Aircraft a2) {
+        Vector v1 = a1.getCalcCoordinates();
+        Vector v2 = a2.getCalcCoordinates();
+        if (v1.calculateDistance(v2)<5) return true;
+        return false;
+    }
+    
     
     }
     

@@ -18,8 +18,6 @@ import interfaces.AutopilotOutputs;
 
 public class Aircraft extends Node {
 
-    private String name;
-    
     private AutopilotConfig config = new AutopilotConfig();
     private Vector calcCoordinates = Vector.NULL;
     private Vector velocity = Vector.NULL;
@@ -66,7 +64,7 @@ public class Aircraft extends Node {
      */
     public Aircraft(String name, AssetManager assetManager, Airport airport, int gate, int runway, float xVelocity, float yVelocity, float zVelocity) {
 
-        this.name = name;
+        setName(name);
         this.aircraftGeometry = new AirplaneModel(assetManager);
         
         // Plane camera
@@ -87,7 +85,8 @@ public class Aircraft extends Node {
         // Fysica
         // TODO: incorporate gate location
         // TODO: incorporate runway into orientation
-        this.setCalcCoordinates(new Vector(airport.getX(), airport.getY(), airport.getZ()));
+        this.setCalcCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
+        this.setCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
         this.forces = new Force(0,this);
     }
@@ -484,7 +483,7 @@ public class Aircraft extends Node {
 
     @Override
     public String toString(){
-        return name;
+        return getName();
     }
 
     

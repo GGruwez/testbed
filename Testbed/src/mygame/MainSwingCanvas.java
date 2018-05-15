@@ -37,11 +37,13 @@ import javax.swing.JPanel;
 
 public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements CustomCanvas{
 
+    private static boolean GRAB_CAMERA = false;
+
     protected RenderCamera renderCamera;
     private World world;
     private TerrainGrid terrain;
     private Log log = new Log();
-    private Callback callbackAfterAppInit;
+    private ArrayList<Callback> appInitCallbacks = new ArrayList<>();
     private LinkedList<Spatial> newSpatialQueue = new LinkedList<Spatial>();
     private LinkedList<Spatial> destructibleSpatialQueue = new LinkedList<Spatial>();
 
@@ -53,8 +55,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
     private boolean mouseVisible = false;
     
 
-    public void setCallBackAfterAppInit(Callback callbackAfterAppInit) {
-        this.callbackAfterAppInit = callbackAfterAppInit;
+    public void addCallBackAfterAppInit(Callback callbackAfterAppInit) {
+        this.appInitCallbacks.add(callbackAfterAppInit);
     }
 
     public Aircraft addNewAircraft(){
@@ -62,7 +64,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, airport, 0, 0, 0, 0, 0);
 
         world.addAircraft(aircraft);
-        rootNode.attachChild(aircraft);
+        this.addToNewSpatialQueue(aircraft);
 
         return aircraft;
     }
@@ -157,7 +159,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
 
         createTerrain();
 
-        callbackAfterAppInit.run();
+        for(Callback callbackAfterAppInit: appInitCallbacks)
+            callbackAfterAppInit.run();
     }
 
     private void createPlaneCameraViewport(){
@@ -234,7 +237,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
             System.out.println("Concurrent modification exception, completing later.");
         }
         updateDifferentCameras();
-        renderCamera.grabCamera();
+        if(GRAB_CAMERA)
+            renderCamera.grabCamera();
 
         log.addLine(this.getSelectedAircraft());
         log.save();

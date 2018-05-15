@@ -5,23 +5,70 @@ import interfaces.Job;
 
 public class Package {
     
-    private Job job;
     
+    private Airport airportFrom;
+    private int gateFrom;
+    private Airport airportTo;
+    private int gateTo;
     private float x;
+    private float y;
     private float z;
+    private boolean pickedUp;
+    private Aircraft pickedUpBy;
     
-    public Package(Job job) {
-        this.job = job;
-        this.x = job.getAirportFrom().getCenterX();
-        this.z = job.getAirportFrom().getCenterZ();
+    public Package(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
+       this.airportFrom = airportFrom;
+       this.gateFrom = gateFrom;
+       this.airportTo = airportTo;
+       this.gateTo = gateTo;
+       this.pickedUp = false;
+       this.x = getStartPosition().getX();
+       this.y=0;
+       this.z = getStartPosition().getZ();
     }
     
+    public Vector getStartPosition() {
+        float offsetX;
+        if (gateFrom==0) offsetX = Airport.W/2;
+        else offsetX = -Airport.W/2;
+        return new Vector(airportFrom.getX() + offsetX, 0, airportFrom.getZ());
+    }
+    
+    public Airport getAirportFrom() {return this.airportFrom;}
+    public int getGateFrom() {return this.gateFrom;}
+    public Airport getAirportTo() {return this.airportTo;}
+    public int getGateTo() {return this.gateTo;}
+    
     public float getX() {
-        return x;
+        return this.x;
+    }
+    
+    public float getY() {
+        return this.y;
     }
     
     public float getZ() {
-        return z;
+        return this.z;
+    }
+    
+    
+    public boolean isPickedUp() {return this.pickedUp;}
+    public void setPickedUp(boolean bool) {this.pickedUp = bool;}
+    
+    public void updatePosition() {
+        if (this.pickedUp) {
+            this.x = pickedUpBy.getCalcCoordinates().getX();
+            this.y = pickedUpBy.getCalcCoordinates().getY();
+            this.z = pickedUpBy.getCalcCoordinates().getZ();
+        }
+    }
+    
+    public void setPickedUpBy(Aircraft aircraft) {
+        this.pickedUpBy = aircraft;
+    }
+
+    public String getStatusDescriptor(){
+        return isPickedUp() ? "in transit" : "waiting";
     }
     
 }

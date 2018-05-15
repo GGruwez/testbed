@@ -114,7 +114,7 @@ public class Main {
                     updateAircraftComboBox();
                 }
             };
-            canvasApplication.setCallBackAfterAppInit(aai);
+            canvasApplication.addCallBackAfterAppInit(aai);
 
             Callback onButtonClick = new Callback() {
                 @Override
@@ -181,10 +181,17 @@ public class Main {
             minimapFrame.setDefaultCloseOperation(0);
             minimapFrame.setLocationRelativeTo(null);
             minimapFrame.setLocation(1305, 0);
-            
-            
-            
+
             gridBagConstraints.gridy = 0;
+            JTabbedPane rightTabbedPane = new JTabbedPane();
+            JPanel basicPanel = new JPanel(new GridBagLayout());
+            JPanel jobsPanel = new JPanel(new GridBagLayout());
+            rightTabbedPane.addTab("Basic", null, basicPanel);
+            rightTabbedPane.addTab("Jobs", null, jobsPanel);
+            buttonPanel.add(rightTabbedPane, gridBagConstraints);
+            
+            
+            gridBagConstraints.gridy++;
             JPanel startStopButtonPanel = new JPanel(new GridBagLayout());
             GridBagConstraints startStopButtonPanelGridBagConstraints = new GridBagConstraints();
             startStopButtonPanelGridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -194,32 +201,36 @@ public class Main {
             startStopButtonPanel.add(playButton, startStopButtonPanelGridBagConstraints);
             startStopButtonPanelGridBagConstraints.gridx = 1;
             startStopButtonPanel.add(stopButton, startStopButtonPanelGridBagConstraints);
-            buttonPanel.add(startStopButtonPanel, gridBagConstraints);
+            basicPanel.add(startStopButtonPanel, gridBagConstraints);
 
-            gridBagConstraints.gridy = 1;
-            buttonPanel.add(generateCylinderButton, gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(generateCylinderButton, gridBagConstraints);
 
-            gridBagConstraints.gridy = 2;
-            buttonPanel.add(readFromFileButton, gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(readFromFileButton, gridBagConstraints);
 
-            gridBagConstraints.gridy = 3;
-            buttonPanel.add(saveConfigButton, gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(saveConfigButton, gridBagConstraints);
 
-            gridBagConstraints.gridy = 4;
-            buttonPanel.add(new CubeUI(canvasApplication, onButtonClick), gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(new CubeUI(canvasApplication, onButtonClick), gridBagConstraints);
 
-            gridBagConstraints.gridy = 5;
-            buttonPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gridBagConstraints);
 
-            gridBagConstraints.gridy = 6;
-            buttonPanel.add(aircraftComboBox, gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(new JLabel("Aircraft management:"), gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(aircraftComboBox, gridBagConstraints);
 
-            gridBagConstraints.gridy = 7;
+            gridBagConstraints.gridy++;
             JButton addAircraftButton = new JButton("Add aircraft");
             addAircraftButton.addActionListener(e -> canvasApplication.addNewAircraft());
-            buttonPanel.add(addAircraftButton, gridBagConstraints);
+            basicPanel.add(addAircraftButton, gridBagConstraints);
 
-            gridBagConstraints.gridy = 8;
+            gridBagConstraints.gridy++;
+            basicPanel.add(new JLabel("Simulation period multiplier:"), gridBagConstraints);
+            gridBagConstraints.gridy++;
             JTextField changeSimulationPeriodMultiplierTextField = new JTextField(Float.toString(World.DEFAULT_SIMULATION_PERIOD_MULTIPLIER));
             changeSimulationPeriodMultiplierTextField.addActionListener(e -> {
                 try {
@@ -227,9 +238,9 @@ public class Main {
                     canvasApplication.getWorld().setSimulationPeriodMultiplier(newSimulationPeriodMultiplier);
                 } catch (NumberFormatException ex) {}
             });
-            buttonPanel.add(changeSimulationPeriodMultiplierTextField, gridBagConstraints);
+            basicPanel.add(changeSimulationPeriodMultiplierTextField, gridBagConstraints);
 
-            gridBagConstraints.gridy = 9;
+            gridBagConstraints.gridy++;
             JLabel infoLabel = new JLabel();
             buttonPanel.add(infoLabel, gridBagConstraints);
             canvasApplication.addUpdateListener(() -> {
@@ -245,9 +256,13 @@ public class Main {
                     updateInfoLabel(canvasApplication, infoLabel);
                 }
             });
-            
-            
-            
+
+            gridBagConstraints.gridy++;
+            jobsPanel.add(new PackageGUI(canvasApplication));
+
+
+
+
             window.add(buttonPanel);
             window.pack();
             window.setVisible(true);
