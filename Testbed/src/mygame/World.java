@@ -167,6 +167,9 @@ public class World {
 
                 }
                 if (hasToCrash(ac)) this.endSimulation();
+                for (Aircraft aircraft:this.collectionOfAircraft) {
+                    if (hasToCrash(ac,aircraft)) this.endSimulation();
+                }
                 // Update visual position of aircraft
                 ac.updateVisualCoordinates();
                 ac.updateVisualRotation();
@@ -486,6 +489,13 @@ public class World {
     private void updatePackages() {
         this.checkPickups();
         this.checkDropOffs();
+    }
+    
+    private boolean hasToCrash(Aircraft a1, Aircraft a2) {
+        Vector v1 = a1.getCalcCoordinates();
+        Vector v2 = a2.getCalcCoordinates();
+        if (v1.calculateDistance(v2)<5) return true;
+        return false;
     }
     
     
