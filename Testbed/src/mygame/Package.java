@@ -14,6 +14,7 @@ public class Package {
     private float y;
     private float z;
     private boolean pickedUp;
+    private Aircraft pickedUpBy;
     
     public Package(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
        this.airportFrom = airportFrom;
@@ -57,5 +58,17 @@ public class Package {
     
     public boolean isPickedUp() {return this.pickedUp;}
     public void setPickedUp(boolean bool) {this.pickedUp = bool;}
+    
+    public void updatePosition() {
+        if (this.pickedUp) {
+            this.x = pickedUpBy.getCalcCoordinates().getX();
+            this.y = pickedUpBy.getCalcCoordinates().getY();
+            this.z = pickedUpBy.getCalcCoordinates().getZ();
+        }
+    }
+    
+    public void setPickedUpBy(Aircraft aircraft) {
+        this.pickedUpBy = aircraft;
+    }
     
 }

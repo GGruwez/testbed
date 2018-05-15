@@ -439,34 +439,38 @@ public class World {
         return false;
     }
     
-//    private void checkPickups() {
-//        for(Aircraft aircraft:this.getCollectionOfAircraft()) {
-//            for(Package p:this.getPackages()) {
-//                if (!p.isPickedUp() &&)
-//            }
-//        }
-//    }
+    private void checkPickups() {
+        for(Aircraft aircraft:this.getCollectionOfAircraft()) {
+            float x = aircraft.getCalcCoordinates().getX();
+            float y = aircraft.getCalcCoordinates().getY();
+            float z = aircraft.getCalcCoordinates().getZ();
+            for(Package p:this.getPackages()) {
+                if (!p.isPickedUp() && isInGate(x,y,z,p.getAirportFrom(),p.getGateFrom())) {
+                    p.setPickedUp(true);
+                    p.setPickedUpBy(aircraft);
+                }
+            }
+        }
+    }
     
     private boolean isDelivered(Package p) {
-        if (p.isPickedUp() && p.getX()>p.getAirportTo().getX()-Airport.W/2
-                && p.getX()<p.getAirportTo().getX()+Airport.W/2
-                && p.getY()<2
-                && p.getZ()>p.getAirportTo().getZ()-Airport.W/2
-                && p.getZ()<p.getAirportTo().getZ()+Airport.W/2)
+        if (p.isPickedUp() && isInGate(p.getX(),p.getY(),p.getZ(),p.getAirportTo(),p.getGateTo()))
             return true;
         else return false;
     }
     
-//    private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
-//        int offset;
-//        if (gate == 0) offset = W/2;
-//        else offset = -W/2;
-//        if (x>airport.getX()-Airport.W/2
-//                && p.getX()<p.getAirportTo().getX()+Airport.W/2
-//                && p.getY()<2
-//                && p.getZ()>p.getAirportTo().getZ()-Airport.W/2
-//                && p.getZ()<p.getAirportTo().getZ()+Airport.W/2)
-//    }
+    private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
+        int offset;
+        if (gate == 0) offset = W/2;
+        else offset = -W/2;
+        if (x>airport.getX()-Airport.W/2+offset
+                && x<airport.getX()+Airport.W/2+offset
+                && y<2
+                && z>airport.getZ()-Airport.W/2
+                && z<airport.getZ()+Airport.W/2)
+            return true;
+        else return false;
+    }
     
     
     }
