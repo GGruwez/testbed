@@ -449,6 +449,11 @@ public class World {
         }
         return false;
     }
+
+    private void notifyPackagesUpdated(){
+        for(Runnable aal: packagesChangedListeners)
+            aal.run();
+    }
     
     private void checkPickups() {
         for(Aircraft aircraft:this.getCollectionOfAircraft()) {
@@ -459,6 +464,7 @@ public class World {
                 if (!p.isPickedUp() && isInGate(x,y,z,p.getAirportFrom(),p.getGateFrom())) {
                     p.setPickedUp(true);
                     p.setPickedUpBy(aircraft);
+                    notifyPackagesUpdated();
                 }
             }
         }
@@ -481,8 +487,7 @@ public class World {
 
     private void removePackage(Package p){
         packages.remove(p);
-        for(Runnable aal: packagesChangedListeners)
-            aal.run();
+        notifyPackagesUpdated();
     }
     
     private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
