@@ -64,7 +64,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, airport, 0, 0, 0, 0, 0);
 
         world.addAircraft(aircraft);
-        rootNode.attachChild(aircraft);
+        this.addToNewSpatialQueue(aircraft);
 
         return aircraft;
     }

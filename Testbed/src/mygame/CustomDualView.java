@@ -19,6 +19,7 @@ public class CustomDualView extends CustomView {
         super(mainCanvas);
     }
 
+    @Override
     public void simpleInitApp(){
         super.simpleInitApp();
 
