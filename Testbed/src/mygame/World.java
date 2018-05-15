@@ -388,7 +388,7 @@ public class World {
     
     
     public void addPackage(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
-        Package toAdd = new Package(airportFrom.getID(),gateFrom,airportTo.getID(),gateTo);
+        Package toAdd = new Package(airportFrom,gateFrom,airportTo,gateTo);
         this.packages.add(toAdd);
         this.autopilotModule.deliverPackage(airportFrom.getID(),gateFrom,airportTo.getID(),gateTo);
     }
