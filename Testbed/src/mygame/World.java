@@ -489,6 +489,9 @@ public class World {
     private void updatePackages() {
         this.checkPickups();
         this.checkDropOffs();
+        for (Package p:this.packages) {
+            p.updatePosition();
+        }
     }
     
     private boolean hasToCrash(Aircraft a1, Aircraft a2) {

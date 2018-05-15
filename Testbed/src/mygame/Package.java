@@ -51,10 +51,6 @@ public class Package {
         return this.z;
     }
     
-    public void updatePosition(float x, float z) {
-        this.x=x;
-        this.z=z;
-    }
     
     public boolean isPickedUp() {return this.pickedUp;}
     public void setPickedUp(boolean bool) {this.pickedUp = bool;}
