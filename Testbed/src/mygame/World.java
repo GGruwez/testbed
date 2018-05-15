@@ -173,6 +173,8 @@ public class World {
                 ac.updateVisualRotation();
                 // Aircraft's calc coordinates and actual visual position coordinates are now the same
 
+                
+                this.updatePackages();
 
                 first = false;
             }
@@ -465,6 +467,15 @@ public class World {
         else return false;
     }
     
+    private void checkDropOffs() {
+        for (Package p:this.getPackages()) {
+            if (p.isPickedUp() && isInGate(p.getX(),p.getY(),p.getZ(),p.getAirportTo(),p.getGateTo())) {
+                p.setPickedUp(false);
+                packages.remove(p);
+            }
+        }
+    }
+    
     private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
         int offset;
         if (gate == 0) offset = W/2;
@@ -476,6 +487,11 @@ public class World {
                 && z<airport.getZ()+Airport.W/2)
             return true;
         else return false;
+    }
+    
+    private void updatePackages() {
+        this.checkPickups();
+        this.checkDropOffs();
     }
     
     
