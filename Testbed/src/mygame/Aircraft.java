@@ -102,7 +102,7 @@ public class Aircraft extends Node {
         this.setCalcCoordinates(new Vector((float) (airport.getX() +  offset * Math.cos(bias)) , 1.22f,(float) (airport.getZ() + offset * Math.sin(bias))));
         this.setCoordinates(new Vector((float) (airport.getX() +  offset * Math.cos(bias)) , 1.22f,(float) (airport.getZ() + offset * Math.sin(bias))));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
-        this.setHeading(bias);
+        this.setHeading(-bias);
         this.forces = new Force(0,this);
     }
 
