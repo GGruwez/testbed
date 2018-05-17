@@ -59,8 +59,8 @@ public class World {
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        this.addAirport(0,0);
-        this.addAirport(-4000,0);
+        this.addAirport(0,0, 0,-1);
+        this.addAirport(4000,0,0,1);
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
@@ -357,14 +357,14 @@ public class World {
         return this.mainSwingCanvas;
     }
     
-    private void addAirport(float xPos, float zPos) {
-        Airport airport = new Airport(W,L,airports.size(),xPos,zPos,this);
+    private void addAirport(float xPos, float zPos, float tox, float toz) {
+        Airport airport = new Airport(W,L,airports.size(),xPos,zPos,tox,toz,this);
         airports.add(airport);
         airport.build();
 
         // centerX, centerZ, centerToRunway0X, centerToRunway0Z
         // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
-        getAutopilotModule().defineAirport(airport.getX(), airport.getZ(), airport.getCenterToRunway0X(), airport.getCenterToRunway0Z());
+        getAutopilotModule().defineAirport(airport.getX(), airport.getZ(), tox, toz);
 
         for(Runnable aal: airportAddedListeners)
             aal.run();

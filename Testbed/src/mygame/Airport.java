@@ -21,8 +21,9 @@ public class Airport extends Node{
     private float location;
     private World world;
     private BatchNode batchNode;
-    
-    public Airport(int W, int L, int ID, float x,  float z, World world) {
+    private float toRunwayx;
+    private float toRunwayz;
+    public Airport(int W, int L, int ID, float x,  float z,float tox, float toz, World world) {
         this.W = W; 
         this.L = L;
         this.x=x;
@@ -30,7 +31,8 @@ public class Airport extends Node{
         this.calculateSurface();
         this.airportID = ID;
         this.world = world;
-        
+        this.toRunwayx = tox;
+        this.toRunwayz = toz;
     }
     
     public int getW() {
@@ -97,8 +99,8 @@ public class Airport extends Node{
     }
 
     // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
-    public float getCenterToRunway0X(){ return 0; } // TODO: check if correct
-    public float getCenterToRunway0Z(){ return -1; } // TODO: check if correct
+    public float getCenterToRunway0X(){ return toRunwayx; } // TODO: check if correct
+    public float getCenterToRunway0Z(){ return toRunwayz; } // TODO: check if correct
 
     public String toString(){
         return getName();
