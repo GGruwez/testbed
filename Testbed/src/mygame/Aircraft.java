@@ -85,9 +85,24 @@ public class Aircraft extends Node {
         // Fysica
         // TODO: incorporate gate location
         // TODO: incorporate runway into orientation
-        this.setCalcCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
-        this.setCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
+        float offset = airport.getW()/2;
+        if (gate == 0){
+            offset = -offset;
+        }
+
+        Vector nzAxis = new Vector(0,0,-1);
+        Vector Airportaxis = new Vector(airport.getCenterToRunway0X(),0,airport.getCenterToRunway0Z());
+        float bias = nzAxis.angleBetween(Airportaxis);
+        if (airport.getCenterToRunway0X() < 0){
+            bias -= Math.PI;
+        }
+
+
+
+        this.setCalcCoordinates(new Vector((float) (airport.getX() +  offset * Math.cos(bias)) , 1.22f,(float) (airport.getZ() + offset * Math.sin(bias))));
+        this.setCoordinates(new Vector((float) (airport.getX() +  offset * Math.cos(bias)) , 1.22f,(float) (airport.getZ() + offset * Math.sin(bias))));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
+        this.setHeading(bias);
         this.forces = new Force(0,this);
     }
 
