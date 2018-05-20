@@ -59,9 +59,8 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         this.appInitCallbacks.add(callbackAfterAppInit);
     }
 
-    public Aircraft addNewAircraft(){
-        Airport airport = world.getAirports().get(0); // TODO: better airport selection
-        Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, airport, 0, 0, 0, 0, 0);
+    public Aircraft addNewAircraft(Airport airport, int gate){
+        Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, airport, gate, 0, 0, 0, 0);
 
         world.addAircraft(aircraft);
         this.addToNewSpatialQueue(aircraft);
@@ -92,7 +91,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         
  //        getRootNode().attachChild(apm);
 
-        Aircraft aircraft = addNewAircraft();
+        Aircraft aircraft = addNewAircraft(getWorld().getAirport(0), 0);
 
 //        Box plane = new Box(1,1,2);
 //        Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");
