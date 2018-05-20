@@ -37,6 +37,19 @@ public class Main {
             JFrame window = new JFrame("Testbed");
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+            MenuBar mb=new MenuBar();
+            Menu menu=new Menu("File");
+            MenuItem loadDrones =new MenuItem("Load drones");
+            MenuItem loadJobs = new MenuItem("Load jobs");
+            MenuItem loadCubes =new MenuItem("Load cubes");
+            MenuItem saveConfig =new MenuItem("Save config");
+            menu.add(loadDrones);
+            menu.add(loadJobs);
+            menu.add(loadCubes);
+            menu.add(saveConfig);
+            mb.add(menu);
+            window.setMenuBar(mb);
+
 
             JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -89,6 +102,13 @@ public class Main {
                 }
             };
 
+            Callback onButtonClick = new Callback() {
+                @Override
+                public void run() {
+                    if (tabbedPane.getSelectedIndex() != 0)
+                        tabChangeListener.stateChanged(null);
+                }
+            };
 
             Callback aai = new Callback() {
 
@@ -131,17 +151,17 @@ public class Main {
                     canvasApplication.getWorld().addAirportAddedListener(() -> updateAirportComboBox());
                     updateAircraftComboBox();
                     updateAirportComboBox();
+
+                    loadDrones.addActionListener((e)-> canvasApplication.loadDronesFromFile("drones.txt"));
+                    loadJobs.addActionListener((e) -> canvasApplication.getWorld().loadPackagesFromFile("jobs.txt"));
+                    loadCubes.addActionListener(e -> {
+                        canvasApplication.getWorld().setPath(canvasApplication.getWorld().readFile("path.txt"));
+                        onButtonClick.run();
+                    });
+                    saveConfig.addActionListener(e -> canvasApplication.getWorld().writeFile("cubePositions.txt"));
                 }
             };
             canvasApplication.addCallBackAfterAppInit(aai);
-
-            Callback onButtonClick = new Callback() {
-                @Override
-                public void run() {
-                    if (tabbedPane.getSelectedIndex() != 0)
-                        tabChangeListener.stateChanged(null);
-                }
-            };
 
             window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.X_AXIS));
             JPanel panel = new JPanel(new BorderLayout());
@@ -172,19 +192,6 @@ public class Main {
                 public void actionPerformed(ActionEvent e) {
                     canvasApplication.getWorld().generateCylinder();
                     onButtonClick.run();
-                }
-            });
-            JButton readFromFileButton = new JButton("read from file");
-            readFromFileButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().setPath(canvasApplication.getWorld().readFile("path.txt"));
-                    onButtonClick.run();
-                }
-            });
-            JButton saveConfigButton = new JButton("save config");
-            saveConfigButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().writeFile("cubePositions.txt");
                 }
             });
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -224,12 +231,6 @@ public class Main {
 
             gridBagConstraints.gridy++;
             basicPanel.add(generateCylinderButton, gridBagConstraints);
-
-            gridBagConstraints.gridy++;
-            basicPanel.add(readFromFileButton, gridBagConstraints);
-
-            gridBagConstraints.gridy++;
-            basicPanel.add(saveConfigButton, gridBagConstraints);
 
             gridBagConstraints.gridy++;
             basicPanel.add(new CubeUI(canvasApplication, onButtonClick), gridBagConstraints);

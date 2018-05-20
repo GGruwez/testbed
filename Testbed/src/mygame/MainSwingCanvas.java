@@ -28,6 +28,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import mygame.visualcomponents.RegularBox;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
@@ -66,6 +68,32 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         this.addToNewSpatialQueue(aircraft);
 
         return aircraft;
+    }
+
+    public void loadDronesFromFile(String fileName) {
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while((line = reader.readLine()) != null) {
+                if(line.startsWith("#"))
+                    continue;
+
+                try {
+                    String[] stringValues = line.split(" ");
+                    int[] values = new int[2];
+                    for(int i=0; i<2; i++) {
+                        values[i] = Integer.valueOf(stringValues[i]);
+                    }
+                    addNewAircraft(getWorld().getAirport(values[0]), values[1]);
+                }catch(Exception e){
+                    System.out.println("Couldn't add drone, airport doesn't exist.");
+                }
+            }
+            reader.close();
+        }
+        catch(Exception e) {
+            System.out.println("Failed reading file.");
+        }
     }
 
     @Override
