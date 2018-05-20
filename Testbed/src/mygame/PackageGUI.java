@@ -74,12 +74,21 @@ public class PackageGUI extends JPanel {
         addButton.addActionListener(this::addButtonClick);
         this.add(addButton, gridBagConstraints);
 
+        gridBagConstraints.gridy++;
+        JButton readFromFileButton = new JButton("read from file");
+        readFromFileButton.addActionListener(this::readFromFileButtonClick);
+        this.add(readFromFileButton, gridBagConstraints);
+
         canvas.addCallBackAfterAppInit(()->{
             updateComboboxes();
             getWorld().addPackagesChangedListeners(this::updateList);
             getWorld().addAirportAddedListener(this::updateComboboxes);
         });
 
+    }
+
+    private void readFromFileButtonClick(ActionEvent actionEvent) {
+        getWorld().loadPackagesFromFile("jobs.txt");
     }
 
     private void addButtonClick(ActionEvent actionEvent) {

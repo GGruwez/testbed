@@ -302,6 +302,32 @@ public class World {
         return pos;
     }
 
+    public void loadPackagesFromFile(String fileName) {
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while((line = reader.readLine()) != null) {
+                if(line.startsWith("#"))
+                    continue;
+
+                try {
+                    String[] stringValues = line.split(" ");
+                    int[] values = new int[4];
+                    for(int i=0; i<4; i++) {
+                        values[i] = Integer.valueOf(stringValues[i]);
+                    }
+                    addPackage(this.getAirport(values[0]), values[1], this.getAirport(values[2]), values[3]);
+                }catch(Exception e){
+                    System.out.println("Couldn't add package, airport doesn't exist.");
+                }
+            }
+            reader.close();
+        }
+        catch(Exception e) {
+            System.out.println("Failed reading file.");
+        }
+    }
+
     public void pauseSimulation(){
         paused = true;
     }
@@ -384,6 +410,16 @@ public class World {
 
 
     public ArrayList<Airport> getAirports() {return this.airports;}
+
+    /**
+     * Get airport based on index.
+     * @param index
+     * @return
+     * @throws IndexOutOfBoundsException
+     */
+    public Airport getAirport(int index) {
+        return this.airports.get(index);
+    }
 
 
     public void addSimulationPeriodChangedListener(Runnable listener) {
