@@ -52,8 +52,10 @@ public class Main {
             Menu demoMenu=new Menu("Demo");
             MenuItem demoPathShapes =new MenuItem("Path shapes");
             MenuItem demoFullTurnAndGateClearing =new MenuItem("Full turn and gate clearing");
+            MenuItem finalDemo =new MenuItem("Final demo");
             demoMenu.add(demoPathShapes);
             demoMenu.add(demoFullTurnAndGateClearing);
+            demoMenu.add(finalDemo);
             mb.add(demoMenu);
 
             window.setMenuBar(mb);
@@ -175,6 +177,10 @@ public class Main {
                     demoFullTurnAndGateClearing.addActionListener(e -> {
                         canvasApplication.loadDronesFromFile("DronesDemoFullTurnAndGateClearing.txt");
                         canvasApplication.getWorld().loadPackagesFromFile("JobsDemoFullTurnAndGateClearing.txt");
+                    });
+                    finalDemo.addActionListener(e -> {
+                        canvasApplication.loadDronesFromFile("FinalDemoDrones.txt");
+                        canvasApplication.getWorld().loadPackagesFromFile("FinalDemoJobs.txt");
                     });
                 }
             };

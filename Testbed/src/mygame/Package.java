@@ -85,7 +85,7 @@ public class Package {
 
     public String getStatusDescriptor(){
         if(isPickedUp()){
-            return "in transit (" + getPickedUpBy() + ")";
+            return "delivering (" + getPickedUpBy() + ")";
         }else{
             return "waiting";
         }
