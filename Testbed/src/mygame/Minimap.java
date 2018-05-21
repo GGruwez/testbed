@@ -29,7 +29,6 @@ public class Minimap extends JPanel {
             if (airport.getCenterToRunway0X() < 0){
                 bias -= Math.PI;
             }
-            System.out.println((int) Math.floor(10*Math.cos(-bias) + 5*Math.sin(-bias)));
 
             float x =  airport.getX();
             float z =  airport.getZ();

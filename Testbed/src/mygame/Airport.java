@@ -104,12 +104,24 @@ public class Airport extends Node{
     public float getY() {return 0;}
     public float getZ() {return z;}
     
-    public Vector getPositionOfGate0() {
-        return new Vector(x+ W/2, 0, z); 
-    }
-    
     public Vector getPositionOfGate1() {
-        return new Vector(x- W/2,0,z );
+        Vector nzAxis = new Vector(0,0,-1);
+        Vector Airportaxis = new Vector(toRunwayx,0,toRunwayz);
+        float bias = nzAxis.angleBetween(Airportaxis);
+        if (toRunwayx < 0){
+            bias -= Math.PI;
+        }
+        return new Vector((float) (x+ W/2 * Math.cos(bias)), 0, (float) (z+ W/2 * Math.sin(bias)) );
+    }
+
+    public Vector getPositionOfGate0() {
+        Vector nzAxis = new Vector(0,0,-1);
+        Vector Airportaxis = new Vector(toRunwayx,0,toRunwayz);
+        float bias = nzAxis.angleBetween(Airportaxis);
+        if (toRunwayx < 0){
+            bias -= Math.PI;
+        }
+        return new Vector((float) (x- W/2 * Math.cos(bias)), 0, (float) (z- W/2 * Math.sin(bias)) );
     }
 
     // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0

@@ -59,8 +59,8 @@ public class World {
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        this.addAirport(0,0, 0,1);
-        this.addAirport(4000,0,0,-1);
+        this.addAirport(0,0, 0,-1);
+        this.addAirport(5000,0,0,-1);
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
@@ -527,14 +527,11 @@ public class World {
     }
     
     private boolean isInGate(float x, float y, float z, Airport airport, int gate) {
-        int offset;
-        if (gate == 0) offset = W/2;
-        else offset = -W/2;
-        if (x>airport.getX()-Airport.W/2+offset
-                && x<airport.getX()+Airport.W/2+offset
-                && y<2
-                && z>airport.getZ()-Airport.W/2
-                && z<airport.getZ()+Airport.W/2)
+        Vector locGate;
+        Vector curPos = new Vector(x,0,z);
+        if (gate == 0) locGate = airport.getPositionOfGate0();
+        else locGate = airport.getPositionOfGate1();
+        if (curPos.calculateDistance(locGate) < airport.getW()/2 && y<2)
             return true;
         else return false;
     }
