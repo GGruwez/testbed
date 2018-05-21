@@ -28,6 +28,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import mygame.visualcomponents.RegularBox;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
@@ -59,14 +61,39 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         this.appInitCallbacks.add(callbackAfterAppInit);
     }
 
-    public Aircraft addNewAircraft(){
-        Airport airport = world.getAirports().get(0); // TODO: better airport selection
-        Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, airport, 0, 0, 0, 0, 0);
+    public Aircraft addNewAircraft(Airport airport, int gate){
+        Aircraft aircraft = new Aircraft("Plane " + getWorld().getCollectionOfAircraft().size(), assetManager, airport, gate, 0, 0, 0, 0);
 
         world.addAircraft(aircraft);
-        rootNode.attachChild(aircraft);
+        this.addToNewSpatialQueue(aircraft);
 
         return aircraft;
+    }
+
+    public void loadDronesFromFile(String fileName) {
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while((line = reader.readLine()) != null) {
+                if(line.startsWith("#"))
+                    continue;
+
+                try {
+                    String[] stringValues = line.split(" ");
+                    int[] values = new int[2];
+                    for(int i=0; i<2; i++) {
+                        values[i] = Integer.valueOf(stringValues[i]);
+                    }
+                    addNewAircraft(getWorld().getAirport(values[0]), values[1]);
+                }catch(Exception e){
+                    System.out.println("Couldn't add drone, airport doesn't exist.");
+                }
+            }
+            reader.close();
+        }
+        catch(Exception e) {
+            System.out.println("Failed reading file.");
+        }
     }
 
     @Override
@@ -92,7 +119,7 @@ public class MainSwingCanvas extends com.jme3.app.SimpleApplication implements C
         
  //        getRootNode().attachChild(apm);
 
-        Aircraft aircraft = addNewAircraft();
+        Aircraft aircraft = addNewAircraft(getWorld().getAirport(0), 0);
 
 //        Box plane = new Box(1,1,2);
 //        Node planemodel = (Node) assetManager.loadModel("Models/airplane6.j3o");

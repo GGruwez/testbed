@@ -99,7 +99,7 @@ public class Force {
     public void setBrakeForces(float front, float left, float right) {
 //        float maxbrake = -(getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).getZ() * getAircraft().getTotalMass()/0.01f + getThrustForce().getZ());
 //        
-        // System.out.println("forward speed " +  getAircraft().getVelocity().inverseTransform(getAircraft().getHeading(), getAircraft().getPitch(), getAircraft().getRoll()).getZ());
+
 //        System.out.println("thrust" + -getThrustForce().getZ());
 //       
 //        
@@ -582,13 +582,12 @@ public class Force {
     }
     
     public Vector getLeftRearWheelFrictionForce(){
-        //System.out.println("left  " +leftRearWheelFrictionForce);
+
     	return  this.leftRearWheelFrictionForce;
         
     }
     
     public Vector getRightRearWheelFrictionForce(){
-        //System.out.println("right  " + rightRearWheelFrictionForce);
 
     	return  this.rightRearWheelFrictionForce;
     }

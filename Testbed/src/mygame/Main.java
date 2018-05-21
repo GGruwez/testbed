@@ -37,6 +37,19 @@ public class Main {
             JFrame window = new JFrame("Testbed");
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+            MenuBar mb=new MenuBar();
+            Menu menu=new Menu("File");
+            MenuItem loadDrones =new MenuItem("Load drones");
+            MenuItem loadJobs = new MenuItem("Load jobs");
+            MenuItem loadCubes =new MenuItem("Load cubes");
+            MenuItem saveConfig =new MenuItem("Save config");
+            menu.add(loadDrones);
+            menu.add(loadJobs);
+            menu.add(loadCubes);
+            menu.add(saveConfig);
+            mb.add(menu);
+            window.setMenuBar(mb);
+
 
             JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -49,6 +62,8 @@ public class Main {
             tabbedPane.addTab("Regular view", null, panel1);
 
             JComboBox<Aircraft> aircraftComboBox = new JComboBox<>();
+            JComboBox<Airport> airportComboBox = new JComboBox<>();
+            JComboBox<Integer> gateComboBox = new JComboBox<>();
 
             ChangeListener tabChangeListener = new ChangeListener() {
 
@@ -87,6 +102,14 @@ public class Main {
                 }
             };
 
+            Callback onButtonClick = new Callback() {
+                @Override
+                public void run() {
+                    if (tabbedPane.getSelectedIndex() != 0)
+                        tabChangeListener.stateChanged(null);
+                }
+            };
+
             Callback aai = new Callback() {
 
                 private void updateAircraftComboBox(){
@@ -94,6 +117,20 @@ public class Main {
                     for(Aircraft ac: canvasApplication.getWorld().getCollectionOfAircraft())
                         aircraftComboBox.addItem(ac);
                     aircraftComboBox.setSelectedIndex(aircraftComboBox.getItemCount()-1); // Select last aircraft
+                }
+
+                private void updateAirportComboBox(){
+                    airportComboBox.removeAllItems();
+                    for(Airport airport : canvasApplication.getWorld().getAirports()){
+                        airportComboBox.addItem(airport);
+                    }
+
+                    gateComboBox.removeAllItems();
+                    int i = 0;
+                    while(i<=1){
+                        gateComboBox.addItem(i);
+                        i++;
+                    }
                 }
 
                 @Override
@@ -111,18 +148,20 @@ public class Main {
                     tabbedPane.addChangeListener(tabChangeListener);
 
                     canvasApplication.getWorld().addAircraftAddedListener(() -> updateAircraftComboBox());
+                    canvasApplication.getWorld().addAirportAddedListener(() -> updateAirportComboBox());
                     updateAircraftComboBox();
+                    updateAirportComboBox();
+
+                    loadDrones.addActionListener((e)-> canvasApplication.loadDronesFromFile("drones.txt"));
+                    loadJobs.addActionListener((e) -> canvasApplication.getWorld().loadPackagesFromFile("jobs.txt"));
+                    loadCubes.addActionListener(e -> {
+                        canvasApplication.getWorld().setPath(canvasApplication.getWorld().readFile("path.txt"));
+                        onButtonClick.run();
+                    });
+                    saveConfig.addActionListener(e -> canvasApplication.getWorld().writeFile("cubePositions.txt"));
                 }
             };
             canvasApplication.addCallBackAfterAppInit(aai);
-
-            Callback onButtonClick = new Callback() {
-                @Override
-                public void run() {
-                    if (tabbedPane.getSelectedIndex() != 0)
-                        tabChangeListener.stateChanged(null);
-                }
-            };
 
             window.setLayout(new BoxLayout(window.getContentPane(), BoxLayout.X_AXIS));
             JPanel panel = new JPanel(new BorderLayout());
@@ -153,19 +192,6 @@ public class Main {
                 public void actionPerformed(ActionEvent e) {
                     canvasApplication.getWorld().generateCylinder();
                     onButtonClick.run();
-                }
-            });
-            JButton readFromFileButton = new JButton("read from file");
-            readFromFileButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().setPath(canvasApplication.getWorld().readFile("path.txt"));
-                    onButtonClick.run();
-                }
-            });
-            JButton saveConfigButton = new JButton("save config");
-            saveConfigButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    canvasApplication.getWorld().writeFile("cubePositions.txt");
                 }
             });
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -207,25 +233,30 @@ public class Main {
             basicPanel.add(generateCylinderButton, gridBagConstraints);
 
             gridBagConstraints.gridy++;
-            basicPanel.add(readFromFileButton, gridBagConstraints);
-
-            gridBagConstraints.gridy++;
-            basicPanel.add(saveConfigButton, gridBagConstraints);
-
-            gridBagConstraints.gridy++;
             basicPanel.add(new CubeUI(canvasApplication, onButtonClick), gridBagConstraints);
 
             gridBagConstraints.gridy++;
             basicPanel.add(new CubeGeneratorUI(canvasApplication, onButtonClick), gridBagConstraints);
 
             gridBagConstraints.gridy++;
+            basicPanel.add(new JLabel("Select aircraft:"), gridBagConstraints);
+            gridBagConstraints.gridy++;
             basicPanel.add(aircraftComboBox, gridBagConstraints);
 
             gridBagConstraints.gridy++;
+            basicPanel.add(new JLabel("Add aircraft:"), gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(airportComboBox, gridBagConstraints);
+            gridBagConstraints.gridy++;
+            basicPanel.add(gateComboBox, gridBagConstraints);
+
+            gridBagConstraints.gridy++;
             JButton addAircraftButton = new JButton("Add aircraft");
-            addAircraftButton.addActionListener(e -> canvasApplication.addNewAircraft());
+            addAircraftButton.addActionListener(e -> canvasApplication.addNewAircraft((Airport)airportComboBox.getSelectedItem(), (int)gateComboBox.getSelectedItem()));
             basicPanel.add(addAircraftButton, gridBagConstraints);
 
+            gridBagConstraints.gridy++;
+            basicPanel.add(new JLabel("Simulation period multiplier:"), gridBagConstraints);
             gridBagConstraints.gridy++;
             JTextField changeSimulationPeriodMultiplierTextField = new JTextField(Float.toString(World.DEFAULT_SIMULATION_PERIOD_MULTIPLIER));
             changeSimulationPeriodMultiplierTextField.addActionListener(e -> {

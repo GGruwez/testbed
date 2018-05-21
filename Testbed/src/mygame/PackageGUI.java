@@ -100,7 +100,7 @@ public class PackageGUI extends JPanel {
     private void updateList(){
         listModel.removeAllElements();
         for(Package p : getWorld().getPackages())
-            listModel.addElement(p.getAirportFrom().getName() + "[" + p.getGateFrom() + "] - " + p.getAirportTo().getName() + "[" + p.getGateTo() + "]");
+            listModel.addElement(p.getAirportFrom().getName() + "[" + p.getGateFrom() + "] - " + p.getAirportTo().getName() + "[" + p.getGateTo() + "] - " + p.getStatusDescriptor());
     }
 
     private void updateComboboxes(){

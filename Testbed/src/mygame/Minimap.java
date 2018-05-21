@@ -28,10 +28,18 @@ public class Minimap extends JPanel {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
         world.getAirports().forEach((airport) -> {
+            Vector nzAxis = new Vector(0,0,-1);
+            Vector Airportaxis = new Vector(airport.getCenterToRunway0X(),0,airport.getCenterToRunway0Z());
+            float bias = nzAxis.angleBetween(Airportaxis);
+            if (airport.getCenterToRunway0X() < 0){
+                bias -= Math.PI;
+            }
+            System.out.println((int) Math.floor(10*Math.cos(-bias) + 5*Math.sin(-bias)));
+
             float x =  airport.getX();
             float z =  airport.getZ();
             g.setColor(Color.LIGHT_GRAY);
-            g.fillRect(scale(z)+this.getWidth()/2, -scale(x)+this.getHeight()/2, 10, 5);
+            g.fillRect(scale(z)+this.getWidth()/2, -scale(x)+this.getHeight()/2, (int) Math.abs(Math.floor(10*Math.cos(-bias) + 5*Math.sin(-bias))), Math.abs((int)Math.floor(10*Math.sin(-bias) + 5*Math.cos(-bias))));
         });
         world.getCollectionOfAircraft().forEach((aircraft) -> {
             float x =  aircraft.getCalcCoordinates().getX();

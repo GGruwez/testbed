@@ -59,8 +59,8 @@ public class World {
         this.mainSwingCanvas = app;
         this.cubesInWorld = new HashSet<Cube>();
         this.cubePositions = new HashMap<Cube, Vector>();
-        this.addAirport(0,0);
-        this.addAirport(4000,0);
+        this.addAirport(0,0, 0,1);
+        this.addAirport(4000,0,0,-1);
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
@@ -302,6 +302,32 @@ public class World {
         return pos;
     }
 
+    public void loadPackagesFromFile(String fileName) {
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while((line = reader.readLine()) != null) {
+                if(line.startsWith("#"))
+                    continue;
+
+                try {
+                    String[] stringValues = line.split(" ");
+                    int[] values = new int[4];
+                    for(int i=0; i<4; i++) {
+                        values[i] = Integer.valueOf(stringValues[i]);
+                    }
+                    addPackage(this.getAirport(values[0]), values[1], this.getAirport(values[2]), values[3]);
+                }catch(Exception e){
+                    System.out.println("Couldn't add package, airport doesn't exist.");
+                }
+            }
+            reader.close();
+        }
+        catch(Exception e) {
+            System.out.println("Failed reading file.");
+        }
+    }
+
     public void pauseSimulation(){
         paused = true;
     }
@@ -357,14 +383,14 @@ public class World {
         return this.mainSwingCanvas;
     }
     
-    private void addAirport(float xPos, float zPos) {
-        Airport airport = new Airport(W,L,airports.size(),xPos,zPos,this);
+    private void addAirport(float xPos, float zPos, float tox, float toz) {
+        Airport airport = new Airport(W,L,airports.size(),xPos,zPos,tox,toz,this);
         airports.add(airport);
         airport.build();
 
         // centerX, centerZ, centerToRunway0X, centerToRunway0Z
         // (centerToRunway0X, centerToRunway0Z) constitutes a unit vector pointing from the center of the airport towards runway 0
-        getAutopilotModule().defineAirport(airport.getX(), airport.getZ(), airport.getCenterToRunway0X(), airport.getCenterToRunway0Z());
+        getAutopilotModule().defineAirport(airport.getX(), airport.getZ(), tox, toz);
 
         for(Runnable aal: airportAddedListeners)
             aal.run();
@@ -384,6 +410,16 @@ public class World {
 
 
     public ArrayList<Airport> getAirports() {return this.airports;}
+
+    /**
+     * Get airport based on index.
+     * @param index
+     * @return
+     * @throws IndexOutOfBoundsException
+     */
+    public Airport getAirport(int index) {
+        return this.airports.get(index);
+    }
 
 
     public void addSimulationPeriodChangedListener(Runnable listener) {
@@ -449,6 +485,11 @@ public class World {
         }
         return false;
     }
+
+    private void notifyPackagesUpdated(){
+        for(Runnable aal: packagesChangedListeners)
+            aal.run();
+    }
     
     private void checkPickups() {
         for(Aircraft aircraft:this.getCollectionOfAircraft()) {
@@ -459,6 +500,7 @@ public class World {
                 if (!p.isPickedUp() && isInGate(x,y,z,p.getAirportFrom(),p.getGateFrom())) {
                     p.setPickedUp(true);
                     p.setPickedUpBy(aircraft);
+                    notifyPackagesUpdated();
                 }
             }
         }
@@ -481,8 +523,7 @@ public class World {
 
     private void removePackage(Package p){
         packages.remove(p);
-        for(Runnable aal: packagesChangedListeners)
-            aal.run();
+        notifyPackagesUpdated();
     }
     
     private boolean isInGate(float x, float y, float z, Airport airport, int gate) {

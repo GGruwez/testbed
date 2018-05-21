@@ -85,9 +85,25 @@ public class Aircraft extends Node {
         // Fysica
         // TODO: incorporate gate location
         // TODO: incorporate runway into orientation
-        this.setCalcCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
-        this.setCoordinates(new Vector(airport.getX(), 1.22f, airport.getZ()));
+        float offset = airport.getW()/2;
+        if (gate == 0){
+            offset = -offset;
+        }
+
+        Vector nzAxis = new Vector(0,0,-1);
+        Vector Airportaxis = new Vector(airport.getCenterToRunway0X(),0,airport.getCenterToRunway0Z());
+        float bias = nzAxis.angleBetween(Airportaxis);
+        if (airport.getCenterToRunway0X() < 0){
+            bias -= Math.PI;
+        }
+
+
+
+        this.setCalcCoordinates(new Vector((float) (airport.getX() +  offset * Math.cos(bias)) , 1.22f,(float) (airport.getZ() + offset * Math.sin(bias))));
+        this.setCoordinates(new Vector((float) (airport.getX() +  offset * Math.cos(bias)) , 1.22f,(float) (airport.getZ() + offset * Math.sin(bias))));
         this.setVelocity(new Vector(xVelocity, yVelocity, zVelocity));
+        this.setHeading(-bias);
+        this.updateVisualRotation();
         this.forces = new Force(0,this);
     }
 
@@ -135,12 +151,15 @@ public class Aircraft extends Node {
 
     public void updateVisualRotation(){
         // Rotatie tonen
+        Vector pitchVec = new Vector(1,0,0).transform(getHeading(),0,0);
+        Vector yawVec = new Vector(0,1,0).transform(getHeading(),0,0);
+        Vector rollVec = new Vector(0,0,1).transform(getHeading(),0,0);
         Quaternion pitchQuat = new Quaternion();
-        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(1, 0, 0));
+        pitchQuat.fromAngleAxis(getPitch(), new Vector3f(pitchVec.getX(), pitchVec.getY(), pitchVec.getZ()));
         Quaternion rollQuat = new Quaternion();
-        rollQuat.fromAngleAxis(getRoll(), (new Vector3f(0, 0, -1)));
+        rollQuat.fromAngleAxis(getRoll(), (new Vector3f(rollVec.getX(), rollVec.getY(), rollVec.getZ())));
         Quaternion yawQuat = new Quaternion();
-        yawQuat.fromAngleAxis(getHeading(), new Vector3f(0, 1, 0));
+        yawQuat.fromAngleAxis(getHeading(), new Vector3f(yawVec.getX(), yawVec.getY(), yawVec.getZ()));
         Quaternion totalQuat = (pitchQuat.mult(rollQuat)).mult(yawQuat);
         this.setLocalRotation(totalQuat); // TODO: put back
     }
