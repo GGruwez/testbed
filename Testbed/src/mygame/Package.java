@@ -79,8 +79,16 @@ public class Package {
         this.pickedUpBy = aircraft;
     }
 
+    public Aircraft getPickedUpBy(){
+        return this.pickedUpBy;
+    }
+
     public String getStatusDescriptor(){
-        return isPickedUp() ? "in transit" : "waiting";
+        if(isPickedUp()){
+            return "in transit (" + getPickedUpBy() + ")";
+        }else{
+            return "waiting";
+        }
     }
     
 }
