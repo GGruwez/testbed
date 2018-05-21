@@ -41,7 +41,7 @@ public class World {
     private HashMap<Cube,Vector> cubePositions;
     private Set<Cube> cubesInWorld;
     
-    private static int W = 30;
+    private static int W = 50;
     private static int L = 700;
     private ArrayList<Airport> airports;
     private AutopilotModule autopilotModule;
