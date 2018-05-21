@@ -15,16 +15,28 @@ public class Package {
     private float z;
     private boolean pickedUp;
     private Aircraft pickedUpBy;
-    
+
+    /**
+     *
+     * @param airportFrom
+     * @param gateFrom
+     * @param airportTo
+     * @param gateTo
+     * @throws IllegalArgumentException when gates aren't valid
+     */
     public Package(Airport airportFrom, int gateFrom, Airport airportTo, int gateTo) {
-       this.airportFrom = airportFrom;
-       this.gateFrom = gateFrom;
-       this.airportTo = airportTo;
-       this.gateTo = gateTo;
-       this.pickedUp = false;
-       this.x = getStartPosition().getX();
-       this.y=0;
-       this.z = getStartPosition().getZ();
+        if(gateFrom != 0 && gateFrom != 1)
+            throw new IllegalArgumentException();
+        if(gateTo != 0 && gateTo != 1)
+            throw new IllegalArgumentException();
+        this.airportFrom = airportFrom;
+        this.gateFrom = gateFrom;
+        this.airportTo = airportTo;
+        this.gateTo = gateTo;
+        this.pickedUp = false;
+        this.x = getStartPosition().getX();
+        this.y=0;
+        this.z = getStartPosition().getZ();
     }
     
     public Vector getStartPosition() {
