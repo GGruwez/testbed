@@ -42,7 +42,7 @@ public class World {
     private Set<Cube> cubesInWorld;
     
     private static int W = 30;
-    private static int L = 600;
+    private static int L = 650;
     private ArrayList<Airport> airports;
     private AutopilotModule autopilotModule;
     private ArrayList<Package> packages;
@@ -61,6 +61,9 @@ public class World {
         this.cubePositions = new HashMap<Cube, Vector>();
         this.addAirport(0,0, 0,-1);
         this.addAirport(5000,0,0,-1);
+        this.addAirport(-5000, 0,0,1);
+        this.addAirport(0,5000,1,0);
+        this.addAirport(0,-5000,-1,0);
         //this.newGround();
         // Simulated evolve
         // Run autopilot every 10 milliseconds
@@ -201,8 +204,12 @@ public class World {
     private boolean hasToCrash(Aircraft aircraft) {
             float wingY = (float) (aircraft.getCalcCoordinates().getY()-Math.sin(aircraft.getRoll())*AirplaneModel.WING_LENGTH);
             float tailY = (float) (aircraft.getCalcCoordinates().getY()-Math.sin(aircraft.getPitch())*AirplaneModel.TAIL_SIZE);
-            if (wingY<0) System.out.println("value: " + aircraft.getCalcCoordinates().getY());
-            return (wingY<0 || tailY<0);
+            boolean wheel = aircraft.getForce().getFrontWheelD() > aircraft.getConfig().getTyreRadius() ||
+                            aircraft.getForce().getLeftRearWheelD() > aircraft.getConfig().getTyreRadius() ||
+                            aircraft.getForce().getRightRearWheelD() > aircraft.getConfig().getTyreRadius();
+
+        if (wingY<0) System.out.println("value: " + aircraft.getCalcCoordinates().getY());
+            return (wingY<0 || tailY<0 || wheel);
         }
     
     public void startSimulation() {

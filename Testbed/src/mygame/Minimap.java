@@ -59,12 +59,12 @@ public class Minimap extends JPanel {
         Airport farrestX = airports.get(0);
         Airport farrestZ = airports.get(0);
         for (Airport airport:airports) {
-            if (farrestX.getX()<airport.getX()) farrestX = airport;
-            if (farrestZ.getZ()<airport.getZ()) farrestZ = airport;
+            if (Math.abs(farrestX.getX())<Math.abs(airport.getX())) farrestX = airport;
+            if (Math.abs(farrestZ.getZ())<Math.abs(airport.getZ())) farrestZ = airport;
         }
         this.size = (int) Math.max(farrestX.getX(), farrestZ.getZ());
         this.size = 2*Math.abs((int) (size + Math.signum(size)*buffer));
-        System.out.println(size);
+
     }
     
     private int scale(float x) {

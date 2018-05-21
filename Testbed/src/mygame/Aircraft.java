@@ -83,8 +83,7 @@ public class Aircraft extends Node {
         this.setRunway(runway);
         
         // Fysica
-        // TODO: incorporate gate location
-        // TODO: incorporate runway into orientation
+
         float offset = airport.getW()/2;
         if (gate == 0){
             offset = -offset;
