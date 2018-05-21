@@ -39,7 +39,7 @@ public class Aircraft extends Node {
     private float elapsedTime;
     private boolean manualControl = false;
     private float neglectValue = 0.00001f;
-    private byte[] image = new byte[0];
+    private byte[] image = null;
     
     private Spatial aircraftGeometry;
     private Camera aircraftCamera;
