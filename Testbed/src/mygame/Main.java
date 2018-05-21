@@ -48,6 +48,14 @@ public class Main {
             menu.add(loadCubes);
             menu.add(saveConfig);
             mb.add(menu);
+
+            Menu demoMenu=new Menu("Demo");
+            MenuItem demoPathShapes =new MenuItem("Path shapes");
+            MenuItem demoFullTurnAndGateClearing =new MenuItem("Full turn and gate clearing");
+            demoMenu.add(demoPathShapes);
+            demoMenu.add(demoFullTurnAndGateClearing);
+            mb.add(demoMenu);
+
             window.setMenuBar(mb);
 
 
@@ -159,6 +167,15 @@ public class Main {
                         onButtonClick.run();
                     });
                     saveConfig.addActionListener(e -> canvasApplication.getWorld().writeFile("cubePositions.txt"));
+
+                    // ++ DEMOS ++
+                    demoPathShapes.addActionListener(e -> {
+                        canvasApplication.getWorld().loadPackagesFromFile("DemoPathShapes.txt");
+                    });
+                    demoFullTurnAndGateClearing.addActionListener(e -> {
+                        canvasApplication.loadDronesFromFile("DronesDemoFullTurnAndGateClearing.txt");
+                        canvasApplication.getWorld().loadPackagesFromFile("JobsDemoFullTurnAndGateClearing.txt");
+                    });
                 }
             };
             canvasApplication.addCallBackAfterAppInit(aai);
