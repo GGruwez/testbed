@@ -35,7 +35,7 @@ public class AutopilotConfig implements interfaces.AutopilotConfig {
     private float rearWheelX = 1.24f; //coordinates
     private float tyreSlope = 50000f;
 
-    private float dampSlope = 5000f;
+    private float dampSlope = 5000f*2;
 
     private float tyreRadius = 0.2f;
     private float rMax = 2486f;    //maximal breaking power on each wheel
